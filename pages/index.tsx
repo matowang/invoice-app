@@ -14,7 +14,7 @@ const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
 	return (
 		<Container maxWidth='md' >
 			<h1>Invoice App</h1>
-			<TableContainer component={Paper} sx={{ mt: 5 }}>
+			<TableContainer component={Paper} sx={{ mt: 9 }}>
 				<Table sx={{ minWidth: 650 }} aria-label="client table">
 					<TableHead>
 						<TableRow>
