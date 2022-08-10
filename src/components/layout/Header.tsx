@@ -22,7 +22,7 @@ const Header = () => {
                         textDecoration: 'none',
                     }}
                 >
-                    INVOICE APP
+                    BILLING APP
                 </Typography>
             </Toolbar>
         </AppBar>

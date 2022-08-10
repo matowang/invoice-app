@@ -1,8 +1,12 @@
+import LoginFormContainer from '../src/components/user/LoginFormContainer';
 
-import type { GetServerSideProps, NextPage } from 'next';
-import { AxiosError } from 'axios';
 import { Container, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+
 const axios = require('axios').default; //remove this to use only client side
+
+import { AxiosError } from 'axios';
+import type { GetServerSideProps, NextPage } from 'next';
+
 
 interface HomeProps {
 	clients: any[];
@@ -11,6 +15,7 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
 	console.log(clients);
+	return <LoginFormContainer />
 	return (
 		<Container maxWidth='md' >
 			<h1>Invoice App</h1>
