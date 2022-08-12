@@ -15,7 +15,11 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
 	console.log(clients);
-	return <LoginFormContainer />
+	return <div className='my-40 mx-20 flex justify-center relative'>
+		<div className='max-w-md w-full'>
+			<LoginFormContainer />
+		</div>
+	</div>
 	return (
 		<Container maxWidth='md' >
 			<h1>Invoice App</h1>

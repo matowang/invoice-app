@@ -7,10 +7,10 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-    return <div>
+    return <>
         <Header />
-        <Container sx={{ my: 20 }}>{children}</Container>
-    </div>
+        <div className='relative w-full'>{children}</div>
+    </>
 }
 
 export default Layout;

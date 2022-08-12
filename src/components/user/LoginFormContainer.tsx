@@ -1,10 +1,9 @@
 import LoginForm from "./LoginForm"
 
 const LoginFormContainer = () => {
-    const handleSubmit = (data: any) => {
+    return <LoginForm onSubmit={(data) => {
         console.log(data);
-    }
-    return <LoginForm onSubmit={handleSubmit} />
+    }} />
 }
 
 export default LoginFormContainer;
