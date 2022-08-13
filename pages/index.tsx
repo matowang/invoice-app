@@ -1,4 +1,4 @@
-import LoginFormContainer from '../src/components/user/LoginFormContainer';
+import LoginFormContainer from '../src/user/LoginFormContainer';
 
 import { Container, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 
