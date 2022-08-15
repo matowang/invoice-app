@@ -1,8 +1,13 @@
 import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import AdbIcon from '@mui/icons-material/Adb';
 
+import { useAuth } from '../user/AuthContext';
+
 const Header = () => {
-    return <header>
+
+    const { logout } = useAuth();
+
+    return (
         <AppBar position="fixed">
             <Toolbar    >
                 <AdbIcon sx={{ mr: 1 }} />
@@ -23,9 +28,9 @@ const Header = () => {
                 >
                     BILLING APP
                 </Typography>
+                <Button sx={{ ml: 'auto' }} color="inherit" onClick={logout}>Logout</Button>
             </Toolbar>
-        </AppBar>
-    </header>
+        </AppBar>)
 }
 
 export default Header;

@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const LoginSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(6, "Password must contain more than 5 characters"),
+    password: z.string().min(4, "Password must contain more than 4 characters"),
 });
 
 type LoginValues = z.infer<typeof LoginSchema>;

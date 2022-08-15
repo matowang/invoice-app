@@ -1,9 +1,12 @@
 import LoginForm from "./LoginForm"
 
+import { useAuth, LoginData } from './AuthContext';
+
 const LoginFormContainer = () => {
-    return <LoginForm onSubmit={(data) => {
-        console.log(data);
-    }} />
+
+    const { login } = useAuth();
+
+    return <LoginForm onSubmit={({ email, password }) => login(email, password)} />
 }
 
 export default LoginFormContainer;

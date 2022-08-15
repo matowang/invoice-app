@@ -24,9 +24,9 @@ class ErrorBoundary extends Component<Props, State> {
 
     public render() {
         if (this.state.hasError) {
-            return <div>
+            return <div className="text-center">
                 <h1>Sorry.. there was an error.</h1>
-                <p>Please contact support.</p>;
+                <p>Please contact support.</p>
             </div>
         }
 

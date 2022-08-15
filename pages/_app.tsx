@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app'
 import { CacheProvider } from '@emotion/react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { StyledEngineProvider } from '@mui/material/styles';
+import { AuthProvider } from '../src/user/AuthContext';
 
 import ErrorBoundary from '../src/components/ErrorBoundary';
 
@@ -21,9 +22,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={MUITheme}>
             <CssBaseline />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <AuthProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </AuthProvider>
           </ThemeProvider>
         </CacheProvider>
       </StyledEngineProvider>

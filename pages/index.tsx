@@ -7,6 +7,9 @@ const axios = require('axios').default; //remove this to use only client side
 import { AxiosError } from 'axios';
 import type { GetServerSideProps, NextPage } from 'next';
 
+import { getClients } from '../src/api/base';
+
+import { useAuth } from '../src/user/AuthContext';
 
 interface HomeProps {
 	clients: any[];
@@ -15,11 +18,6 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
 	console.log(clients);
-	return <div className='my-40 mx-20 flex justify-center relative'>
-		<div className='max-w-md w-full'>
-			<LoginFormContainer />
-		</div>
-	</div>
 	return (
 		<Container maxWidth='md' >
 			<h1>Invoice App</h1>
@@ -90,7 +88,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 		clientsRes = await dbInstance.get('/clients');
 		invoicesRes = await dbInstance.get('/invoices?limit=10');
-		console.log(clientsRes.data);
 	} catch (e) {
 		if (e instanceof AxiosError)
 			console.error(e.message);
