@@ -6,17 +6,17 @@ import { z } from "zod";
 
 const LoginSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(4, "Password must contain more than 4 characters"),
+    password: z.string().min(5, "Password must contain more than 4 characters").max(16, "Password can't be more than 16 characters"),
 });
 
-type LoginValues = z.infer<typeof LoginSchema>;
+export type LoginValues = z.infer<typeof LoginSchema>;
 
 interface LoginFormProps {
     onSubmit: (data: LoginValues) => void;
 }
 
 const LoginForm = ({ onSubmit }: LoginFormProps) => {
-    const { register, handleSubmit: handleFormHookSubmit, watch, formState: { errors } } = useForm<LoginValues>({
+    const { register, handleSubmit: handleFormHookSubmit, formState: { errors } } = useForm<LoginValues>({
         resolver: zodResolver(LoginSchema)
     });
 

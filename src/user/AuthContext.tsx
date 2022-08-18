@@ -5,6 +5,9 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 
 import { useRouter } from 'next/router';
 
+import { LoginValues } from './LoginForm';
+import { RegisterValues } from './RegisterForm';
+
 export type LoginData = {
     user_id: string;
     email: string;
@@ -14,7 +17,8 @@ export type LoginData = {
 
 interface AuthContextType {
     loading: boolean;
-    login: (email: string, password: string) => void;
+    login: (values: LoginValues) => void;
+    register: (values: RegisterValues) => void;
     logout: () => void;
     token: string | null;
 }
@@ -48,7 +52,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setLoading(false);
     }, []);
 
-    const login = async (email: string, password: string) => {
+    const login = async ({ email, password }: LoginValues) => {
         if (process.env.NEXT_PUBLIC_API_URL) {
             console.log("Logging in...")
             try {
@@ -72,13 +76,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             throw new Error("No NEXT_PUBLIC_API_URL environment variable ")
     }
 
+    const register = (values: RegisterValues) => {
+        console.log(values);
+    }
+
     const logout = () => {
         destroyCookie(null, 'token');
         setToken(null);
         router.push('/login');
     }
 
-    return <AuthContext.Provider value={{ loading, login, logout, token }}>
+    return <AuthContext.Provider value={{ loading, login, logout, token, register }}>
         {children}
     </AuthContext.Provider>
 }
