@@ -1,24 +1,12 @@
-import axios from "axios";
 import { setCookie, destroyCookie, parseCookies } from 'nookies'
 
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 import { useRouter } from 'next/router';
 
-import { LoginValues } from './LoginForm';
-import { RegisterValues } from './RegisterForm';
-
-export type LoginData = {
-    user_id: string;
-    email: string;
-    name: string;
-    token: string;
-} //TODO: put this somewhere else
-
 interface AuthContextType {
     loading: boolean;
-    login: (values: LoginValues) => void;
-    register: (values: RegisterValues) => void;
+    login: (token: string) => void;
     logout: () => void;
     token: string | null;
 }
@@ -52,41 +40,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setLoading(false);
     }, []);
 
-    const login = async ({ email, password }: LoginValues) => {
-        if (process.env.NEXT_PUBLIC_API_URL) {
-            console.log("Logging in...")
-            try {
-                const { data } = await axios.post<LoginData>(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-                    email: email,
-                    password: password
-                });
-                setCookie(null, 'token', data.token, {
-                    maxAge: 30 * 24 * 60 * 60,
-                    path: '/',
-                });
-                setToken(data.token);
-                setLoading(false);
-                router.push('/');
-            } catch (err) {
-                console.error(err);
-            }
-            console.log("Logged in.");
-        }
-        else
-            throw new Error("No NEXT_PUBLIC_API_URL environment variable ")
+    const login = async (token: string) => {
+        setCookie(null, 'token', token, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+        });
+        setToken(token);
+        setLoading(false);
     }
-
-    const register = (values: RegisterValues) => {
-        console.log(values);
-    }
-
     const logout = () => {
         destroyCookie(null, 'token');
         setToken(null);
         router.push('/login');
     }
 
-    return <AuthContext.Provider value={{ loading, login, logout, token, register }}>
+    return <AuthContext.Provider value={{ loading, login, logout, token }}>
         {children}
     </AuthContext.Provider>
 }

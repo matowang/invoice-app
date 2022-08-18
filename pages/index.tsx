@@ -19,7 +19,6 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
-	console.log(clients);
 	return (
 		<AuthGaurd>
 			<Container maxWidth='md' >

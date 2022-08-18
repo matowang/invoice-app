@@ -4,7 +4,6 @@ import { parseCookies } from 'nookies'
 
 const dbInstance = axios.create({
     baseURL: 'http://localhost:3139',
-    headers: { 'x-access-token': '555' }
 });
 
 dbInstance.interceptors.request.use(function (config) {

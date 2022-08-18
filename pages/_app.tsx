@@ -5,6 +5,7 @@ import { CacheProvider } from '@emotion/react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { AuthProvider } from '../src/user/AuthContext';
+import { AlertProvider } from '../src/components/AlertContext';
 
 import ErrorBoundary from '../src/components/ErrorBoundary';
 
@@ -22,11 +23,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={MUITheme}>
             <CssBaseline />
-            <AuthProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </AuthProvider>
+            <AlertProvider>
+              <AuthProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </AuthProvider>
+            </AlertProvider>
           </ThemeProvider>
         </CacheProvider>
       </StyledEngineProvider>

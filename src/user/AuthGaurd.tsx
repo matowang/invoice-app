@@ -17,7 +17,7 @@ const AuthGaurd = ({ children }: AuthGaurdProps) => {
     }, [loading, token]);
     if (loading)
         return <div><h1>loading...</h1></div>;
-    return <p>children</p>;
+    return <p>{children}</p>;
 }
 
 export default AuthGaurd;
