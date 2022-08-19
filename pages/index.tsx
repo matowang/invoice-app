@@ -1,6 +1,6 @@
 import LoginFormContainer from '../src/user/LoginFormContainer';
 
-import AuthGaurd from '../src/user/AuthGaurd';
+import AuthGuard from '../src/user/AuthGuard';
 
 import { Container, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 
@@ -20,7 +20,7 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
 	return (
-		<AuthGaurd>
+		<AuthGuard>
 			<Container maxWidth='md' >
 				<h1>Invoice App</h1>
 				<TableContainer component={Paper} sx={{ mt: 9 }}>
@@ -76,7 +76,7 @@ const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
 					</Table>
 				</TableContainer>
 			</Container>
-		</AuthGaurd>
+		</AuthGuard>
 	)
 }
 

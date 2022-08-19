@@ -4,20 +4,20 @@ import { useAuth } from './AuthContext';
 
 import { useRouter } from 'next/router';
 
-interface AuthGaurdProps {
+interface AuthGuardProps {
     children: ReactNode
 }
 
-const AuthGaurd = ({ children }: AuthGaurdProps) => {
-    const { loading, token } = useAuth();
+const AuthGuard = ({ children }: AuthGuardProps) => {
+    const { loading, user } = useAuth();
     const router = useRouter();
     useEffect(() => {
-        if (!loading && !token)
+        if (!loading && !user)
             router.push('/login');
-    }, [loading, token]);
-    if (loading)
+    }, [loading, user]);
+    if (!user)
         return <div><h1>loading...</h1></div>;
-    return <p>{children}</p>;
+    return <>{children}</>;
 }
 
-export default AuthGaurd;
+export default AuthGuard;

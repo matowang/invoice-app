@@ -1,14 +1,15 @@
 import { setCookie, destroyCookie, parseCookies } from 'nookies'
 
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
-import { useRouter } from 'next/router';
+import AuthAPI, { UserDTO } from '../api/auth';
 
 interface AuthContextType {
     loading: boolean;
     login: (token: string) => void;
     logout: () => void;
     token: string | null;
+    user: UserDTO | null;
 }
 
 interface AuthProviderProps {
@@ -27,34 +28,49 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 
-    const router = useRouter();
-
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [token, setToken] = useState<string | null>(null);
+    const [user, setUser] = useState<UserDTO | null>(null);
 
-    useEffect(() => {
+    const initAuth = useCallback(async () => {
+        console.log("init auth");
         const { token } = parseCookies();
-        if (token) {
+        if (!token) return setLoading(false);
+        const user = await AuthAPI.validateToken(token);
+        if (user) {
             setToken(token);
+            setUser(user);
+        } else {
+            destroyCookie(null, 'token');
         }
         setLoading(false);
     }, []);
 
+    useEffect(() => {
+        initAuth();
+    }, [initAuth]);
+
     const login = async (token: string) => {
+        const user = await AuthAPI.validateToken(token);
+        if (user) {
+            setToken(token);
+            setUser(user);
+        } else {
+            destroyCookie(null, 'token');
+        }
         setCookie(null, 'token', token, {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
         });
-        setToken(token);
-        setLoading(false);
     }
+
     const logout = () => {
         destroyCookie(null, 'token');
         setToken(null);
-        router.push('/login');
+        setUser(null);
     }
 
-    return <AuthContext.Provider value={{ loading, login, logout, token }}>
+    return <AuthContext.Provider value={{ loading, login, logout, token, user }}>
         {children}
     </AuthContext.Provider>
 }

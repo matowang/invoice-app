@@ -3,7 +3,7 @@ import axios from "axios";
 import { parseCookies } from 'nookies'
 
 const dbInstance = axios.create({
-    baseURL: 'http://localhost:3139',
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 dbInstance.interceptors.request.use(function (config) {

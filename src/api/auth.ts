@@ -3,21 +3,31 @@ import axios from "axios";
 import { LoginValues } from "../user/LoginForm";
 import { RegisterValues } from "../user/RegisterForm";
 
+export type CompanyDetails = {
+    name: string
+    address: string
+    vatNumber: string
+    regNumber: string
+    iban?: string
+    swift?: string
+}
+
 export type LoginReturnData = {
     user_id: string,
     email: string,
     name: string,
     token: string,
-    companyDetails: {
-        name: string
-        address: string
-        vatNumber: string
-        regNumber: string
-        iban?: string
-        swift?: string
-    }
-
+    companyDetails: CompanyDetails
 }
+
+export type UserDTO = {
+    id: string
+    name: string
+    email: string
+    password: string
+    avatar?: string
+    companyDetails?: CompanyDetails
+};
 
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -34,9 +44,27 @@ const register = async (registerValues: RegisterValues) => {
     console.log(registerValues);
 }
 
+const validateToken = async (token: string): Promise<UserDTO | null> => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/me`, {
+            headers: {
+                'x-access-token': token
+            }
+        });
+        const data = await res.json();
+        return data;
+    } catch (err) {
+        console.log(err);
+        if (axios.isAxiosError(err))
+            return null;
+        return null;
+    }
+}
+
 const AuthAPI = {
     login,
-    register
+    register,
+    validateToken
 }
 
 export default AuthAPI;

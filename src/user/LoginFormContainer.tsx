@@ -33,7 +33,6 @@ const LoginFormContainer = () => {
                     } else {
                         showAlert("Something went wrong");
                     }
-                } finally {
                     setDisabled(false);
                 }
             }} />
