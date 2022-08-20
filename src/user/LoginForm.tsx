@@ -36,13 +36,15 @@ const LoginForm = ({ onSubmit, formError, disabled }: LoginFormProps) => {
             <form onSubmit={handleFormHookSubmit(handleSubmit)} className="flex flex-col gap-5">
                 <TextField {...register("email")}
                     data-test='email'
-                    defaultValue="test@gmail.com"
+                    label="Email"
+                    placeholder='myemail@toptal.com'
                     error={!!errors.email}
                     helperText={errors.email?.message}
                     disabled={disabled} />
                 <TextField {...register("password")}
                     type="password"
                     data-test='password'
+                    label="Password"
                     error={!!errors.password}
                     helperText={errors.password?.message}
                     disabled={disabled}

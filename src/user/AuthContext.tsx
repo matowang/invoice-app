@@ -2,7 +2,7 @@ import { setCookie, destroyCookie, parseCookies } from 'nookies'
 
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
-import AuthAPI, { UserDTO } from '../api/auth';
+import AuthAPI, { UserDTO, setHeaderToken } from '../api/auth';
 
 interface AuthContextType {
     loading: boolean;
@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<UserDTO | null>(null);
 
     const initAuth = useCallback(async () => {
+        setLoading(true);
         console.log("init auth");
         const { token } = parseCookies();
         if (!token) return setLoading(false);
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (user) {
             setToken(token);
             setUser(user);
+            setHeaderToken(token, logout);
         } else {
             destroyCookie(null, 'token');
         }
@@ -55,6 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (user) {
             setToken(token);
             setUser(user);
+            setHeaderToken(token, logout);
         } else {
             destroyCookie(null, 'token');
         }

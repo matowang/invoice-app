@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from "zod";
 
 const RegisterSchema = z.object({
+    name: z.string(),
     email: z.string().email(),
     password: z.string().min(5, "Password must contain more than 4 characters").max(16, "Password can't be more than 16 characters"),
     confirmPassword: z.string().min(5, "Password must contain more than 4 characters").max(16, "Password can't be more than 16 characters"),
@@ -17,10 +18,12 @@ export type RegisterValues = z.infer<typeof RegisterSchema>;
 
 interface RegisterFormProps {
     onSubmit: (data: RegisterValues) => void;
+    formError: string | null;
+    disabled: boolean;
 }
 
-const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
-    const { register, handleSubmit: handleFormHookSubmit, formState: { errors }, getValues, watch } = useForm<RegisterValues>({
+const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
+    const { register, handleSubmit: handleFormHookSubmit, formState: { errors } } = useForm<RegisterValues>({
         resolver: zodResolver(RegisterSchema)
     });
 
@@ -30,22 +33,35 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
 
     return (
         <>
-            <h1 className='my-3 text-lg'>Register</h1>
+            <h1 className='my-3 text-lg'>Sign-Up</h1>
+            {formError && <p className='text-red-400' data-test='form-error'>{formError}</p>}
             <form onSubmit={handleFormHookSubmit(handleSubmit)} className="flex flex-col gap-5">
+                <TextField {...register("name")}
+                    label="Name"
+                    placeholder="Matthew Wang"
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                    disabled={disabled} />
                 <TextField {...register("email")}
-                    defaultValue="test@gmail.com"
+                    label="Email"
+                    placeholder="myemail@toptal.com"
                     error={!!errors.email}
-                    helperText={errors.email?.message} />
+                    helperText={errors.email?.message}
+                    disabled={disabled} />
                 <TextField type="password" {...register("password")}
+                    label="Password"
                     error={!!errors.password}
                     helperText={errors.password?.message}
+                    disabled={disabled}
                 />
                 <TextField type="password"
                     {...register("confirmPassword")}
+                    label="Confirm Password"
                     error={!!errors.confirmPassword}
                     helperText={errors.confirmPassword?.message}
+                    disabled={disabled}
                 />
-                <Button type="submit" variant='contained'>Submit</Button>
+                <Button type="submit" variant='contained' disabled={disabled}>Submit</Button>
             </form>
         </>
     )
