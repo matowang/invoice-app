@@ -27,8 +27,9 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
         resolver: zodResolver(RegisterSchema)
     });
 
-    const handleSubmit = (data: RegisterValues) => {
-        onSubmit(data);
+    const handleSubmit = async (data: RegisterValues) => {
+        if (disabled) return;
+        await onSubmit(data);
     }
 
     return (
@@ -61,7 +62,7 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
                     helperText={errors.confirmPassword?.message}
                     disabled={disabled}
                 />
-                <Button type="submit" variant='contained' disabled={disabled}>Submit</Button>
+                <Button type="submit" variant='contained' disabled={disabled}>Sign-Up</Button>
             </form>
         </>
     )

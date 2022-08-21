@@ -10,6 +10,7 @@ interface AuthContextType {
     logout: () => void;
     token: string | null;
     user: UserDTO | null;
+    updateUser: (user: UserDTO) => void;
 }
 
 interface AuthProviderProps {
@@ -73,7 +74,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUser(null);
     }
 
-    return <AuthContext.Provider value={{ loading, login, logout, token, user }}>
+    const updateUser = (user: UserDTO) => {
+        setUser(user);
+    }
+
+    return <AuthContext.Provider value={{ loading, login, logout, token, user, updateUser }}>
         {children}
     </AuthContext.Provider>
 }

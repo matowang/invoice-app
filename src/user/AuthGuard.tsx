@@ -3,6 +3,7 @@ import { ReactNode, useEffect } from "react"
 import { useAuth } from './AuthContext';
 
 import { useRouter } from 'next/router';
+import PageLoader from "../components/PageLoader";
 
 interface AuthGuardProps {
     children: ReactNode
@@ -12,11 +13,15 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
     const { loading, user } = useAuth();
     const router = useRouter();
     useEffect(() => {
-        if (!loading && !user)
-            router.push('/login');
+        if (!loading)
+            if (!user)
+                router.push('/login');
+            else if (!user.companyDetails)
+                router.push('/company-details')
+
     }, [loading, user]);
-    if (!user)
-        return <div><h1>loading...</h1></div>;
+    if (!user?.companyDetails)
+        return <PageLoader />;
     return <>{children}</>;
 }
 

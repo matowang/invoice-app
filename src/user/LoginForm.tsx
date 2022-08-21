@@ -49,7 +49,7 @@ const LoginForm = ({ onSubmit, formError, disabled }: LoginFormProps) => {
                     helperText={errors.password?.message}
                     disabled={disabled}
                 />
-                <Button type="submit" variant='contained' disabled={disabled} data-test='submit-login'>Submit</Button>
+                <Button type="submit" variant='contained' disabled={disabled} data-test='submit-login'>Login</Button>
             </form>
         </>
     )

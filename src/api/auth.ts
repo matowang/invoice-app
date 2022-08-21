@@ -2,15 +2,7 @@ import axios from "axios";
 
 import { LoginValues } from "../user/LoginForm";
 import { RegisterValues } from "../user/RegisterForm";
-
-export type CompanyDetails = {
-    name: string,
-    address: string,
-    vatNumber: string,
-    regNumber: string,
-    iban?: string,
-    swift?: string,
-}
+import { CompanyDetails } from "../user/CompanyDetailsForm";
 
 export type LoginDTO = {
     user_id: string,
@@ -100,10 +92,16 @@ const validateToken = async (token: string): Promise<UserDTO | null> => {
     }
 }
 
+const setCompanyDetails = async (newCompanyDetails: CompanyDetails): Promise<UserDTO> => {
+    const { data: { user } } = await dbInstance.put<{ success: boolean, user: UserDTO }>('/me/company', newCompanyDetails);
+    return user;
+}
+
 const AuthAPI = {
     login,
     register,
-    validateToken
+    validateToken,
+    setCompanyDetails
 }
 
 export default AuthAPI;
