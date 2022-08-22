@@ -19,7 +19,7 @@ const Register = () => {
     return (
         <div className='my-40 mx-20 flex flex-col items-center relative'>
             <div className='max-w-md w-full'>
-                <CompanyDetailsFormContainer onSubmitSuccess={() => { router.push('/dashboard') }} />
+                <CompanyDetailsFormContainer onSubmitSuccess={() => { router.push('/') }} />
             </div>
         </div>)
 }

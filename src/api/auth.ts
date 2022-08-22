@@ -46,7 +46,7 @@ export const setHeaderToken = (token: string, onTokenInvalid: () => unknown) => 
             ...config,
             headers: {
                 ...config.headers,
-                'x-access-token': token
+                'x-access-token': 555
             }
         }
         return config;

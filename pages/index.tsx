@@ -1,28 +1,24 @@
-import LoginFormContainer from '../src/user/LoginFormContainer';
-
-import AuthGuard from '../src/user/AuthGuard';
-
-import { Container, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from '@mui/material';
 
 const axios = require('axios').default; //remove this to use only client side
 
 import { AxiosError } from 'axios';
 import type { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
 
-import { getClients } from '../src/api/base';
+import AuthGuard from '../src/user/AuthGuard';
 
-import { useAuth } from '../src/user/AuthContext';
+import InvoicesTableContainer from '../src/invoices/InvoicesTableContainer';
 
-interface HomeProps {
+interface DashboardProps {
 	clients: any[];
 	invoices: any[];
 }
 
-const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
+const Dashboard: NextPage<DashboardProps> = ({ clients, invoices }) => {
 	return (
 		<AuthGuard>
-			<Container maxWidth='md' >
-				<h1>Invoice App</h1>
+			<div className="grid grid-cols-1 xl:grid-cols-2 my-20" >
 				<TableContainer component={Paper} sx={{ mt: 9 }}>
 					<Table sx={{ minWidth: 650 }} aria-label="client table">
 						<TableHead>
@@ -50,32 +46,21 @@ const Home: NextPage<HomeProps> = ({ clients, invoices }) => {
 						</TableBody>
 					</Table>
 				</TableContainer>
-				<TableContainer component={Paper} sx={{ mt: 5 }}>
-					<Table sx={{ minWidth: 650 }} aria-label="invoice table">
-						<TableHead>
-							<TableRow>
-								<TableCell component='th'>Invoice Number</TableCell>
-								<TableCell component='th' align="right">Client</TableCell>
-								<TableCell component='th' align="right">Due Date</TableCell>
-								<TableCell component='th' align="right">Bill</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{invoices.map(({ invoice, client }) => (
-								<TableRow
-									key={invoice.id}
-									sx={{}}
-								>
-									<TableCell>{invoice.invoice_number}</TableCell>
-									<TableCell align="right">{client.name}</TableCell>
-									<TableCell align="right">{invoice.date}</TableCell>
-									<TableCell align="right">{invoice.value}</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</TableContainer>
-			</Container>
+				<section>
+					<header className='flex justify-between items-end'>
+						<h2 className='m-0'>Invoices</h2>
+						<div>
+							<Link href="/invoices"><a className="no-underline">
+								<Button variant="outlined">Add Invoice</Button>
+							</a></Link>
+							<Link href="/invoices"><a className="no-underline">
+								<Button variant="outlined">See all</Button>
+							</a></Link>
+						</div>
+					</header>
+					<InvoicesTableContainer page={1} />
+				</section >
+			</div>
 		</AuthGuard>
 	)
 }
@@ -107,4 +92,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 
-export default Home;
+export default Dashboard;

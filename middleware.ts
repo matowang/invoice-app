@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import AuthAPI from './src/api/auth';
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/login'],
+    matcher: ['/', '/login'],
 }
 
 export async function middleware(request: NextRequest) {

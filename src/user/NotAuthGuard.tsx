@@ -13,7 +13,7 @@ const NotAuthGuard = ({ children }: NotAuthGuardProps) => {
     const router = useRouter();
     useEffect(() => {
         if (!loading && user)
-            router.push('/dashboard');
+            router.push('/');
     }, [loading, user]);
     if (loading || user)
         return <div><h1>loading...</h1></div>;

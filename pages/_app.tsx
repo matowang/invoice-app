@@ -6,6 +6,8 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { AuthProvider } from '../src/user/AuthContext';
 import { AlertProvider } from '../src/components/AlertContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import ErrorBoundary from '../src/components/ErrorBoundary';
 
@@ -13,8 +15,10 @@ import createEmotionCache from '../src/util/createEmotionCache';
 import MUITheme from '../MUITheme';
 
 const emotionCache = createEmotionCache();
+const queryClient = new QueryClient()
 
 import Layout from '../src/layout';
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -23,17 +27,20 @@ function MyApp({ Component, pageProps }: AppProps) {
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={MUITheme}>
             <CssBaseline />
-            <AlertProvider>
-              <AuthProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </AuthProvider>
-            </AlertProvider>
+            <QueryClientProvider client={queryClient}>
+              <AlertProvider>
+                <AuthProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </AuthProvider>
+              </AlertProvider>
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
           </ThemeProvider>
         </CacheProvider>
       </StyledEngineProvider>
-    </ErrorBoundary>
+    </ErrorBoundary >
   )
 }
 
