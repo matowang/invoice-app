@@ -1,15 +1,16 @@
-import { Pagination } from "@mui/material";
+import { Button, Pagination } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
+import Link from 'next/link';
 
-import { useInvoices } from "../src/invoices/useInvoices";
+import { useInvoices } from "../../src/invoices/useInvoices";
 
-import PageLoader from "../src/components/PageLoader";
-import AuthGuard from "../src/user/AuthGuard";
+import PageLoader from "../../src/components/PageLoader";
+import AuthGuard from "../../src/user/AuthGuard";
 
-import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
+import InvoicesTableContainer from "../../src/invoices/InvoicesTableContainer";
 
-const Invoices = () => {
+const InvoicesPage = () => {
     const [page, setPage] = useState<number | undefined>();
     const router = useRouter();
     const { totalPages } = useInvoices({ page });
@@ -49,6 +50,14 @@ const Invoices = () => {
     return (
         <AuthGuard>
             <div className="mt-20 mx-10">
+                <header className='flex justify-between items-end'>
+                    <h2 className='m-0'>Invoices</h2>
+                    <div className="flex gap-2">
+                        <Link href="/add-invoice"><a className="no-underline">
+                            <Button variant="outlined">Add Invoice</Button>
+                        </a></Link>
+                    </div>
+                </header>
                 <InvoicesTableContainer page={page} />
             </div >
             <div className="flex justify-center mt-10">
@@ -59,4 +68,4 @@ const Invoices = () => {
 }
 
 
-export default Invoices;
+export default InvoicesPage;

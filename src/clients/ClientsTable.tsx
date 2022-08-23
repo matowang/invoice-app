@@ -15,10 +15,10 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
             <Table sx={{ minWidth: 650 }} aria-label="client table">
                 <TableHead>
                     <TableRow>
-                        <TableCell component='th'>Client Name</TableCell>
-                        <TableCell component='th' align="right">Email</TableCell>
-                        <TableCell component='th' align="right">Company</TableCell>
-                        <TableCell component='th' align="right">Total Billed</TableCell>
+                        <TableCell component='th' className="font-bold">Client Name</TableCell>
+                        <TableCell component='th' align="right" className="font-bold">Email</TableCell>
+                        <TableCell component='th' align="right" className="font-bold">Company</TableCell>
+                        <TableCell component='th' align="right" className="font-bold">Total Billed</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

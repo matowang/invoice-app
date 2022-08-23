@@ -56,9 +56,6 @@ const Clients = () => {
                         <Link href="/clients/new"><a className="no-underline">
                             <Button variant="outlined">Add Client</Button>
                         </a></Link>
-                        <Link href="/clients"><a className="no-underline">
-                            <Button variant="outlined">See all</Button>
-                        </a></Link>
                     </div>
                 </header>
                 <ClientsTableContainer page={page} />

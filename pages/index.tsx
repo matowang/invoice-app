@@ -10,11 +10,11 @@ import ClientsTableContainer from '../src/clients/ClientsTableContainer';
 const Dashboard: NextPage = () => {
 	return (
 		<AuthGuard>
-			<div className="grid grid-cols-1 xl:grid-cols-2 my-20" >
+			<div className="grid grid-cols-1 gap-10 xl:grid-cols-[3fr_5fr] my-20 mx-10" >
 				<section>
 					<header className='flex justify-between items-end'>
 						<h2 className='m-0'>Clients</h2>
-						<div>
+						<div className="flex gap-2">
 							<Link href="/clients/new"><a className="no-underline">
 								<Button variant="outlined">Add Client</Button>
 							</a></Link>
@@ -28,7 +28,7 @@ const Dashboard: NextPage = () => {
 				<section>
 					<header className='flex justify-between items-end'>
 						<h2 className='m-0'>Invoices</h2>
-						<div>
+						<div className="flex gap-2">
 							<Link href="/add-invoice"><a className="no-underline">
 								<Button variant="outlined">Add Invoice</Button>
 							</a></Link>
