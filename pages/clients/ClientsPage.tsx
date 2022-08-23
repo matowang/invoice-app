@@ -1,13 +1,14 @@
-import { Pagination } from "@mui/material";
+import { Button, Pagination } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
+import Link from 'next/link';
 
-import { useClients } from "../src/clients/useClients";
+import { useClients } from "../../src/clients/useClients";
 
-import PageLoader from "../src/components/PageLoader";
-import AuthGuard from "../src/user/AuthGuard";
+import PageLoader from "../../src/components/PageLoader";
+import AuthGuard from "../../src/user/AuthGuard";
 
-import ClientsTableContainer from "../src/clients/ClientsTableContainer";
+import ClientsTableContainer from "../../src/clients/ClientsTableContainer";
 
 const Clients = () => {
     const [page, setPage] = useState<number | undefined>();
@@ -49,6 +50,17 @@ const Clients = () => {
     return (
         <AuthGuard>
             <div className="mt-20 mx-10">
+                <header className='flex justify-between items-end'>
+                    <h2 className='m-0'>Clients</h2>
+                    <div>
+                        <Link href="/clients/new"><a className="no-underline">
+                            <Button variant="outlined">Add Client</Button>
+                        </a></Link>
+                        <Link href="/clients"><a className="no-underline">
+                            <Button variant="outlined">See all</Button>
+                        </a></Link>
+                    </div>
+                </header>
                 <ClientsTableContainer page={page} />
             </div >
             <div className="flex justify-center mt-10">

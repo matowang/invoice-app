@@ -15,7 +15,7 @@ const Dashboard: NextPage = () => {
 					<header className='flex justify-between items-end'>
 						<h2 className='m-0'>Clients</h2>
 						<div>
-							<Link href="/add-client"><a className="no-underline">
+							<Link href="/clients/new"><a className="no-underline">
 								<Button variant="outlined">Add Client</Button>
 							</a></Link>
 							<Link href="/clients"><a className="no-underline">

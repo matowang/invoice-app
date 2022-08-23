@@ -1,3 +1,4 @@
+import { ClientValues } from "../clients/ClientForm";
 import { dbInstance } from "./auth";
 
 export const CLIENTS_PAGE_LIMIT = 10;
@@ -49,6 +50,12 @@ export const getClients = async ({ page }: { page: number }) => {
         offset: ((page - 1) * CLIENTS_PAGE_LIMIT).toString(),
     }
     const { data } = await dbInstance.get<{ clients: ClientDTO[], total: number }>(`/clients?${new URLSearchParams(params).toString()}`);
+    return data;
+}
+
+export const createClient = async (clientValues: ClientValues) => {
+    await new Promise(r => setTimeout(r, 2000));
+    const { data } = await dbInstance.post('/clients', clientValues);
     return data;
 }
 
