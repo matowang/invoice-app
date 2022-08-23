@@ -1,4 +1,5 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton } from "@mui/material";
+import TableRowError from "../components/TableRowError";
 
 import { ClientDTO } from '../api/base';
 
@@ -43,12 +44,10 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
                                     <TableCell align="right">{client.totalBilled}</TableCell>
                                 </TableRow>
                             ))}
-                    {errorMessage && <TableRow>
-                        <TableCell align="center" className="text-red-500">{errorMessage}</TableCell>
-                    </TableRow>}
+                    {errorMessage && <TableRowError colSpan={4} errorMessage={errorMessage} />}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     )
 }
 

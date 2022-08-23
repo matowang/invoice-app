@@ -1,4 +1,5 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton } from "@mui/material";
+import TableRowError from "../components/TableRowError";
 
 import { InvoiceDTO } from '../api/base';
 
@@ -8,7 +9,7 @@ interface InvoicesTableProps {
     errorMessage?: string;
 }
 
-const InvoicesTable = ({ invoices, loading }: InvoicesTableProps) => {
+const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) => {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="invoice table">
@@ -43,6 +44,7 @@ const InvoicesTable = ({ invoices, loading }: InvoicesTableProps) => {
                                     <TableCell align="right">{invoice.value}</TableCell>
                                 </TableRow>
                             ))}
+                    {errorMessage && <TableRowError colSpan={4} errorMessage={errorMessage} />}
                 </TableBody>
             </Table>
         </TableContainer>

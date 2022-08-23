@@ -77,6 +77,7 @@ const register = async (registerValues: RegisterValues) => {
 }
 
 const validateToken = async (token: string): Promise<UserDTO | null> => {
+    await new Promise(r => setTimeout(r, 2000));
     try {
         const { data } = await axiosInstance.get('/me', {
             headers: {
