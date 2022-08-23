@@ -22,7 +22,7 @@ const InvoicesTable = ({ invoices, loading }: InvoicesTableProps) => {
                 </TableHead>
                 <TableBody>
                     {loading ?
-                        Array.from(Array(10)).map(() => <TableRow>
+                        Array.from(Array(10)).map((e, i) => <TableRow key={i + 'inv-skel'}>
                             <TableCell><Skeleton /></TableCell>
                             <TableCell align="right"><Skeleton /></TableCell>
                             <TableCell align="right"><Skeleton /></TableCell>

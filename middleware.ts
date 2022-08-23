@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-import AuthAPI from './src/api/auth';
-
 export const config = {
-    matcher: ['/', '/login'],
+    matcher: ['/'],
 }
 
 export async function middleware(request: NextRequest) {

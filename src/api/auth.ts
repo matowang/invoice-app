@@ -37,7 +37,7 @@ export const dbInstance = axios.create({
 
 let headerTokenInterceptor: number;
 let tokenInvalidInterceptor: number;
-export const setHeaderToken = (token: string, onTokenInvalid: () => unknown) => {
+export const setHeaderToken = (token: string, onTokenInvalid?: () => unknown) => {
     dbInstance.interceptors.request.eject(headerTokenInterceptor);
     dbInstance.interceptors.request.eject(tokenInvalidInterceptor);
     dbInstance.interceptors.request.use(function (config) {

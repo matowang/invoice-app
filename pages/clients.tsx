@@ -2,28 +2,28 @@ import { Pagination } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 
-import { useInvoices } from "../src/invoices/useInvoices";
+import { useClients } from "../src/clients/useClients";
 
 import PageLoader from "../src/components/PageLoader";
 import AuthGuard from "../src/user/AuthGuard";
 
-import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
+import ClientsTableContainer from "../src/clients/ClientsTableContainer";
 
-const Invoices = () => {
+const Clients = () => {
     const [page, setPage] = useState<number | undefined>();
     const router = useRouter();
-    const { totalPages } = useInvoices({ page });
+    const { totalPages } = useClients({ page });
 
     useEffect(() => {
         if (!router.isReady) return;
         if (typeof router.query.page !== 'string') {
-            router.replace(`/invoices?page=${1}`);
+            router.replace(`/clients?page=${1}`);
             setPage(1);
             return;
         }
         const page = parseInt(router.query.page);
         if (page < 1) {
-            router.replace(`/invoices?pages=1`)
+            router.replace(`/clients?pages=1`)
             setPage(1);
         } else {
             setPage(page)
@@ -33,7 +33,7 @@ const Invoices = () => {
     useEffect(() => {
         if (!totalPages || !page) return;
         if (totalPages < page) {
-            router.replace(`/invoices?pages=${totalPages}`);
+            router.replace(`/clients?pages=${totalPages}`);
             setPage(totalPages);
         }
     }, [page, totalPages])
@@ -42,14 +42,14 @@ const Invoices = () => {
         return <PageLoader />
 
     const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
-        router.push(`/invoices?page=${page}`);
+        router.push(`/clients?page=${page}`);
         setPage(page);
     }
 
     return (
         <AuthGuard>
             <div className="mt-20 mx-10">
-                <InvoicesTableContainer page={page} />
+                <ClientsTableContainer page={page} />
             </div >
             <div className="flex justify-center mt-10">
                 <Pagination count={totalPages} page={page} onChange={handlePageChange} />
@@ -59,4 +59,4 @@ const Invoices = () => {
 }
 
 
-export default Invoices;
+export default Clients;

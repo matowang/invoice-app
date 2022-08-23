@@ -1,7 +1,3 @@
-import { Button } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import Link from 'next/link';
-import { getInvoices, InvoiceDTO } from '../api/base';
 import { useInvoices } from './useInvoices';
 import InvoicesTable from './InvoicesTable';
 
