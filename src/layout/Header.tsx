@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, Button, Skeleton, Toolbar, Typography } from "@mui/material";
 import AdbIcon from '@mui/icons-material/Adb';
 
 import { useAuth } from '../user/AuthContext';
@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Header = () => {
 
-    const { logout } = useAuth();
+    const { loading, logout } = useAuth();
 
     return (
         <AppBar position="fixed">
@@ -30,7 +30,8 @@ const Header = () => {
                         BILLING APP
                     </Typography>
                 </Link>
-                <Button sx={{ ml: 'auto' }} color="inherit" onClick={logout}>Logout</Button>
+                {true ? <Skeleton sx={{ ml: 'auto' }} width={100} /> :
+                    <Button sx={{ ml: 'auto' }} color="inherit" onClick={logout}>Logout</Button>}
             </Toolbar>
         </AppBar>)
 }
