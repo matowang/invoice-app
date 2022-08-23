@@ -13,7 +13,7 @@ const CreateClientForm = ({ onSubmitSuccess }: ClientFormContainerProps) => {
 
     const { showAlert } = useAlert();
     const [formError, setFormError] = useState<string | null>(null);
-    const { mutate, isLoading } = useCreateClient({});
+    const { mutate, isLoading } = useCreateClient();
 
     return <>
         <LinearLoader loading={isLoading} />
