@@ -1,6 +1,6 @@
 import { Button, Pagination } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo } from "react";
 import Link from 'next/link';
 
 import { useInvoices } from "../../src/invoices/useInvoices";
@@ -11,31 +11,29 @@ import AuthGuard from "../../src/user/AuthGuard";
 import InvoicesTableContainer from "../../src/invoices/InvoicesTableContainer";
 
 const InvoicesPage = () => {
-    const [page, setPage] = useState<number | undefined>();
     const router = useRouter();
+    const page = useMemo(() =>
+        typeof router.query.page === 'string' ?
+            parseInt(router.query.page) : undefined
+        , [router.query]);
     const { totalPages } = useInvoices({ page });
 
     useEffect(() => {
         if (!router.isReady) return;
         if (typeof router.query.page !== 'string') {
             router.replace(`/invoices?page=${1}`);
-            setPage(1);
             return;
         }
         const page = parseInt(router.query.page);
         if (page < 1) {
             router.replace(`/invoices?pages=1`)
-            setPage(1);
-        } else {
-            setPage(page)
         }
     }, [router.isReady]);
 
     useEffect(() => {
         if (!totalPages || !page) return;
         if (totalPages < page) {
-            router.replace(`/invoices?pages=${totalPages}`);
-            setPage(totalPages);
+            router.replace(`/invoices?page=${totalPages}`);
         }
     }, [page, totalPages])
 
@@ -44,7 +42,6 @@ const InvoicesPage = () => {
 
     const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
         router.push(`/invoices?page=${page}`);
-        setPage(page);
     }
 
     return (

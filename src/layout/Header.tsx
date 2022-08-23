@@ -30,7 +30,7 @@ const Header = () => {
                         BILLING APP
                     </Typography>
                 </Link>
-                {true ? <Skeleton sx={{ ml: 'auto' }} width={100} /> :
+                {loading ? <Skeleton sx={{ ml: 'auto' }} width={100} /> :
                     <Button sx={{ ml: 'auto' }} color="inherit" onClick={logout}>Logout</Button>}
             </Toolbar>
         </AppBar>)

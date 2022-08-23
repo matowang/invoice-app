@@ -1,5 +1,7 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton } from "@mui/material";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton, Button, IconButton } from "@mui/material";
 import TableRowStatusMessage from "../components/TableRowStatusMessage";
+import Link from 'next/link';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { InvoiceDTO } from '../api/base';
 
@@ -19,6 +21,7 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
                         <TableCell component='th' align="right" className="font-bold">Client</TableCell>
                         <TableCell component='th' align="right" className="font-bold">Due Date</TableCell>
                         <TableCell component='th' align="right" className="font-bold">Value</TableCell>
+                        <TableCell component='th' align="right" className="font-bold"></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -28,24 +31,28 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
                             <TableCell align="right"><Skeleton /></TableCell>
                             <TableCell align="right"><Skeleton /></TableCell>
                             <TableCell align="right"><Skeleton /></TableCell>
+                            <TableCell align="right"><Skeleton /></TableCell>
                         </TableRow>)
                         : invoices?.length === 0 ?
-                            <TableRowStatusMessage colSpan={4} status='empty'>No Invoices to show</TableRowStatusMessage>
+                            <TableRowStatusMessage colSpan={5} status='empty'>No Invoices to show</TableRowStatusMessage>
                             : invoices?.map(({ invoice, client }) => (
-                                <TableRow
-                                    key={invoice.id}
-                                    sx={{}}
-                                >
-                                    <TableCell>{invoice.invoice_number}</TableCell>
+
+                                <TableRow hover component="tr">
+                                    <TableCell>
+                                        <Link href={`/invoices/${invoice.id}/view`} key={invoice.id} passHref><a className="text-inherit">
+                                            {invoice.invoice_number}
+                                        </a></Link>
+                                    </TableCell>
                                     <TableCell align="right">{client.name}</TableCell>
                                     <TableCell align="right">{invoice.date}</TableCell>
                                     <TableCell align="right">{invoice.value}</TableCell>
+                                    <TableCell align="right" sx={{ p: 0 }}><IconButton onClick={() => { }}><MoreVertIcon /></IconButton></TableCell>
                                 </TableRow>
                             ))}
                     {errorMessage && <TableRowStatusMessage colSpan={4} status='error'>{errorMessage}</TableRowStatusMessage>}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     )
 }
 

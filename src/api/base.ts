@@ -60,7 +60,7 @@ export const createClient = async (clientValues: ClientValues) => {
 }
 
 export const getInvoices = async ({ page }: { page: number }) => {
-    await new Promise(r => setTimeout(r, 2000));
+    //await new Promise(r => setTimeout(r, 2000));
     const params = {
         limit: INVOICES_PAGE_LIMIT.toString(),
         offset: ((page - 1) * INVOICES_PAGE_LIMIT).toString(),

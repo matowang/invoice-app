@@ -2,9 +2,8 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { Snackbar, Alert } from '@mui/material';
 import { AlertColor } from "@mui/material/Alert";
 
-
 interface AlertContextType {
-    showAlert: (msg: string, type?: AlertColor) => void;
+    showAlert: (msg: ReactNode, type?: AlertColor) => void;
 }
 
 interface AlertProviderProps {
@@ -23,11 +22,11 @@ export const useAlert = () => {
 export const AlertProvider = ({ children }: AlertProviderProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const [alertType, setAlertType] = useState<AlertColor>("success");
-    const [alertMessage, setAlterMessage] = useState<string>("Alert");
+    const [alertMessage, setAlterMessage] = useState<ReactNode>("Alert");
 
-    const showAlert = (msg: string, type: AlertColor = 'error'): void => {
+    const showAlert = (msg: ReactNode, type: AlertColor = 'error'): void => {
         setAlertType(type);
-        setAlterMessage(msg.toString());
+        setAlterMessage(msg);
         setOpen(true);
     }
 
