@@ -1,5 +1,5 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton } from "@mui/material";
-import TableRowError from "../components/TableRowError";
+import TableRowStatusMessage from "../components/TableRowStatusMessage";
 
 import { InvoiceDTO } from '../api/base';
 
@@ -30,9 +30,7 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
                             <TableCell align="right"><Skeleton /></TableCell>
                         </TableRow>)
                         : invoices?.length === 0 ?
-                            <TableRow>
-                                <TableCell colSpan={4} className="text-center">No invoices to show.</TableCell>
-                            </TableRow>
+                            <TableRowStatusMessage colSpan={4} status='empty'>No Invoices to show</TableRowStatusMessage>
                             : invoices?.map(({ invoice, client }) => (
                                 <TableRow
                                     key={invoice.id}
@@ -44,7 +42,7 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
                                     <TableCell align="right">{invoice.value}</TableCell>
                                 </TableRow>
                             ))}
-                    {errorMessage && <TableRowError colSpan={4} errorMessage={errorMessage} />}
+                    {errorMessage && <TableRowStatusMessage colSpan={4} status='error'>{errorMessage}</TableRowStatusMessage>}
                 </TableBody>
             </Table>
         </TableContainer>

@@ -1,5 +1,5 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton } from "@mui/material";
-import TableRowError from "../components/TableRowError";
+import TableRowStatusMessage from "../components/TableRowStatusMessage";
 
 import { ClientDTO } from '../api/base';
 
@@ -30,9 +30,7 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
                             <TableCell align="right"><Skeleton /></TableCell>
                         </TableRow>)
                         : clients?.length === 0 ?
-                            <TableRow>
-                                <TableCell colSpan={4} className="text-center">No clients to show.</TableCell>
-                            </TableRow>
+                            <TableRowStatusMessage colSpan={4} status='empty'>No Clients to Show.</TableRowStatusMessage>
                             : clients?.map((client) => (
                                 <TableRow key={client.id}
                                 >
@@ -44,7 +42,7 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
                                     <TableCell align="right">{client.totalBilled}</TableCell>
                                 </TableRow>
                             ))}
-                    {errorMessage && <TableRowError colSpan={4} errorMessage={errorMessage} />}
+                    {errorMessage && <TableRowStatusMessage colSpan={4} status='error'>{errorMessage}</TableRowStatusMessage>}
                 </TableBody>
             </Table>
         </TableContainer >
