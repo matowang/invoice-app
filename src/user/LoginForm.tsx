@@ -25,7 +25,6 @@ const LoginForm = ({ onSubmit, formError, disabled }: LoginFormProps) => {
 
     const handleSubmit = async (data: LoginValues) => {
         if (disabled) return;
-        console.log(data);
         await onSubmit(data);
     }
 
@@ -39,14 +38,14 @@ const LoginForm = ({ onSubmit, formError, disabled }: LoginFormProps) => {
                     label="Email"
                     placeholder='myemail@toptal.com'
                     error={!!errors.email}
-                    helperText={errors.email?.message}
+                    helperText={errors.email && <span data-test='email-error'>{errors.email?.message}</span>}
                     disabled={disabled} />
                 <TextField {...register("password")}
                     type="password"
                     data-test='password'
                     label="Password"
                     error={!!errors.password}
-                    helperText={errors.password?.message}
+                    helperText={errors.password && <span data-test='password-error'>{errors.password?.message}</span>}
                     disabled={disabled}
                 />
                 <Button type="submit" variant='contained' disabled={disabled} data-test='submit-login'>Login</Button>

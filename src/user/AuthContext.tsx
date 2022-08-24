@@ -54,6 +54,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }, [initAuth]);
 
     const login = async (token: string) => {
+        setCookie(null, 'token', token, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+        });
         const user = await AuthAPI.validateToken(token);
         if (user) {
             setToken(token);
@@ -62,10 +66,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         } else {
             destroyCookie(null, 'token');
         }
-        setCookie(null, 'token', token, {
-            maxAge: 30 * 24 * 60 * 60,
-            path: '/',
-        });
     }
 
     const logout = () => {

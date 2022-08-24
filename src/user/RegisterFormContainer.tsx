@@ -29,7 +29,7 @@ const RegisterFormContainer = ({ onRegisterSuccess }: RegisterFormContainerProps
                     if (axios.isAxiosError(err) && err.response?.status === 400)
                         setFormError(err.response?.data as string ?? null);
                     else
-                        showAlert("Something went wrong");
+                        showAlert(<span data-test='form-error'>"Something went wrong"</span>);
                     setDisabled(false);
                 }
             }} />

@@ -7,7 +7,7 @@ const Login = () => {
             <div className='max-w-md w-full'>
                 <LoginFormContainer />
             </div>
-            <Link href='/register'><a className="my-5">Don't have an account? Sign-up here.</a></Link>
+            <Link href='/signup'><a className="my-5">Don't have an account? Sign-up here.</a></Link>
         </div>
     </NotAuthGuard>
 }

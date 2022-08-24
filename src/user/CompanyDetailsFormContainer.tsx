@@ -28,9 +28,10 @@ const CompanyDetailsFormContainer = ({ onSubmitSuccess }: CompanyDetailsFormCont
                 try {
                     const newUser = await AuthAPI.setCompanyDetails(data);
                     updateUser(newUser);
-                    onSubmitSuccess();
+                    await onSubmitSuccess();
+                    showAlert(<span data-test='success-message'>Onboarding successful.</span>, 'success')
                 } catch (err) {
-                    showAlert("Something went wrong");
+                    showAlert(<span data-test="form-error">Something went wrong</span>);
                     setDisabled(false);
                 }
             }} />

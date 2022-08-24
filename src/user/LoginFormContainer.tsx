@@ -31,7 +31,7 @@ const LoginFormContainer = () => {
                     if (axios.isAxiosError(err) && err.response?.status === 400) {
                         setFormError("The entered Email or Password is wrong.")
                     } else {
-                        showAlert("Something went wrong");
+                        showAlert(<span data-test='form-error'>"Something went wrong"</span>);
                     }
                     setDisabled(false);
                 }

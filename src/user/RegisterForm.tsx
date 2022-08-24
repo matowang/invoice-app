@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from "zod";
 
 const RegisterSchema = z.object({
-    name: z.string(),
+    name: z.string().min(1),
     email: z.string().email(),
     password: z.string().min(5, "Password must contain more than 4 characters").max(16, "Password can't be more than 16 characters"),
     confirmPassword: z.string().min(5, "Password must contain more than 4 characters").max(16, "Password can't be more than 16 characters"),
@@ -41,28 +41,36 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
                     label="Name"
                     placeholder="Matthew Wang"
                     error={!!errors.name}
-                    helperText={errors.name?.message}
-                    disabled={disabled} />
+                    helperText={errors.name && <span data-test="name-error">{errors.name?.message}</span>}
+                    disabled={disabled}
+                    data-test='name' />
                 <TextField {...register("email")}
                     label="Email"
                     placeholder="myemail@toptal.com"
                     error={!!errors.email}
-                    helperText={errors.email?.message}
-                    disabled={disabled} />
+                    helperText={errors.email && <span data-test="email-error">{errors.email?.message}</span>}
+                    disabled={disabled}
+                    data-test='email' />
                 <TextField type="password" {...register("password")}
                     label="Password"
                     error={!!errors.password}
-                    helperText={errors.password?.message}
+                    helperText={errors.password && <span data-test="password-error">{errors.password?.message}</span>}
                     disabled={disabled}
+                    data-test='password'
                 />
                 <TextField type="password"
                     {...register("confirmPassword")}
                     label="Confirm Password"
                     error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword?.message}
+                    helperText={errors.confirmPassword && <span data-test="confirm-password-error">{errors.confirmPassword?.message}</span>}
                     disabled={disabled}
+                    data-test='confirm-password'
                 />
-                <Button type="submit" variant='contained' disabled={disabled}>Sign-Up</Button>
+                <Button
+                    type="submit"
+                    variant='contained'
+                    disabled={disabled}
+                    data-test='submit-sign-up'>Sign-Up</Button>
             </form>
         </>
     )

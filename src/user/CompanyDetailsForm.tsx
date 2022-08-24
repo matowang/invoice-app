@@ -42,43 +42,53 @@ const CompanyDetailsForm = ({ disabled, onSubmit, defaultCompanyValues, formErro
                     defaultValue={defaultCompanyValues?.name}
                     placeholder="Toptal"
                     error={!!errors.name}
-                    helperText={errors.name?.message}
-                    disabled={disabled} />
+                    helperText={errors.name && <span data-test="company-name-error">{errors.name?.message}</span>}
+                    disabled={disabled}
+                    inputProps={{ 'data-test': 'company-name' }} />
                 <TextField {...register("address")}
                     label="Company Address"
                     defaultValue={defaultCompanyValues?.address}
                     error={!!errors.address}
-                    helperText={errors.address?.message}
-                    disabled={disabled} />
+                    helperText={errors.name && <span data-test="company-address-error">{errors.address?.message}</span>}
+                    disabled={disabled}
+                    inputProps={{ 'data-test': 'company-address' }} />
                 <TextField {...register("vatNumber")}
                     label="VAT Number"
                     defaultValue={defaultCompanyValues?.vatNumber}
                     placeholder="123456789"
                     error={!!errors.vatNumber}
-                    helperText={errors.vatNumber?.message}
-                    disabled={disabled} />
+                    helperText={errors.name && <span data-test="company-vat-error">{errors.vatNumber?.message}</span>}
+                    disabled={disabled}
+                    inputProps={{ 'data-test': 'company-vat' }} />
                 <TextField {...register("regNumber")}
                     label="Registration number"
                     defaultValue={defaultCompanyValues?.regNumber}
                     placeholder="OC123456"
                     error={!!errors.regNumber}
-                    helperText={errors.regNumber?.message}
-                    disabled={disabled} />
+                    helperText={errors.name && <span data-test="company-reg-error">{errors.regNumber?.message}</span>}
+                    disabled={disabled}
+                    inputProps={{ 'data-test': 'company-reg-number' }} />
                 <TextField {...register("iban")}
                     label="International Bank Account Number (IBAN)"
                     defaultValue={defaultCompanyValues?.iban}
                     placeholder="AL472121100900000002356987411"
                     error={!!errors.iban}
-                    helperText={errors.iban?.message}
-                    disabled={disabled} />
+                    helperText={errors.name && <span data-test="company-iban-error">{errors.iban?.message}</span>}
+                    disabled={disabled}
+                    inputProps={{ 'data-test': 'company-iban' }} />
                 <TextField {...register("swift")}
                     label="SWIFT code"
                     defaultValue={defaultCompanyValues?.swift}
                     placeholder="BOFAUS3N"
                     error={!!errors.swift}
-                    helperText={errors.swift?.message}
-                    disabled={disabled} />
-                <Button type="submit" variant='contained' disabled={disabled}>Submit</Button>
+                    helperText={errors.name && <span data-test="company-swift-error">{errors.swift?.message}</span>}
+                    disabled={disabled}
+                    inputProps={{ 'data-test': 'company-swift' }} />
+                <Button
+                    type="submit"
+                    variant='contained'
+                    disabled={disabled}
+                    data-test="submit-company-details">Submit</Button>
             </form>
         </>
     )
