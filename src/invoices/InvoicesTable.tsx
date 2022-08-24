@@ -1,9 +1,11 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton, Button, IconButton } from "@mui/material";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton, IconButton, Menu, MenuItem } from "@mui/material";
 import TableRowStatusMessage from "../components/TableRowStatusMessage";
 import Link from 'next/link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { InvoiceDTO } from '../api/base';
+import { useMenuOpen } from "../hooks/useMenuOpen";
+import { useState } from "react";
 
 interface InvoicesTableProps {
     invoices?: InvoiceDTO[];
@@ -12,6 +14,8 @@ interface InvoicesTableProps {
 }
 
 const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) => {
+    const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
+    const [currentMenuID, setCurrentMenuID] = useState<string | null>(null);
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="invoice table">
@@ -46,7 +50,24 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
                                     <TableCell align="right">{client.name}</TableCell>
                                     <TableCell align="right">{invoice.date}</TableCell>
                                     <TableCell align="right">{invoice.value}</TableCell>
-                                    <TableCell align="right" sx={{ p: 0 }}><IconButton onClick={() => { }}><MoreVertIcon /></IconButton></TableCell>
+                                    <TableCell align="right" sx={{ p: 0 }}>
+                                        <IconButton onClick={(event) => {
+                                            handleMenuClick(event);
+                                            setCurrentMenuID(invoice.id);
+                                        }}><MoreVertIcon /></IconButton>
+                                        <Menu
+                                            anchorEl={menuAnchorEl}
+                                            open={menuOpen && invoice.id === currentMenuID}
+                                            onClose={handleMenuClose}
+                                        >
+                                            <MenuItem onClick={handleMenuClose}>
+                                                <Link href={`/invoices/${invoice.id}/edit`}><a>Edit Invoice</a></Link>
+                                            </MenuItem>
+                                            <MenuItem onClick={handleMenuClose}>
+                                                <Link href={`/invoices/new`}><a>Delete Invoice</a></Link>
+                                            </MenuItem>
+                                        </Menu>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                     {errorMessage && <TableRowStatusMessage colSpan={4} status='error'>{errorMessage}</TableRowStatusMessage>}
