@@ -16,10 +16,10 @@ const Dashboard: NextPage = () => {
 						<h2 className='m-0'>Clients</h2>
 						<div className="flex gap-2">
 							<Link href="/clients/new"><a className="no-underline">
-								<Button variant="outlined">Add Client</Button>
+								<Button variant="outlined" data-test="add-client">Add Client</Button>
 							</a></Link>
 							<Link href="/clients"><a className="no-underline">
-								<Button variant="outlined">See all</Button>
+								<Button variant="outlined" data-test="view-all-clients">See all</Button>
 							</a></Link>
 						</div>
 					</header>
@@ -30,10 +30,10 @@ const Dashboard: NextPage = () => {
 						<h2 className='m-0'>Invoices</h2>
 						<div className="flex gap-2">
 							<Link href="/add-invoice"><a className="no-underline">
-								<Button variant="outlined">Add Invoice</Button>
+								<Button variant="outlined" data-test="add-invoice">Add Invoice</Button>
 							</a></Link>
 							<Link href="/invoices"><a className="no-underline">
-								<Button variant="outlined">See all</Button>
+								<Button variant="outlined" data-test="view-all-clients">See all</Button>
 							</a></Link>
 						</div>
 					</header>
