@@ -1,5 +1,6 @@
 import { ClientValues } from "../clients/ClientForm";
 import { dbInstance } from "./auth";
+import { CompanyDetails } from "../user/CompanyDetailsForm";
 
 export const CLIENTS_PAGE_LIMIT = 10;
 export const INVOICES_PAGE_LIMIT = 10;
@@ -18,12 +19,7 @@ export type InvoiceDTO = {
 		user_id: string;
 		email: string;
 		name: string;
-		companyDetails: {
-			name: string;
-			vatNumber: string;
-			regNumber: string;
-			address: string;
-		};
+		companyDetails: CompanyDetails;
 		id: string;
 	};
 };
@@ -32,12 +28,7 @@ export type ClientDTO = {
 	user_id: string;
 	email: string;
 	name: string;
-	companyDetails: {
-		name: string;
-		vatNumber: string;
-		regNumber: string;
-		address: string;
-	};
+	companyDetails: CompanyDetails;
 	id: string;
 	totalBilled: number;
 	invoicesCount: number;
@@ -66,7 +57,7 @@ export const getClient = async (clientID: string) => {
 };
 
 export const createClient = async (clientValues: ClientValues) => {
-	await new Promise((r) => setTimeout(r, 2000));
+	//await new Promise((r) => setTimeout(r, 2000));
 	const { data } = await dbInstance.post("/clients", clientValues);
 	return data;
 };
@@ -84,7 +75,7 @@ export const editClient = async (
 };
 
 export const getInvoices = async ({ page }: { page: number }) => {
-	//await new Promise(r => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 1000));
 	const params = {
 		limit: INVOICES_PAGE_LIMIT.toString(),
 		offset: ((page - 1) * INVOICES_PAGE_LIMIT).toString(),

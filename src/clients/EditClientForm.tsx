@@ -2,11 +2,13 @@ import axios from "axios";
 
 import { useAlert } from "../components/AlertContext";
 import { useEditClient } from "./useEditClient";
-import { useClient } from "./useClient";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-import ClientForm from "./ClientForm";
+import ClientForm, { ClientValues } from "./ClientForm";
 import LinearLoader from "../components/LinearLoader";
+
+import { getClient } from "../api/base";
+import { Skeleton, TextField } from "@mui/material";
 
 interface EditClientFormProps {
 	onSubmitSuccess?: () => unknown;
@@ -21,24 +23,40 @@ const EditClientForm = ({
 }: EditClientFormProps) => {
 	const { showAlert } = useAlert();
 	const [formError, setFormError] = useState<string | null>(null);
-	const { mutate, isLoading } = useEditClient();
-	const {
-		data,
-		isLoading: getClientIsLoading,
-		isError,
-	} = useClient(clientID, {
-		onError: onGetClientError,
-	});
 
-	if (!data || isError) return null;
+	const [initValues, setInitValues] = useState<ClientValues | undefined>();
+
+	const { mutate, isLoading: editClientIsLoading } = useEditClient();
+
+	useEffect(() => {
+		getClient(clientID)
+			.then((data) => setInitValues(data))
+			.catch((err) => {
+				showAlert("Something went wrong.");
+				onGetClientError(err);
+			});
+	}, []);
+
+	if (!initValues) {
+		return (
+			<Fragment key='loading-edit-client-form'>
+				<LinearLoader loading />
+				<div className='flex flex-col gap-5'>
+					{Array.from(Array(8)).map((e, i) => (
+						<TextField disabled key={"loading-field" + i} />
+					))}
+				</div>
+			</Fragment>
+		);
+	}
 
 	return (
-		<>
-			<LinearLoader loading={isLoading || getClientIsLoading} />
+		<Fragment key='loaded-edit-client-form'>
+			<LinearLoader loading={editClientIsLoading} />
 			<ClientForm
 				formError={formError}
-				disabled={isLoading || getClientIsLoading}
-				defaultValues={data}
+				disabled={editClientIsLoading}
+				defaultValues={initValues}
 				onSubmit={(clientValues) => {
 					mutate(
 						{
@@ -47,7 +65,12 @@ const EditClientForm = ({
 						},
 						{
 							onSuccess: () => {
-								showAlert("Edited Client Successfully.", "success");
+								showAlert(
+									<span data-test='form-success'>
+										Edited Client Successfully.
+									</span>,
+									"success"
+								);
 								onSubmitSuccess?.();
 								setFormError(null);
 							},
@@ -64,7 +87,7 @@ const EditClientForm = ({
 					);
 				}}
 			/>
-		</>
+		</Fragment>
 	);
 };
 

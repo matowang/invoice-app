@@ -23,9 +23,9 @@ const EditClient = () => {
 					<EditClientForm
 						clientID={router.query.id}
 						onGetClientError={(err) => {
-							if (axios.isAxiosError(err) && err.response?.status === 404)
-								return router.push("/404");
-							throw new Error("something went wrong");
+							if (axios.isAxiosError(err)) {
+								if (err.response?.status === 404) return router.push("/404");
+							}
 						}}
 					/>
 				</div>

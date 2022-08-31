@@ -25,7 +25,12 @@ const CreateClientForm = ({ onSubmitSuccess }: CreateClientForm) => {
 				onSubmit={(clientValues) => {
 					mutate(clientValues, {
 						onSuccess: () => {
-							showAlert("Added Client Successfully.", "success");
+							showAlert(
+								<span data-test='form-success'>
+									Added Client Successfully.
+								</span>,
+								"success"
+							);
 							onSubmitSuccess?.();
 							setFormError(null);
 						},

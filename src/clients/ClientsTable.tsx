@@ -1,7 +1,20 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Skeleton, IconButton, Menu, MenuItem } from "@mui/material";
+import {
+	TableContainer,
+	Paper,
+	Table,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableBody,
+	Typography,
+	Skeleton,
+	IconButton,
+	Menu,
+	MenuItem,
+} from "@mui/material";
 import TableRowStatusMessage from "../components/TableRowStatusMessage";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Link from "next/Link";
+import Link from "next/link";
 
 import { ClientDTO } from "../api/base";
 import { useMenuOpen } from "../hooks/useMenuOpen";
@@ -13,19 +26,25 @@ interface ClientsTableProps {
 	errorMessage?: string;
 }
 
-const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => {
-	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
+const ClientsTable = ({
+	clients,
+	loading,
+	errorMessage,
+}: ClientsTableProps) => {
+	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } =
+		useMenuOpen();
 	const [currentMenuID, setCurrentMenuID] = useState<string | null>(null);
 	return (
 		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 650 }} aria-label='client table' data-test='clients-table'>
+			<Table
+				sx={{ minWidth: 650 }}
+				aria-label='client table'
+				data-test='clients-table'
+			>
 				<TableHead>
 					<TableRow>
 						<TableCell component='th' className='font-bold'>
 							Client Name
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Email
 						</TableCell>
 						<TableCell component='th' align='right' className='font-bold'>
 							Company
@@ -36,7 +55,11 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
 						<TableCell component='th' align='right' className='font-bold'>
 							Total Billed
 						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'></TableCell>
+						<TableCell
+							component='th'
+							align='right'
+							className='font-bold'
+						></TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -66,50 +89,57 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
 						</TableRowStatusMessage>
 					) : (
 						clients?.map((client) => (
-							<TableRow key={client.id} hover data-test={`client-row-${client.id}`}>
-								<TableCell component='th' data-test='client-name'>
-									<Link href={`/clients/${client.id}`}>
-										<a className='text-inherit'>{client.name}</a>
-									</Link>
-								</TableCell>
-								<TableCell align='right'>{client.email}</TableCell>
-								<TableCell align='right' data-test='client-companyName'>
-									{client.companyDetails.name}
-								</TableCell>
-								<TableCell align='right' data-test='client-invoicesCount'>
-									{client.invoicesCount}
-								</TableCell>
-								<TableCell align='right' data-test='client-totalBilled'>
-									{client.totalBilled}
-								</TableCell>
-								<TableCell align='right' sx={{ p: 0 }}>
-									<IconButton
-										data-test='client-actions'
-										onClick={(event) => {
-											handleMenuClick(event);
-											setCurrentMenuID(client.id);
-										}}
-									>
-										<MoreVertIcon />
-									</IconButton>
-									<Menu anchorEl={menuAnchorEl} open={menuOpen && client.id === currentMenuID} onClose={handleMenuClose}>
-										<MenuItem onClick={handleMenuClose}>
-											<Link href={`/clients/${client.id}/edit`}>
-												<a>Edit Client</a>
-											</Link>
-										</MenuItem>
-										<MenuItem onClick={handleMenuClose}>
-											<Link href={`/clients/new`}>
-												<a>Delete Client</a>
-											</Link>
-										</MenuItem>
-									</Menu>
-								</TableCell>
-							</TableRow>
+							<Link href={`/clients/${client.id}`}>
+								<TableRow
+									key={client.id}
+									hover
+									data-test={`client-row-${client.id}`}
+								>
+									<TableCell component='th' data-test='client-name'>
+										{client.name}
+									</TableCell>
+									<TableCell align='right' data-test='client-companyName'>
+										{client.companyDetails.name}
+									</TableCell>
+									<TableCell align='right' data-test='client-invoicesCount'>
+										{client.invoicesCount}
+									</TableCell>
+									<TableCell align='right' data-test='client-totalBilled'>
+										{client.totalBilled}
+									</TableCell>
+									<TableCell align='right' sx={{ p: 0 }}>
+										<IconButton
+											data-test='client-actions'
+											onClick={(event) => {
+												handleMenuClick(event);
+												setCurrentMenuID(client.id);
+											}}
+										>
+											<MoreVertIcon />
+										</IconButton>
+										<Menu
+											anchorEl={menuAnchorEl}
+											open={menuOpen && client.id === currentMenuID}
+											onClose={handleMenuClose}
+										>
+											<MenuItem onClick={handleMenuClose}>
+												<Link href={`/clients/${client.id}`}>
+													<a>Edit Client</a>
+												</Link>
+											</MenuItem>
+											<MenuItem onClick={handleMenuClose}>
+												<Link href={`/clients/new`}>
+													<a>Delete Client</a>
+												</Link>
+											</MenuItem>
+										</Menu>
+									</TableCell>
+								</TableRow>
+							</Link>
 						))
 					)}
 					{errorMessage && (
-						<TableRowStatusMessage colSpan={6} status='error'>
+						<TableRowStatusMessage colSpan={5} status='error'>
 							<span date-test='clients-fetch-error'>{errorMessage}</span>
 						</TableRowStatusMessage>
 					)}
