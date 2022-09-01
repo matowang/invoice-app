@@ -39,6 +39,8 @@ export const getClients = async ({ page }: { page: number }) => {
 	const params = {
 		limit: CLIENTS_PAGE_LIMIT.toString(),
 		offset: ((page - 1) * CLIENTS_PAGE_LIMIT).toString(),
+		sort: "asc",
+		sortBy: "clientName",
 	};
 	const { data } = await dbInstance.get<{
 		clients: ClientDTO[];
