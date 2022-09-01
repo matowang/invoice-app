@@ -9,6 +9,9 @@ import { AlertProvider } from "../src/components/AlertContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 import ErrorBoundary from "../src/components/ErrorBoundary";
 
 import createEmotionCache from "../src/util/createEmotionCache";
@@ -28,19 +31,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 					<ThemeProvider theme={MUITheme}>
 						<CssBaseline />
 						<QueryClientProvider client={queryClient}>
-							<AlertProvider>
-								<AuthProvider>
-									<Layout>
-										<Head>
-											<meta
-												name='viewport'
-												content='initial-scale=1, width=device-width'
-											/>
-										</Head>
-										<Component {...pageProps} />
-									</Layout>
-								</AuthProvider>
-							</AlertProvider>
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
+								<AlertProvider>
+									<AuthProvider>
+										<Layout>
+											<Head>
+												<meta name='viewport' content='initial-scale=1, width=device-width' />
+											</Head>
+											<Component {...pageProps} />
+										</Layout>
+									</AuthProvider>
+								</AlertProvider>
+							</LocalizationProvider>
 							<ReactQueryDevtools initialIsOpen={false} />
 						</QueryClientProvider>
 					</ThemeProvider>

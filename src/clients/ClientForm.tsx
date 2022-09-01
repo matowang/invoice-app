@@ -26,18 +26,14 @@ interface ClientFormProps {
 	defaultValues?: ClientValues;
 }
 
-const ClientForm = ({
-	onSubmit,
-	formError,
-	disabled,
-	defaultValues,
-}: ClientFormProps) => {
+const ClientForm = ({ onSubmit, formError, disabled, defaultValues }: ClientFormProps) => {
 	const {
 		register,
 		handleSubmit: handleFormHookSubmit,
 		formState: { errors },
 	} = useForm<ClientValues>({
 		resolver: zodResolver(ClientValuesSchema),
+		defaultValues: defaultValues,
 	});
 	const handleSubmit = async (data: ClientValues) => {
 		if (disabled) return;
@@ -50,22 +46,14 @@ const ClientForm = ({
 					{formError}
 				</p>
 			)}
-			<form
-				onSubmit={handleFormHookSubmit(handleSubmit)}
-				className='flex flex-col gap-5'
-			>
+			<form onSubmit={handleFormHookSubmit(handleSubmit)} className='flex flex-col gap-5'>
 				<TextField
 					{...register("email")}
 					label='Email'
-					defaultValue={defaultValues?.email}
 					placeholder='myemail@toptal.com'
 					error={!!errors.email}
 					helperText={
-						errors.email && (
-							<span data-test='client-email-error'>
-								{errors.email?.message}
-							</span>
-						)
+						errors.email && <span data-test='client-email-error'>{errors.email?.message}</span>
 					}
 					disabled={disabled}
 					inputProps={{ "data-test": "client-email" }}
@@ -73,13 +61,10 @@ const ClientForm = ({
 				<TextField
 					{...register("name")}
 					label='Name'
-					defaultValue={defaultValues?.name}
 					placeholder='Matthew Wang'
 					error={!!errors.name}
 					helperText={
-						errors.name && (
-							<span data-test='client-name-error'>{errors.name?.message}</span>
-						)
+						errors.name && <span data-test='client-name-error'>{errors.name?.message}</span>
 					}
 					disabled={disabled}
 					inputProps={{ "data-test": "client-name" }}
@@ -87,7 +72,6 @@ const ClientForm = ({
 				<TextField
 					{...register("companyDetails.name")}
 					label='Company Name'
-					defaultValue={defaultValues?.companyDetails.name}
 					placeholder='Toptal'
 					error={!!errors.companyDetails?.name}
 					helperText={
@@ -103,7 +87,6 @@ const ClientForm = ({
 				<TextField
 					{...register("companyDetails.vatNumber")}
 					label='Company VAT Number'
-					defaultValue={defaultValues?.companyDetails.vatNumber}
 					placeholder='123456789'
 					error={!!errors.companyDetails?.vatNumber}
 					helperText={
@@ -119,7 +102,6 @@ const ClientForm = ({
 				<TextField
 					{...register("companyDetails.regNumber")}
 					label='Company Registration number'
-					defaultValue={defaultValues?.companyDetails.regNumber}
 					placeholder='OC123456'
 					error={!!errors.companyDetails?.regNumber}
 					helperText={
@@ -135,7 +117,6 @@ const ClientForm = ({
 				<TextField
 					{...register("companyDetails.address")}
 					label='Company Address'
-					defaultValue={defaultValues?.companyDetails.address}
 					placeholder='CA LA example st.'
 					error={!!errors.companyDetails?.address}
 					helperText={
@@ -151,7 +132,6 @@ const ClientForm = ({
 				<TextField
 					{...register("companyDetails.iban")}
 					label='Company IBAN'
-					defaultValue={defaultValues?.companyDetails.iban}
 					placeholder='AL472121100900000002356987411'
 					error={!!errors.companyDetails?.iban}
 					helperText={
@@ -167,7 +147,6 @@ const ClientForm = ({
 				<TextField
 					{...register("companyDetails.swift")}
 					label='Company SWIFT Code'
-					defaultValue={defaultValues?.companyDetails.swift}
 					placeholder='BOFAUS3N'
 					error={!!errors.companyDetails?.swift}
 					helperText={
@@ -181,12 +160,7 @@ const ClientForm = ({
 					disabled={disabled}
 					inputProps={{ "data-test": "client-company-swift" }}
 				/>
-				<Button
-					type='submit'
-					variant='contained'
-					disabled={disabled}
-					data-test='submit-client'
-				>
+				<Button type='submit' variant='contained' disabled={disabled} data-test='submit-client'>
 					Submit
 				</Button>
 			</form>
