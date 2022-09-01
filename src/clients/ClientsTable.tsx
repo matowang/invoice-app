@@ -89,12 +89,8 @@ const ClientsTable = ({
 						</TableRowStatusMessage>
 					) : (
 						clients?.map((client) => (
-							<Link href={`/clients/${client.id}`}>
-								<TableRow
-									key={client.id}
-									hover
-									data-test={`client-row-${client.id}`}
-								>
+							<Link href={`/clients/${client.id}`} key={client.id}>
+								<TableRow hover data-test={`client-row-${client.id}`}>
 									<TableCell component='th' data-test='client-name'>
 										{client.name}
 									</TableCell>

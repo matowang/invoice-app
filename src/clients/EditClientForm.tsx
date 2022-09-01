@@ -8,7 +8,7 @@ import ClientForm, { ClientValues } from "./ClientForm";
 import LinearLoader from "../components/LinearLoader";
 
 import { getClient } from "../api/base";
-import { Skeleton, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 
 interface EditClientFormProps {
 	onSubmitSuccess?: () => unknown;
@@ -35,7 +35,7 @@ const EditClientForm = ({
 				showAlert("Something went wrong.");
 				onGetClientError(err);
 			});
-	}, []);
+	}, [clientID, onGetClientError, showAlert]);
 
 	if (!initValues) {
 		return (
