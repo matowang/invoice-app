@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Autocomplete, Button, TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import dayjs from "dayjs";
+
+import { ClientCompanyNameDTO } from "../api/base";
 
 // "invoice": {
 //     "user_id": "111",
@@ -17,20 +19,36 @@ import dayjs from "dayjs";
 //     "id": "1644492391138"
 // },
 
+//TODO Invoice Items Support
+
 const InvoiceValuesSchema = z.object({
 	date: z
 		.number({ required_error: "Date is required", invalid_type_error: "Must be a valid date." })
 		.int("Must be a valid date."),
-	// dueDate: z.number().int().min(1, "Must be a valid date."),
-	// invoice_number: z.string().min(3, "Invoice Number must be 3 or more characters."),
-	// meta: z.object({
-	// 	projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
-	// 	invoiceItems: z.object({
-	// 		description: z.string().min(3, "Item Description must be 3 or more characters."),
-	// 		value: z.number().positive(),
-	// 	}),
-	// }),
-	// client_id: z.string(),
+	dueDate: z.number().int().min(1, "Must be a valid date."),
+	invoice_number: z.string().min(3, "Invoice Number must be 3 or more characters."),
+	meta: z
+		.object({
+			projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
+			// invoiceItems: z.object({
+			// 	description: z.string().min(3, "Item Description must be 3 or more characters."),
+			// 	value: z.number().positive(),
+			// }),
+		})
+		.optional(),
+	clientCompany: z.object(
+		{
+			id: z.string().min(1),
+			companyName: z.string({
+				required_error: "Company Name is Required",
+				invalid_type_error: "Must be a valid Company Name",
+			}),
+		},
+		{
+			required_error: "Company Name is Required",
+			invalid_type_error: "Must be a valid Company Name",
+		}
+	),
 });
 
 export type InvoiceValues = z.infer<typeof InvoiceValuesSchema>;
@@ -40,13 +58,21 @@ interface InvoiceFormProps {
 	formError?: string | null;
 	disabled?: boolean;
 	defaultValues?: InvoiceValues;
+	clientsCompanyNames: ClientCompanyNameDTO[];
 }
 
-const InvoiceForm = ({ onSubmit, formError, disabled, defaultValues }: InvoiceFormProps) => {
+const InvoiceForm = ({
+	onSubmit,
+	formError,
+	disabled,
+	defaultValues,
+	clientsCompanyNames,
+}: InvoiceFormProps) => {
 	const {
 		handleSubmit: handleFormHookSubmit,
 		formState: { errors },
 		control,
+		register,
 	} = useForm<InvoiceValues>({
 		resolver: zodResolver(InvoiceValuesSchema),
 		defaultValues: { ...defaultValues },
@@ -78,7 +104,11 @@ const InvoiceForm = ({ onSubmit, formError, disabled, defaultValues }: InvoiceFo
 									{...params}
 									error={!!errors.date}
 									helperText={
-										errors.date && <span data-test='client-date-error'>{errors.date?.message}</span>
+										errors.date ? (
+											<span data-test='client-date-error'>{errors.date?.message}</span>
+										) : (
+											"mm/dd/yyyy"
+										)
 									}
 									inputProps={{ ...params.inputProps, "data-test": "client-date" }}
 									InputLabelProps={{
@@ -89,76 +119,91 @@ const InvoiceForm = ({ onSubmit, formError, disabled, defaultValues }: InvoiceFo
 						/>
 					)}
 				/>
-				{/* <TextField
-					{...register("name")}
-					label='Name'
-					defaultValue={defaultValues?.name}
-					placeholder='Matthew Wang'
-					error={!!errors.name}
-					helperText={errors.name && <span data-test='client-name-error'>{errors.name?.message}</span>}
-					disabled={disabled}
-					inputProps={{ "data-test": "client-name" }}
+				<Controller
+					name='dueDate'
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<DesktopDatePicker
+							onChange={(value) => onChange(value?.valueOf())}
+							value={value ? dayjs(value) : null}
+							label='Due Date'
+							renderInput={(params) => (
+								<TextField
+									{...params}
+									error={!!errors.dueDate}
+									helperText={
+										errors.dueDate ? (
+											<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
+										) : (
+											"mm/dd/yyyy"
+										)
+									}
+									inputProps={{ ...params.inputProps, "data-test": "client-due-date" }}
+									InputLabelProps={{
+										shrink: true,
+									}}
+								/>
+							)}
+						/>
+					)}
 				/>
 				<TextField
-					{...register("companyDetails.name")}
-					label='Company Name'
-					defaultValue={defaultValues?.companyDetails.name}
-					placeholder='Toptal'
-					error={!!errors.companyDetails?.name}
-					helperText={errors.companyDetails?.name && <span data-test='client-company-name-error'>{errors.companyDetails?.name?.message}</span>}
+					{...register("invoice_number")}
+					label='Invoice Number'
+					placeholder='1234'
+					error={!!errors.invoice_number}
+					helperText={
+						errors.invoice_number && (
+							<span data-test='client-invoice-number-error'>{errors.invoice_number?.message}</span>
+						)
+					}
 					disabled={disabled}
-					inputProps={{ "data-test": "client-company-name" }}
+					inputProps={{ "data-test": "client-invoice-number" }}
 				/>
 				<TextField
-					{...register("companyDetails.vatNumber")}
-					label='Company VAT Number'
-					defaultValue={defaultValues?.companyDetails.vatNumber}
-					placeholder='123456789'
-					error={!!errors.companyDetails?.vatNumber}
-					helperText={errors.companyDetails?.vatNumber && <span data-test='client-company-vat-error'>{errors.companyDetails?.vatNumber?.message}</span>}
+					{...register("meta.projectCode")}
+					label='Invoice Project Code'
+					placeholder='A1234567'
+					error={!!errors.meta?.projectCode}
+					helperText={
+						errors.meta?.projectCode && (
+							<span data-test='client-invoice-project-code-error'>
+								{errors.meta?.projectCode?.message}
+							</span>
+						)
+					}
 					disabled={disabled}
-					inputProps={{ "data-test": "client-company-vat" }}
+					inputProps={{ "data-test": "client-invoice-project-code" }}
 				/>
-				<TextField
-					{...register("companyDetails.regNumber")}
-					label='Company Registration number'
-					defaultValue={defaultValues?.companyDetails.regNumber}
-					placeholder='OC123456'
-					error={!!errors.companyDetails?.regNumber}
-					helperText={errors.companyDetails?.regNumber && <span data-test='client-company-reg-error'>{errors.companyDetails?.regNumber?.message}</span>}
-					disabled={disabled}
-					inputProps={{ "data-test": "client-company-reg" }}
+				<Controller
+					name='clientCompany'
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<Autocomplete
+							disablePortal
+							onChange={(e, value) => onChange(value)}
+							value={value || null}
+							options={clientsCompanyNames}
+							getOptionLabel={(option) => option.companyName}
+							isOptionEqualToValue={(option, value) => option.id == value.id}
+							renderInput={(params) => (
+								<TextField
+									{...params}
+									error={!!errors.clientCompany}
+									helperText={
+										errors.clientCompany && (
+											<span data-test='client-invoice-project-code-error'>
+												{errors.clientCompany?.message}
+											</span>
+										)
+									}
+									disabled={disabled}
+									label='Client Company Name'
+								/>
+							)}
+						/>
+					)}
 				/>
-				<TextField
-					{...register("companyDetails.address")}
-					label='Company Address'
-					defaultValue={defaultValues?.companyDetails.address}
-					placeholder='CA LA example st.'
-					error={!!errors.companyDetails?.address}
-					helperText={errors.companyDetails?.address && <span data-test='client-company-address-error'>{errors.companyDetails?.address?.message}</span>}
-					disabled={disabled}
-					inputProps={{ "data-test": "client-company-address" }}
-				/>
-				<TextField
-					{...register("companyDetails.iban")}
-					label='Company IBAN'
-					defaultValue={defaultValues?.companyDetails.iban}
-					placeholder='AL472121100900000002356987411'
-					error={!!errors.companyDetails?.iban}
-					helperText={errors.companyDetails?.iban && <span data-test='client-company-iban-error'>{errors.companyDetails?.iban?.message}</span>}
-					disabled={disabled}
-					inputProps={{ "data-test": "client-company-iban" }}
-				/>
-				<TextField
-					{...register("companyDetails.swift")}
-					label='Company SWIFT Code'
-					defaultValue={defaultValues?.companyDetails.swift}
-					placeholder='BOFAUS3N'
-					error={!!errors.companyDetails?.swift}
-					helperText={errors.companyDetails?.swift && <span data-test='client-company-swift-error'> {errors.companyDetails?.swift?.message} </span>}
-					disabled={disabled}
-					inputProps={{ "data-test": "client-company-swift" }}
-				/> */}
 				<Button type='submit' variant='contained' disabled={disabled} data-test='submit-client'>
 					Submit
 				</Button>
