@@ -45,7 +45,7 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 						invoice_number,
 						meta,
 						client_id: clientCompany.id,
-						value: 1000,
+						value: meta?.items?.reduce((a, item) => a + item.value, 0) || 0, //Sum all item values
 					};
 					console.log(reformattedValues);
 					mutate(reformattedValues, {

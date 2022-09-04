@@ -1,6 +1,6 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
@@ -19,8 +19,6 @@ import { ClientCompanyNameDTO } from "../api/base";
 //     "id": "1644492391138"
 // },
 
-//TODO Invoice Items Support
-
 const InvoiceValuesSchema = z.object({
 	date: z
 		.number({ required_error: "Date is required", invalid_type_error: "Must be a valid date." })
@@ -30,10 +28,14 @@ const InvoiceValuesSchema = z.object({
 	meta: z
 		.object({
 			projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
-			// invoiceItems: z.object({
-			// 	description: z.string().min(3, "Item Description must be 3 or more characters."),
-			// 	value: z.number().positive(),
-			// }),
+			items: z
+				.array(
+					z.object({
+						description: z.string().min(3, "Item Description must be 3 or more characters."),
+						value: z.number().positive(),
+					})
+				)
+				.min(1, "Must include atleast 1 invoice item"),
 		})
 		.optional(),
 	clientCompany: z.object(
@@ -75,8 +77,22 @@ const InvoiceForm = ({
 		register,
 	} = useForm<InvoiceValues>({
 		resolver: zodResolver(InvoiceValuesSchema),
-		defaultValues: { ...defaultValues },
+		defaultValues: {
+			...defaultValues,
+			meta: {
+				items: [{}],
+			},
+		},
 	});
+	const {
+		fields: itemsFields,
+		append,
+		remove: removeItem,
+	} = useFieldArray({
+		control,
+		name: "meta.items",
+	});
+
 	const handleSubmit = async (data: InvoiceValues) => {
 		console.log("invoice submit", data);
 		if (disabled) return;
@@ -88,6 +104,11 @@ const InvoiceForm = ({
 			{formError && (
 				<p className='text-red-400' data-test='form-error'>
 					{formError}
+				</p>
+			)}
+			{errors.meta?.items && (
+				<p className='text-red-400' data-test='form-error'>
+					{errors.meta?.items.message}
 				</p>
 			)}
 			<form onSubmit={handleFormHookSubmit(handleSubmit)} className='flex flex-col gap-5'>
@@ -204,6 +225,71 @@ const InvoiceForm = ({
 						/>
 					)}
 				/>
+				{itemsFields.map((field, i) => (
+					<div
+						className='grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative'
+						key={`invoice-item-${field.id}`}
+					>
+						<div className='absolute bg-white top-0 left-2 -translate-y-1/2 p-2 text-xs text-slate-500'>{`Invoice Item ${i}`}</div>
+						<TextField
+							{...register(`meta.items.${i}.description`)}
+							error={!!errors.meta?.items?.[i]?.description}
+							helperText={
+								errors.meta?.items?.[i]?.description && (
+									<span data-test='client-invoice-project-code-error'>
+										{errors.meta?.items[i]?.description?.message}
+									</span>
+								)
+							}
+							disabled={disabled}
+							label='Description'
+						/>
+						<Controller
+							name={`meta.items.${i}.value`}
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<TextField
+									type='number'
+									onChange={(e) => onChange(parseInt(e.target.value))}
+									error={!!errors.meta?.items?.[i]?.value}
+									value={value}
+									helperText={
+										errors.meta?.items?.[i]?.value && (
+											<span data-test='client-invoice-project-code-error'>
+												{errors.meta?.items[i]?.value?.message}
+											</span>
+										)
+									}
+									disabled={disabled}
+									label={`Value`}
+								/>
+							)}
+						/>
+						{i !== 0 && (
+							<Button
+								variant='outlined'
+								disabled={disabled}
+								data-test='add-invoice-item'
+								onClick={() => removeItem(i)}
+							>
+								Remove Invoice Item
+							</Button>
+						)}
+					</div>
+				))}
+				<Button
+					variant='contained'
+					disabled={disabled}
+					data-test='add-invoice-item'
+					onClick={() =>
+						append({
+							description: "",
+							value: 0,
+						})
+					}
+				>
+					Add Invoice Item
+				</Button>
 				<Button type='submit' variant='contained' disabled={disabled} data-test='submit-client'>
 					Submit
 				</Button>
