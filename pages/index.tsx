@@ -37,7 +37,7 @@ const Dashboard: NextPage = () => {
 					<header className='flex justify-between items-end'>
 						<h2 className='m-0'>Invoices</h2>
 						<div className='flex gap-2'>
-							<Link href='/add-invoice'>
+							<Link href='/invoices/new'>
 								<a className='no-underline'>
 									<Button variant='outlined' data-test='add-invoice'>
 										Add Invoice
