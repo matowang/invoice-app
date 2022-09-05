@@ -26,9 +26,9 @@ const InvoiceValuesSchema = z.object({
 		.int("Must be a valid date."),
 	dueDate: z.number().int().min(1, "Must be a valid date."),
 	invoice_number: z.string().min(3, "Invoice Number must be 3 or more characters."),
+	projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
 	meta: z
 		.object({
-			projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
 			items: z
 				.array(
 					z.object({
@@ -192,14 +192,14 @@ const InvoiceForm = ({
 					inputProps={{ "data-test": "client-invoice-number" }}
 				/>
 				<TextField
-					{...register("meta.projectCode")}
+					{...register("projectCode")}
 					label='Invoice Project Code'
 					placeholder='A1234567'
-					error={!!errors.meta?.projectCode}
+					error={!!errors.projectCode}
 					helperText={
-						errors.meta?.projectCode && (
+						errors.projectCode && (
 							<span data-test='client-invoice-project-code-error'>
-								{errors.meta?.projectCode?.message}
+								{errors.projectCode?.message}
 							</span>
 						)
 					}

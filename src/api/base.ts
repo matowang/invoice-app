@@ -30,7 +30,8 @@ export type InvoiceAPIValues = {
 	dueDate: number;
 	invoice_number: string;
 	client_id: string;
-	meta?: any;
+	projectCode?: string;
+	meta?: Record<string, any>;
 	value: number;
 };
 
@@ -118,6 +119,7 @@ const reformatInvoiceValue = (invoiceFormValues: InvoiceFormValues): InvoiceAPIV
 		invoice_number: invoiceFormValues.invoice_number,
 		meta: invoiceFormValues.meta,
 		client_id: invoiceFormValues.clientCompany.id,
+		projectCode: invoiceFormValues.projectCode || undefined,
 		value: valueSum,
 	};
 	return reformattedValues;
