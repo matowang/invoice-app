@@ -1,7 +1,7 @@
 import { ClientValues } from "../clients/ClientForm";
 import { dbInstance } from "./auth";
 import { CompanyDetails } from "../user/CompanyDetailsForm";
-import { InvoiceValues } from "../invoices/InvoiceForm";
+import { InvoiceFormValues } from "../invoices/InvoiceForm";
 
 export const CLIENTS_PAGE_LIMIT = 10;
 export const INVOICES_PAGE_LIMIT = 10;
@@ -25,7 +25,7 @@ export type InvoiceDTO = {
 	};
 };
 
-export type CreateInvoiceValues = {
+export type InvoiceAPIValues = {
 	date: number;
 	dueDate: number;
 	invoice_number: string;
@@ -110,8 +110,21 @@ export const getInvoices = async ({ page }: { page: number }) => {
 	return data;
 };
 
-export const createInvoice = async (invoiceValues: CreateInvoiceValues) => {
-	//await new Promise((r) => setTimeout(r, 2000));
-	const { data } = await dbInstance.post("/invoices", invoiceValues);
+const reformatInvoiceValue = (invoiceFormValues: InvoiceFormValues): InvoiceAPIValues => {
+	const valueSum = invoiceFormValues.meta?.items?.reduce((a, item) => a + item.value, 0) || 0;
+	const reformattedValues: InvoiceAPIValues = {
+		date: invoiceFormValues.date,
+		dueDate: invoiceFormValues.dueDate,
+		invoice_number: invoiceFormValues.invoice_number,
+		meta: invoiceFormValues.meta,
+		client_id: invoiceFormValues.clientCompany.id,
+		value: valueSum,
+	};
+	return reformattedValues;
+};
+
+export const createInvoice = async (invoiceFormValues: InvoiceFormValues) => {
+	await new Promise((r) => setTimeout(r, 2000));
+	const { data } = await dbInstance.post("/invoices", reformatInvoiceValue(invoiceFormValues));
 	return data;
 };

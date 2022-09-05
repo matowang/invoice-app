@@ -8,7 +8,7 @@ import ClientForm, { ClientValues } from "./ClientForm";
 import LinearLoader from "../components/LinearLoader";
 
 import { getClient } from "../api/base";
-import { TextField } from "@mui/material";
+import { Skeleton } from "@mui/material";
 
 interface EditClientFormProps {
 	onSubmitSuccess?: () => unknown;
@@ -16,11 +16,7 @@ interface EditClientFormProps {
 	onGetClientError: (err: unknown) => unknown;
 }
 
-const EditClientForm = ({
-	onSubmitSuccess,
-	clientID,
-	onGetClientError,
-}: EditClientFormProps) => {
+const EditClientForm = ({ onSubmitSuccess, clientID, onGetClientError }: EditClientFormProps) => {
 	const { showAlert } = useAlert();
 	const [formError, setFormError] = useState<string | null>(null);
 
@@ -43,7 +39,7 @@ const EditClientForm = ({
 				<LinearLoader loading />
 				<div className='flex flex-col gap-5'>
 					{Array.from(Array(8)).map((e, i) => (
-						<TextField disabled key={"loading-field" + i} />
+						<Skeleton key={`loading-client-form-skel-${i}`} height='4rem' />
 					))}
 				</div>
 			</Fragment>
@@ -66,19 +62,14 @@ const EditClientForm = ({
 						{
 							onSuccess: () => {
 								showAlert(
-									<span data-test='form-success'>
-										Edited Client Successfully.
-									</span>,
+									<span data-test='form-success'>Edited Client Successfully.</span>,
 									"success"
 								);
 								onSubmitSuccess?.();
 								setFormError(null);
 							},
 							onError: (err) => {
-								if (
-									!axios.isAxiosError(err) ||
-									typeof err.response?.data !== "string"
-								)
+								if (!axios.isAxiosError(err) || typeof err.response?.data !== "string")
 									return showAlert("Something went wrong.");
 								showAlert(err.response.data);
 								setFormError(err.response.data);

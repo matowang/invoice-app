@@ -8,6 +8,7 @@ import { z } from "zod";
 import dayjs from "dayjs";
 
 import { ClientCompanyNameDTO } from "../api/base";
+import { useEffect } from "react";
 
 // "invoice": {
 //     "user_id": "111",
@@ -53,14 +54,15 @@ const InvoiceValuesSchema = z.object({
 	),
 });
 
-export type InvoiceValues = z.infer<typeof InvoiceValuesSchema>;
+export type InvoiceFormValues = z.infer<typeof InvoiceValuesSchema>;
 
 interface InvoiceFormProps {
-	onSubmit?: (data: InvoiceValues) => void;
+	onSubmit?: (data: InvoiceFormValues) => void;
 	formError?: string | null;
 	disabled?: boolean;
-	defaultValues?: InvoiceValues;
+	defaultValues?: InvoiceFormValues;
 	clientsCompanyNames: ClientCompanyNameDTO[];
+	resetOnSuccesfulSubmit?: boolean;
 }
 
 const InvoiceForm = ({
@@ -69,19 +71,21 @@ const InvoiceForm = ({
 	disabled,
 	defaultValues,
 	clientsCompanyNames,
+	resetOnSuccesfulSubmit,
 }: InvoiceFormProps) => {
 	const {
 		handleSubmit: handleFormHookSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitSuccessful },
 		control,
 		register,
-	} = useForm<InvoiceValues>({
+		reset,
+	} = useForm<InvoiceFormValues>({
 		resolver: zodResolver(InvoiceValuesSchema),
 		defaultValues: {
-			...defaultValues,
 			meta: {
 				items: [{}],
 			},
+			...defaultValues,
 		},
 	});
 	const {
@@ -93,11 +97,15 @@ const InvoiceForm = ({
 		name: "meta.items",
 	});
 
-	const handleSubmit = async (data: InvoiceValues) => {
+	const handleSubmit = async (data: InvoiceFormValues) => {
 		console.log("invoice submit", data);
 		if (disabled) return;
 		await onSubmit?.(data);
 	};
+
+	useEffect(() => {
+		if (resetOnSuccesfulSubmit && isSubmitSuccessful) reset(undefined, { keepDefaultValues: true });
+	}, [isSubmitSuccessful, reset, resetOnSuccesfulSubmit]);
 
 	return (
 		<>
@@ -120,6 +128,7 @@ const InvoiceForm = ({
 							onChange={(value) => onChange(value?.valueOf())}
 							value={value ? dayjs(value) : null}
 							label='Date'
+							disabled={disabled}
 							renderInput={(params) => (
 								<TextField
 									{...params}
@@ -148,6 +157,7 @@ const InvoiceForm = ({
 							onChange={(value) => onChange(value?.valueOf())}
 							value={value ? dayjs(value) : null}
 							label='Due Date'
+							disabled={disabled}
 							renderInput={(params) => (
 								<TextField
 									{...params}
@@ -252,7 +262,7 @@ const InvoiceForm = ({
 									type='number'
 									onChange={(e) => onChange(parseInt(e.target.value))}
 									error={!!errors.meta?.items?.[i]?.value}
-									value={value}
+									value={value || ""}
 									helperText={
 										errors.meta?.items?.[i]?.value && (
 											<span data-test='client-invoice-project-code-error'>
