@@ -6,6 +6,7 @@ import {
 	TableRow,
 	TableCell,
 	TableBody,
+	Typography,
 	Skeleton,
 	IconButton,
 	Menu,
@@ -78,57 +79,46 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
 						</TableRowStatusMessage>
 					) : (
 						invoices?.map(({ invoice, client }) => (
-							<TableRow
-								hover
-								component='tr'
-								data-test={`invoice-row-${invoice.id}`}
-								key={invoice.id}
-							>
-								<TableCell data-test='invoice-number'>
-									<Link href={`/invoices/${invoice.id}/view`}>
-										<a className='text-inherit'>{invoice.invoice_number}</a>
-									</Link>
-								</TableCell>
-								<TableCell align='right' data-test='invoice-company'>
-									{client.companyDetails.name}
-								</TableCell>
-								<TableCell align='right' data-test='invoice-date'>
-									{invoice.date}
-								</TableCell>
-								<TableCell align='right' data-test='invoice-project'>
-									{client.name}
-								</TableCell>
-								<TableCell align='right' data-test='invoice-price'>
-									{invoice.value}
-								</TableCell>
-								<TableCell align='right' sx={{ p: 0 }}>
-									<IconButton
-										data-test='invoice-actions'
-										onClick={(event) => {
-											handleMenuClick(event);
-											setCurrentMenuID(invoice.id);
-										}}
-									>
-										<MoreVertIcon />
-									</IconButton>
-									<Menu
-										anchorEl={menuAnchorEl}
-										open={menuOpen && invoice.id === currentMenuID}
-										onClose={handleMenuClose}
-									>
-										<MenuItem onClick={handleMenuClose}>
+							<Link href={`/invoices/${invoice.id}/view`} key={invoice.id}>
+								<TableRow hover component='tr' data-test={`invoice-row-${invoice.id}`}>
+									<TableCell data-test='invoice-number'>{invoice.invoice_number}</TableCell>
+									<TableCell align='right' data-test='invoice-company'>
+										{client.companyDetails.name}
+									</TableCell>
+									<TableCell align='right' data-test='invoice-date'>
+										{invoice.date}
+									</TableCell>
+									<TableCell align='right' data-test='invoice-project'>
+										{client.name}
+									</TableCell>
+									<TableCell align='right' data-test='invoice-price'>
+										{invoice.value}
+									</TableCell>
+									<TableCell align='right' sx={{ p: 0 }}>
+										<IconButton
+											data-test='invoice-actions'
+											onClick={(event) => {
+												handleMenuClick(event);
+												setCurrentMenuID(invoice.id);
+											}}
+										>
+											<MoreVertIcon />
+										</IconButton>
+										<Menu
+											anchorEl={menuAnchorEl}
+											open={menuOpen && invoice.id === currentMenuID}
+											onClose={handleMenuClose}
+										>
 											<Link href={`/invoices/${invoice.id}/edit`}>
-												<a>Edit Invoice</a>
+												<MenuItem onClick={handleMenuClose}>
+													<Typography sx={{ color: "inherit" }}>Edit Invoice</Typography>
+												</MenuItem>
 											</Link>
-										</MenuItem>
-										<MenuItem onClick={handleMenuClose}>
-											<Link href={`/invoices/new`}>
-												<a>Delete Invoice</a>
-											</Link>
-										</MenuItem>
-									</Menu>
-								</TableCell>
-							</TableRow>
+											<MenuItem onClick={handleMenuClose}>Delete Invoice</MenuItem>
+										</Menu>
+									</TableCell>
+								</TableRow>
+							</Link>
 						))
 					)}
 					{errorMessage && (

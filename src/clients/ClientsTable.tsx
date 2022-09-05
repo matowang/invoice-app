@@ -6,7 +6,6 @@ import {
 	TableRow,
 	TableCell,
 	TableBody,
-	Typography,
 	Skeleton,
 	IconButton,
 	Menu,
@@ -26,21 +25,12 @@ interface ClientsTableProps {
 	errorMessage?: string;
 }
 
-const ClientsTable = ({
-	clients,
-	loading,
-	errorMessage,
-}: ClientsTableProps) => {
-	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } =
-		useMenuOpen();
+const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => {
+	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
 	const [currentMenuID, setCurrentMenuID] = useState<string | null>(null);
 	return (
 		<TableContainer component={Paper}>
-			<Table
-				sx={{ minWidth: 650 }}
-				aria-label='client table'
-				data-test='clients-table'
-			>
+			<Table sx={{ minWidth: 650 }} aria-label='client table' data-test='clients-table'>
 				<TableHead>
 					<TableRow>
 						<TableCell component='th' className='font-bold'>
@@ -55,11 +45,7 @@ const ClientsTable = ({
 						<TableCell component='th' align='right' className='font-bold'>
 							Total Billed
 						</TableCell>
-						<TableCell
-							component='th'
-							align='right'
-							className='font-bold'
-						></TableCell>
+						<TableCell component='th' align='right' className='font-bold'></TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -118,16 +104,12 @@ const ClientsTable = ({
 											open={menuOpen && client.id === currentMenuID}
 											onClose={handleMenuClose}
 										>
-											<MenuItem onClick={handleMenuClose}>
-												<Link href={`/clients/${client.id}`}>
-													<a>Edit Client</a>
-												</Link>
-											</MenuItem>
-											<MenuItem onClick={handleMenuClose}>
-												<Link href={`/clients/new`}>
-													<a>Delete Client</a>
-												</Link>
-											</MenuItem>
+											<Link href={`/clients/${client.id}`}>
+												<MenuItem onClick={handleMenuClose}>Edit Client</MenuItem>
+											</Link>
+											<Link href={`/clients/new`}>
+												<MenuItem onClick={handleMenuClose}>Delete Client</MenuItem>
+											</Link>
 										</Menu>
 									</TableCell>
 								</TableRow>
