@@ -1,25 +1,34 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import LinearLoader from "../components/LinearLoader";
 import InvoiceForm, { InvoiceFormValues } from "./InvoiceForm";
+import { Skeleton } from "@mui/material";
 
 import { useClientCompanyNames } from "../clients/useClientsCompanyNames";
 import { useAlert } from "../components/AlertContext";
-import { useCreateInvoice } from "./useCreateInvoice";
+import { useInvoice } from "./useInvoice";
+import { useEditInvoice } from "./useEditInvoice";
 
 import axios from "axios";
 
-interface CreateInvoiceFormProps {
+interface EditInvoiceFormProps {
 	onSubmitSuccess?: () => void;
+	invoiceID: string;
 }
 
-const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
+const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) => {
 	const {
 		data: clientCompanyNameData,
 		isError: isErrorGetClient,
 		isLoading: isLoadingClientsCompanyNames,
 	} = useClientCompanyNames();
-	const { mutate, isLoading: mutateIsLoading } = useCreateInvoice();
+	const {
+		data: invoiceData,
+		isError: isGetInvoiceError,
+		isLoading: isLoadingInvoice,
+	} = useInvoice(invoiceID);
+
+	const { mutate, isLoading: isMutating } = useEditInvoice(invoiceID);
 	const [formError, setFormError] = useState<null | string>(null);
 
 	const { showAlert } = useAlert();
@@ -30,7 +39,10 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 			return new Promise((resolve, reject) => {
 				mutate(invoiceFormValues, {
 					onSuccess: (data) => {
-						showAlert(<span data-test='form-success'>Added Invoice Successfully.</span>, "success");
+						showAlert(
+							<span data-test='form-success'>Edited Invoice Successfully.</span>,
+							"success"
+						);
 						onSubmitSuccess?.();
 						setFormError(null);
 						resolve(data);
@@ -48,20 +60,35 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 		[mutate, onSubmitSuccess, showAlert]
 	);
 
+	if (!invoiceData && isLoadingInvoice)
+		return (
+			<>
+				<LinearLoader loading />
+				<div className='flex flex-col gap-5'>
+					{Array.from(Array(8)).map((e, i) => (
+						<Skeleton key={`loading-edit-invoice-form-skel-${i}`} height='4rem' />
+					))}
+				</div>
+			</>
+		);
 	return (
 		<>
-			<LinearLoader loading={mutateIsLoading} />
+			<LinearLoader loading={isMutating || !invoiceData} />
 			<InvoiceForm
 				onSubmit={submitForm}
-				formError={isErrorGetClient ? "Something went wrong. Please refresh." : formError}
-				disabled={isErrorGetClient || mutateIsLoading}
+				formError={
+					isErrorGetClient || isGetInvoiceError
+						? "Something went wrong. Please refresh."
+						: formError
+				}
+				disabled={isErrorGetClient || isGetInvoiceError || isMutating}
 				clientsCompanyNames={clientCompanyNameData || []}
 				isLoadingClientsCompanyNames={isLoadingClientsCompanyNames}
-				resetOnSuccesfulSubmit
-				submitText='Create Invoice'
+				defaultValues={invoiceData}
+				submitText='Submit Edit'
 			/>
 		</>
 	);
 };
 
-export default CreateInvoiceForm;
+export default EditInvoiceForm;

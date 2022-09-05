@@ -15,31 +15,22 @@ import TableRowStatusMessage from "../components/TableRowStatusMessage";
 import Link from "next/link";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-import { InvoiceDTO } from "../api/base";
+import { InvoiceWithClientsDTO } from "../api/base";
 import { useMenuOpen } from "../hooks/useMenuOpen";
 import { useState } from "react";
 
 interface InvoicesTableProps {
-	invoices?: InvoiceDTO[];
+	invoices?: InvoiceWithClientsDTO[];
 	loading: boolean;
 	errorMessage?: string;
 }
 
-const InvoicesTable = ({
-	invoices,
-	loading,
-	errorMessage,
-}: InvoicesTableProps) => {
-	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } =
-		useMenuOpen();
+const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) => {
+	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
 	const [currentMenuID, setCurrentMenuID] = useState<string | null>(null);
 	return (
 		<TableContainer component={Paper}>
-			<Table
-				sx={{ minWidth: 650 }}
-				aria-label='invoice table'
-				data-test='invoices-table'
-			>
+			<Table sx={{ minWidth: 650 }} aria-label='invoice table' data-test='invoices-table'>
 				<TableHead>
 					<TableRow>
 						<TableCell component='th' className='font-bold'>
@@ -57,11 +48,7 @@ const InvoicesTable = ({
 						<TableCell component='th' align='right' className='font-bold'>
 							Value
 						</TableCell>
-						<TableCell
-							component='th'
-							align='right'
-							className='font-bold'
-						></TableCell>
+						<TableCell component='th' align='right' className='font-bold'></TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>

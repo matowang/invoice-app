@@ -7,6 +7,19 @@ export const CLIENTS_PAGE_LIMIT = 10;
 export const INVOICES_PAGE_LIMIT = 10;
 
 export type InvoiceDTO = {
+	id: string;
+	createdAt: number;
+	invoice_number: string;
+	user_id: string;
+	client_id: string;
+	date: number;
+	dueDate: number;
+	value: number;
+	projectCode: string;
+	meta?: Record<string, any>;
+};
+
+export type InvoiceWithClientsDTO = {
 	invoice: {
 		id: string;
 		user_id: string;
@@ -105,13 +118,21 @@ export const getInvoices = async ({ page }: { page: number }) => {
 		offset: ((page - 1) * INVOICES_PAGE_LIMIT).toString(),
 	};
 	const { data } = await dbInstance.get<{
-		invoices: InvoiceDTO[];
+		invoices: InvoiceWithClientsDTO[];
 		total: number;
 	}>(`/invoices?${new URLSearchParams(params).toString()}`);
 	return data;
 };
 
-const reformatInvoiceValue = (invoiceFormValues: InvoiceFormValues): InvoiceAPIValues => {
+export const getInvoice = async (id: string) => {
+	await new Promise((r) => setTimeout(r, 1000));
+	const { data } = await dbInstance.get<{ success: boolean; invoice: InvoiceDTO }>(
+		`/invoices/${id}`
+	);
+	return data.invoice;
+};
+
+const transformInvoiceValue = (invoiceFormValues: InvoiceFormValues): InvoiceAPIValues => {
 	const valueSum = invoiceFormValues.meta?.items?.reduce((a, item) => a + item.value, 0) || 0;
 	const reformattedValues: InvoiceAPIValues = {
 		date: invoiceFormValues.date,
@@ -125,8 +146,17 @@ const reformatInvoiceValue = (invoiceFormValues: InvoiceFormValues): InvoiceAPIV
 	return reformattedValues;
 };
 
+export const editInvoice = async (invoiceID: string, invoiceValues: InvoiceFormValues) => {
+	await new Promise((r) => setTimeout(r, 2000));
+	const { data } = await dbInstance.put("/invoices", {
+		...transformInvoiceValue(invoiceValues),
+		id: invoiceID,
+	});
+	return data;
+};
+
 export const createInvoice = async (invoiceFormValues: InvoiceFormValues) => {
 	await new Promise((r) => setTimeout(r, 2000));
-	const { data } = await dbInstance.post("/invoices", reformatInvoiceValue(invoiceFormValues));
+	const { data } = await dbInstance.post("/invoices", transformInvoiceValue(invoiceFormValues));
 	return data;
 };

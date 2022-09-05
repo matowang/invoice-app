@@ -36,15 +36,12 @@ export const dbInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-let headerTokenInterceptor: number;
-let tokenInvalidInterceptor: number;
-export const setHeaderToken = (
-	token: string,
-	onTokenInvalid?: () => unknown
-) => {
-	dbInstance.interceptors.request.eject(headerTokenInterceptor);
-	dbInstance.interceptors.request.eject(tokenInvalidInterceptor);
-	dbInstance.interceptors.request.use(
+let requestInterceptor: number;
+let responseInterceptor: number;
+export const setHeaderToken = (token: string, onTokenInvalid?: () => unknown) => {
+	dbInstance.interceptors.request.eject(requestInterceptor);
+	dbInstance.interceptors.request.eject(responseInterceptor);
+	requestInterceptor = dbInstance.interceptors.request.use(
 		function (config) {
 			// Do something before request is sent
 			config = {
@@ -61,18 +58,17 @@ export const setHeaderToken = (
 			return Promise.reject(error);
 		}
 	);
-	dbInstance.interceptors.response.use(
+	responseInterceptor = dbInstance.interceptors.response.use(
 		function (response) {
 			// Any status code that lie within the range of 2xx cause this function to trigger
 			return response;
 		},
 		function (error) {
 			// Any status codes that falls outside the range of 2xx cause this function to trigger
-			if (
-				axios.isAxiosError(error) &&
-				(error.response?.status === 401 || error.response?.status === 403)
-			)
-				if (onTokenInvalid) return onTokenInvalid();
+			if (axios.isAxiosError(error) && error.response?.data === "Invalid Token" && onTokenInvalid) {
+				console.log("invalid token");
+				return onTokenInvalid();
+			}
 			return Promise.reject(error);
 		}
 	);
@@ -104,15 +100,10 @@ const validateToken = async (token: string): Promise<UserDTO | null> => {
 	}
 };
 
-const setCompanyDetails = async (
-	newCompanyDetails: CompanyDetails
-): Promise<UserDTO> => {
+const setCompanyDetails = async (newCompanyDetails: CompanyDetails): Promise<UserDTO> => {
 	const {
 		data: { user },
-	} = await dbInstance.put<{ success: boolean; user: UserDTO }>(
-		"/me/company",
-		newCompanyDetails
-	);
+	} = await dbInstance.put<{ success: boolean; user: UserDTO }>("/me/company", newCompanyDetails);
 	return user;
 };
 

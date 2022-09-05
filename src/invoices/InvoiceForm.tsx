@@ -8,7 +8,7 @@ import { z } from "zod";
 import dayjs from "dayjs";
 
 import { ClientCompanyNameDTO } from "../api/base";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
 // "invoice": {
 //     "user_id": "111",
@@ -62,7 +62,9 @@ interface InvoiceFormProps {
 	disabled?: boolean;
 	defaultValues?: InvoiceFormValues;
 	clientsCompanyNames: ClientCompanyNameDTO[];
+	isLoadingClientsCompanyNames?: boolean;
 	resetOnSuccesfulSubmit?: boolean;
+	submitText?: ReactNode;
 }
 
 const InvoiceForm = ({
@@ -71,7 +73,9 @@ const InvoiceForm = ({
 	disabled,
 	defaultValues,
 	clientsCompanyNames,
+	isLoadingClientsCompanyNames,
 	resetOnSuccesfulSubmit,
+	submitText,
 }: InvoiceFormProps) => {
 	const {
 		handleSubmit: handleFormHookSubmit,
@@ -106,6 +110,14 @@ const InvoiceForm = ({
 	useEffect(() => {
 		if (resetOnSuccesfulSubmit && isSubmitSuccessful) reset(undefined, { keepDefaultValues: true });
 	}, [isSubmitSuccessful, reset, resetOnSuccesfulSubmit]);
+
+	// // This useEffect follows react-hook-form best practices
+	// // "defaultValues are cached on the first render within the custom hook. If you want to reset the defaultValues, you should use the reset api."
+	// // https://react-hook-form.com/api/useform#props
+	// useEffect(() => {
+	// 	console.log(defaultValues);
+	// 	reset(defaultValues);
+	// }, [defaultValues, reset]);
 
 	return (
 		<>
@@ -216,7 +228,8 @@ const InvoiceForm = ({
 							value={value || null}
 							options={clientsCompanyNames}
 							getOptionLabel={(option) => option.companyName}
-							isOptionEqualToValue={(option, value) => option.id == value.id}
+							isOptionEqualToValue={(option, value) => option.id === value.id}
+							loading={isLoadingClientsCompanyNames}
 							renderInput={(params) => (
 								<TextField
 									{...params}
@@ -288,7 +301,8 @@ const InvoiceForm = ({
 					</div>
 				))}
 				<Button
-					variant='contained'
+					variant='outlined'
+					className='py-12'
 					disabled={disabled}
 					data-test='add-invoice-item'
 					onClick={() =>
@@ -298,10 +312,10 @@ const InvoiceForm = ({
 						})
 					}
 				>
-					Add Invoice Item
+					Add Invoice Item +
 				</Button>
 				<Button type='submit' variant='contained' disabled={disabled} data-test='submit-client'>
-					Submit
+					{submitText || "Submit"}
 				</Button>
 			</form>
 		</>
