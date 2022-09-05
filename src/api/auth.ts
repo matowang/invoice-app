@@ -66,7 +66,6 @@ export const setHeaderToken = (token: string, onTokenInvalid?: () => unknown) =>
 		function (error) {
 			// Any status codes that falls outside the range of 2xx cause this function to trigger
 			if (axios.isAxiosError(error) && error.response?.data === "Invalid Token" && onTokenInvalid) {
-				console.log("invalid token");
 				return onTokenInvalid();
 			}
 			return Promise.reject(error);

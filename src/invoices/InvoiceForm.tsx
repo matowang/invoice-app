@@ -102,7 +102,6 @@ const InvoiceForm = ({
 	});
 
 	const handleSubmit = async (data: InvoiceFormValues) => {
-		console.log("invoice submit", data);
 		if (disabled) return;
 		await onSubmit?.(data);
 	};
@@ -110,14 +109,6 @@ const InvoiceForm = ({
 	useEffect(() => {
 		if (resetOnSuccesfulSubmit && isSubmitSuccessful) reset(undefined, { keepDefaultValues: true });
 	}, [isSubmitSuccessful, reset, resetOnSuccesfulSubmit]);
-
-	// // This useEffect follows react-hook-form best practices
-	// // "defaultValues are cached on the first render within the custom hook. If you want to reset the defaultValues, you should use the reset api."
-	// // https://react-hook-form.com/api/useform#props
-	// useEffect(() => {
-	// 	console.log(defaultValues);
-	// 	reset(defaultValues);
-	// }, [defaultValues, reset]);
 
 	return (
 		<>

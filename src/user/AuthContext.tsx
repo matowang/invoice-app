@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 	const initAuth = useCallback(async () => {
 		setLoading(true);
-		console.log("init auth");
 		const { token } = parseCookies();
 		if (!token) return setLoading(false);
 		const user = await AuthAPI.validateToken(token);
