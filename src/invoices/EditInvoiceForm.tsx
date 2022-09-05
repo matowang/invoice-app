@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import LinearLoader from "../components/LinearLoader";
 import InvoiceForm, { InvoiceFormValues } from "./InvoiceForm";
 import { Skeleton } from "@mui/material";
+import Error404 from "../components/Error404";
 
 import { useClientCompanyNames } from "../clients/useClientsCompanyNames";
 import { useAlert } from "../components/AlertContext";
@@ -26,6 +27,7 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) =
 		data: invoiceData,
 		isError: isGetInvoiceError,
 		isLoading: isLoadingInvoice,
+		error,
 	} = useInvoice(invoiceID);
 
 	const { mutate, isLoading: isMutating } = useEditInvoice(invoiceID);
@@ -71,9 +73,11 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) =
 				</div>
 			</>
 		);
+
+	if (axios.isAxiosError(error) && error.response?.status === 404) return <Error404 />;
 	return (
 		<>
-			<LinearLoader loading={isMutating || !invoiceData} />
+			<LinearLoader loading={isMutating} />
 			<InvoiceForm
 				onSubmit={submitForm}
 				formError={

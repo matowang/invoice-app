@@ -4,7 +4,11 @@ import { getInvoice } from "../api/base";
 import { useClientCompanyNames } from "../clients/useClientsCompanyNames";
 
 export const useInvoice = (id: string) => {
-	const { data: invoiceData, isError } = useQuery(["invoices", "single", id], () => getInvoice(id));
+	const {
+		data: invoiceData,
+		isError,
+		error,
+	} = useQuery(["invoices", "single", id], () => getInvoice(id));
 	const { data: clientCompanyNameData, isError: isErrorGetClient } = useClientCompanyNames();
 	const selectedClientCompany = useMemo(() => {
 		if (!clientCompanyNameData || !invoiceData) return;
@@ -29,5 +33,6 @@ export const useInvoice = (id: string) => {
 		data,
 		isLoading: !isError && !data,
 		isError: isErrorGetClient || isError,
+		error: isError ? error || new Error("Something went wrong") : undefined,
 	};
 };
