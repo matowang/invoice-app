@@ -2,7 +2,7 @@ import { setCookie, destroyCookie, parseCookies } from "nookies";
 
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
-import AuthAPI, { UserDTO, setHeaderToken } from "../api/auth";
+import AuthAPI, { setHeaderToken, UserDTO } from "../api/auth";
 
 interface AuthContextType {
 	loading: boolean;

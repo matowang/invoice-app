@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createInvoice } from "../api/base";
+import { createInvoice } from "../api/invoices";
 
 export const useCreateInvoice = () => {
 	const queryClient = useQueryClient();

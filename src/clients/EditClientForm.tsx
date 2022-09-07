@@ -7,7 +7,7 @@ import { Fragment, useEffect, useState } from "react";
 import ClientForm, { ClientValues } from "./ClientForm";
 import LinearLoader from "../components/LinearLoader";
 
-import { getClient } from "../api/base";
+import { getClient } from "../api/clients";
 import { Skeleton } from "@mui/material";
 
 interface EditClientFormProps {

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { editInvoice } from "../api/base";
+import { editInvoice } from "../api/invoices";
 import { InvoiceFormValues } from "./InvoiceForm";
 
 export const useEditInvoice = (invoiceID: string) => {

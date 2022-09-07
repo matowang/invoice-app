@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import dayjs from "dayjs";
 
-import { ClientCompanyNameDTO } from "../api/base";
+import { ClientCompanyNameDTO } from "../api/clients";
 import { ReactNode, useEffect } from "react";
 
 // "invoice": {

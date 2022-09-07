@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { editClient } from "../api/base";
+import { editClient } from "../api/clients";
 import { ClientValues } from "./ClientForm";
 
 interface EditClientValues extends ClientValues {
@@ -9,8 +9,7 @@ interface EditClientValues extends ClientValues {
 export const useEditClient = () => {
 	const queryClient = useQueryClient();
 	return useMutation(
-		(editClientValues: EditClientValues) =>
-			editClient(editClientValues.id, editClientValues),
+		(editClientValues: EditClientValues) => editClient(editClientValues.id, editClientValues),
 		{
 			onSuccess: async () => {
 				queryClient.removeQueries(["clients"]);

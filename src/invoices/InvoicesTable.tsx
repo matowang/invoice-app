@@ -16,7 +16,7 @@ import TableRowStatusMessage from "../components/TableRowStatusMessage";
 import Link from "next/link";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-import { InvoiceWithClientsDTO } from "../api/base";
+import { InvoiceWithClientsDTO } from "../api/InvoiceDTO";
 import { useMenuOpen } from "../hooks/useMenuOpen";
 import { useState } from "react";
 
