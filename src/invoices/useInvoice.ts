@@ -4,14 +4,26 @@ import { getInvoice } from "../api/invoices";
 import { useClientCompanyNames } from "../clients/useClientsCompanyNames";
 import { transformInvoiceDTO } from "../util/transformInvoiceData";
 
-export const useInvoice = (id: string) => {
+interface useInvoiceOptions {
+	keepPreviousData?: boolean;
+}
+
+export const useInvoice = (id: string, { keepPreviousData }: useInvoiceOptions = {}) => {
 	const {
 		data: invoiceData,
 		isError,
 		error,
-	} = useQuery(["invoices", "single", id], () => getInvoice(id));
+		refetch,
+		isLoading: isLoadingInvoice,
+	} = useQuery(["invoices", "single", id], () => getInvoice(id), {
+		keepPreviousData,
+	});
 
-	const { data: clientCompanyNameData, isError: isErrorGetClient } = useClientCompanyNames();
+	const {
+		data: clientCompanyNameData,
+		isError: isErrorGetClient,
+		isLoading: isLoadingClientCompanyNames,
+	} = useClientCompanyNames();
 
 	const data = useMemo(
 		() =>
@@ -23,8 +35,9 @@ export const useInvoice = (id: string) => {
 
 	return {
 		data,
-		isLoading: !isError && !data,
+		isLoading: isLoadingInvoice || isLoadingClientCompanyNames,
 		isError: isErrorGetClient || isError,
 		error: isError ? error || new Error("Something went wrong") : undefined,
+		refetch,
 	};
 };

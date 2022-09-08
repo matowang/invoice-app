@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
@@ -32,24 +33,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [token, setToken] = useState<string | null>(null);
 	const [user, setUser] = useState<UserDTO | null>(null);
 
-	const initAuth = useCallback(async () => {
-		setLoading(true);
-		const { token } = parseCookies();
-		if (!token) return setLoading(false);
-		const user = await AuthAPI.validateToken(token);
-		if (user) {
-			setToken(token);
-			setUser(user);
-			setHeaderToken(token, logout);
-		} else {
-			destroyCookie(null, "token");
-		}
-		setLoading(false);
-	}, []);
-
-	useEffect(() => {
-		initAuth();
-	}, [initAuth]);
+	const queryClient = useQueryClient();
 
 	const login = async (token: string) => {
 		setCookie(null, "token", token, {
@@ -66,16 +50,36 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		}
 	};
 
-	const logout = () => {
+	const logout = useCallback(() => {
 		console.log("LOGOUT");
 		destroyCookie(null, "token");
 		setToken(null);
 		setUser(null);
-	};
+		queryClient.clear();
+	}, [queryClient]);
 
 	const updateUser = (user: UserDTO) => {
 		setUser(user);
 	};
+
+	const initAuth = useCallback(async () => {
+		setLoading(true);
+		const { token } = parseCookies();
+		if (!token) return setLoading(false);
+		const user = await AuthAPI.validateToken(token);
+		if (user) {
+			setToken(token);
+			setUser(user);
+			setHeaderToken(token, logout);
+		} else {
+			destroyCookie(null, "token");
+		}
+		setLoading(false);
+	}, [logout]);
+
+	useEffect(() => {
+		initAuth();
+	}, [initAuth]);
 
 	return (
 		<AuthContext.Provider value={{ loading, login, logout, token, user, updateUser }}>

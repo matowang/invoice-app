@@ -33,7 +33,7 @@ const ClientForm = ({ onSubmit, formError, disabled, defaultValues }: ClientForm
 		formState: { errors },
 	} = useForm<ClientValues>({
 		resolver: zodResolver(ClientValuesSchema),
-		defaultValues: defaultValues,
+		defaultValues,
 	});
 	const handleSubmit = async (data: ClientValues) => {
 		if (disabled) return;

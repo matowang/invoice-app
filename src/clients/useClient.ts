@@ -1,14 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { ClientDTO, getClient } from "../api/clients";
+import { getClient } from "../api/clients";
 
 interface useClientOptions {
-	onSuccess?: (client: ClientDTO) => void;
-	onError?: (err: unknown) => void;
+	keepPreviousData: boolean;
 }
 
-export const useClient = (id: string, { onSuccess, onError }: useClientOptions = {}) => {
-	return useQuery(["clients", "single", id], () => getClient(id), {
-		onSuccess,
-		onError,
-	});
+export const useClient = (id: string, { keepPreviousData }: useClientOptions) => {
+	return useQuery(["clients", "single", id], () => getClient(id), { keepPreviousData });
 };

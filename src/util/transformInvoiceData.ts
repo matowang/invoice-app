@@ -24,10 +24,7 @@ export const transformInvoiceDTO = (
 export const transformInvoiceValue = (invoiceFormValues: InvoiceFormValues): InvoiceAPIValues => {
 	const valueSum = invoiceFormValues.meta?.items?.reduce((a, item) => a + item.value, 0) || 0;
 	const reformattedValues: InvoiceAPIValues = {
-		date: invoiceFormValues.date,
-		dueDate: invoiceFormValues.dueDate,
-		invoice_number: invoiceFormValues.invoice_number,
-		meta: invoiceFormValues.meta,
+		...invoiceFormValues,
 		client_id: invoiceFormValues.clientCompany.id,
 		projectCode: invoiceFormValues.projectCode || undefined,
 		value: valueSum,

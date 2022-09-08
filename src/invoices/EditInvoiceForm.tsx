@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 import LinearLoader from "../components/LinearLoader";
 import InvoiceForm, { InvoiceFormValues } from "./InvoiceForm";
@@ -23,12 +23,12 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) =
 		isError: isErrorGetClient,
 		isLoading: isLoadingClientsCompanyNames,
 	} = useClientCompanyNames();
+
 	const {
 		data: invoiceData,
 		isError: isGetInvoiceError,
-		isLoading: isLoadingInvoice,
 		error,
-	} = useInvoice(invoiceID);
+	} = useInvoice(invoiceID, { keepPreviousData: true });
 
 	const { mutate, isLoading: isMutating } = useEditInvoice(invoiceID);
 	const [formError, setFormError] = useState<null | string>(null);
@@ -62,7 +62,7 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) =
 		[mutate, onSubmitSuccess, showAlert]
 	);
 
-	if (!invoiceData && isLoadingInvoice)
+	if (!invoiceData)
 		return (
 			<>
 				<LinearLoader loading />
@@ -75,6 +75,7 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) =
 		);
 
 	if (axios.isAxiosError(error) && error.response?.status === 404) return <Error404 />;
+
 	return (
 		<>
 			<LinearLoader loading={isMutating} />

@@ -6,7 +6,7 @@ export const useEditInvoice = (invoiceID: string) => {
 	const queryClient = useQueryClient();
 	return useMutation((invoiceValues: InvoiceFormValues) => editInvoice(invoiceID, invoiceValues), {
 		onSuccess: async () => {
-			//queryClient.removeQueries(["invoices", "single", invoiceID]);
+			queryClient.removeQueries(["invoices", "single", invoiceID]);
 			queryClient.invalidateQueries(["invoices"]);
 		},
 	});

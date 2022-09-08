@@ -106,6 +106,7 @@ const InvoiceForm = ({
 		await onSubmit?.(data);
 	};
 
+	//clear values on submit
 	useEffect(() => {
 		if (resetOnSuccesfulSubmit && isSubmitSuccessful) reset(undefined, { keepDefaultValues: true });
 	}, [isSubmitSuccessful, reset, resetOnSuccesfulSubmit]);
