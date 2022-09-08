@@ -115,6 +115,11 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
 												</MenuItem>
 											</Link>
 											<MenuItem onClick={handleMenuClose}>Delete Invoice</MenuItem>
+											<Link href={`/invoices/${invoice.id}/view?print=true`}>
+												<MenuItem onClick={handleMenuClose}>
+													<Typography sx={{ color: "inherit" }}>Print Invoice</Typography>
+												</MenuItem>
+											</Link>
 										</Menu>
 									</TableCell>
 								</TableRow>

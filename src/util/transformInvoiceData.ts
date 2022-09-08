@@ -9,6 +9,8 @@ export const transformInvoiceDTO = (
 	const clientCompany = clientCompanyNameData.find(
 		(company) => company.id === invoiceDTO.client_id
 	);
+	const valueSum =
+		invoiceDTO.meta?.items?.reduce((a: number, item: { value: number }) => a + item.value, 0) || 0;
 	return {
 		...invoiceDTO,
 		meta: {
@@ -17,6 +19,7 @@ export const transformInvoiceDTO = (
 				? invoiceDTO?.meta.items
 				: [{ description: null, value: null }],
 		},
+		value: valueSum,
 		clientCompany: clientCompany || { id: "", companyName: "" },
 	};
 };
