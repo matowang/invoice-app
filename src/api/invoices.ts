@@ -44,11 +44,11 @@ export const getInvoice = async (id: string) => {
 	return data.invoice;
 };
 
-export const editInvoice = async (invoiceID: string, invoiceValues: InvoiceFormValues) => {
+export const editInvoice = async (invoiceId: string, invoiceValues: InvoiceFormValues) => {
 	await new Promise((r) => setTimeout(r, 2000));
 	const { data } = await dbInstance.put("/invoices", {
 		...transformInvoiceValue(invoiceValues),
-		id: invoiceID,
+		id: invoiceId,
 	});
 	return data;
 };

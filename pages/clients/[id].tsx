@@ -21,7 +21,7 @@ const EditClient = () => {
 				<div className='max-w-md w-full'>
 					<h1>Edit Client</h1>
 					<EditClientForm
-						clientID={router.query.id}
+						clientId={router.query.id}
 						onGetClientError={(err) => {
 							if (axios.isAxiosError(err)) {
 								if (err.response?.status === 404) return router.push("/404");

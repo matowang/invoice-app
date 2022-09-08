@@ -14,10 +14,10 @@ import axios from "axios";
 
 interface EditInvoiceFormProps {
 	onSubmitSuccess?: () => void;
-	invoiceID: string;
+	invoiceId: string;
 }
 
-const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) => {
+const EditInvoiceForm = ({ onSubmitSuccess, invoiceId }: EditInvoiceFormProps) => {
 	const {
 		data: clientCompanyNameData,
 		isError: isErrorGetClient,
@@ -28,9 +28,9 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceID }: EditInvoiceFormProps) =
 		data: invoiceData,
 		isError: isGetInvoiceError,
 		error,
-	} = useInvoice(invoiceID, { keepPreviousData: true });
+	} = useInvoice(invoiceId, { keepPreviousData: true });
 
-	const { mutate, isLoading: isMutating } = useEditInvoice(invoiceID);
+	const { mutate, isLoading: isMutating } = useEditInvoice(invoiceId);
 	const [formError, setFormError] = useState<null | string>(null);
 
 	const { showAlert } = useAlert();

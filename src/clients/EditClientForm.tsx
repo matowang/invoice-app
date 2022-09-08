@@ -12,11 +12,11 @@ import { Skeleton } from "@mui/material";
 
 interface EditClientFormProps {
 	onSubmitSuccess?: () => unknown;
-	clientID: string;
+	clientId: string;
 	onGetClientError: (err: unknown) => unknown;
 }
 
-const EditClientForm = ({ onSubmitSuccess, clientID, onGetClientError }: EditClientFormProps) => {
+const EditClientForm = ({ onSubmitSuccess, clientId, onGetClientError }: EditClientFormProps) => {
 	const { showAlert } = useAlert();
 	const [formError, setFormError] = useState<string | null>(null);
 
@@ -25,13 +25,13 @@ const EditClientForm = ({ onSubmitSuccess, clientID, onGetClientError }: EditCli
 	const { mutate, isLoading: editClientIsLoading } = useEditClient();
 
 	useEffect(() => {
-		getClient(clientID)
+		getClient(clientId)
 			.then((data) => setInitValues(data))
 			.catch((err) => {
 				showAlert("Something went wrong.");
 				onGetClientError(err);
 			});
-	}, [clientID, onGetClientError, showAlert]);
+	}, [clientId, onGetClientError, showAlert]);
 
 	if (!initValues) {
 		return (
@@ -57,7 +57,7 @@ const EditClientForm = ({ onSubmitSuccess, clientID, onGetClientError }: EditCli
 					mutate(
 						{
 							...clientValues,
-							id: clientID,
+							id: clientId,
 						},
 						{
 							onSuccess: () => {

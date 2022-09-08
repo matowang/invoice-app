@@ -27,7 +27,7 @@ interface ClientsTableProps {
 
 const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => {
 	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
-	const [currentMenuID, setCurrentMenuID] = useState<string | null>(null);
+	const [currentMenuId, setCurrentMenuId] = useState<string | null>(null);
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 650 }} aria-label='client table' data-test='clients-table'>
@@ -94,14 +94,14 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
 											data-test='client-actions'
 											onClick={(event) => {
 												handleMenuClick(event);
-												setCurrentMenuID(client.id);
+												setCurrentMenuId(client.id);
 											}}
 										>
 											<MoreVertIcon />
 										</IconButton>
 										<Menu
 											anchorEl={menuAnchorEl}
-											open={menuOpen && client.id === currentMenuID}
+											open={menuOpen && client.id === currentMenuId}
 											onClose={handleMenuClose}
 										>
 											<Link href={`/clients/${client.id}`}>

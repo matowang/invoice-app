@@ -28,7 +28,7 @@ interface InvoicesTableProps {
 
 const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) => {
 	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
-	const [currentMenuID, setCurrentMenuID] = useState<string | null>(null);
+	const [currentMenuId, setCurrentMenuId] = useState<string | null>(null);
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 650 }} aria-label='invoice table' data-test='invoices-table'>
@@ -99,14 +99,14 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
 											data-test='invoice-actions'
 											onClick={(event) => {
 												handleMenuClick(event);
-												setCurrentMenuID(invoice.id);
+												setCurrentMenuId(invoice.id);
 											}}
 										>
 											<MoreVertIcon />
 										</IconButton>
 										<Menu
 											anchorEl={menuAnchorEl}
-											open={menuOpen && invoice.id === currentMenuID}
+											open={menuOpen && invoice.id === currentMenuId}
 											onClose={handleMenuClose}
 										>
 											<Link href={`/invoices/${invoice.id}/edit`}>

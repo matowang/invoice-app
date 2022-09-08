@@ -20,7 +20,7 @@ const NewInvoicePage = () => {
 				<div className='max-w-md w-full'>
 					<h1>Edit Invoice</h1>
 					<EditInvoiceForm
-						invoiceID={router.query.id}
+						invoiceId={router.query.id}
 						// onGetInvoiceError={(err) => {
 						// 	if (axios.isAxiosError(err)) {
 						// 		if (err.response?.status === 404) return router.push("/404");

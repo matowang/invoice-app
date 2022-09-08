@@ -33,12 +33,12 @@ export const getClients = async ({ page }: { page: number }) => {
 	return data;
 };
 
-export const getClient = async (clientID: string) => {
+export const getClient = async (clientId: string) => {
 	await new Promise((r) => setTimeout(r, 2000));
 	const { data } = await dbInstance.get<{
 		success: boolean;
 		client: ClientDTO;
-	}>(`/clients/${clientID}`);
+	}>(`/clients/${clientId}`);
 	return data.client;
 };
 
@@ -57,11 +57,11 @@ export const createClient = async (clientValues: ClientValues) => {
 	return data;
 };
 
-export const editClient = async (clientID: string, clientValues: ClientValues) => {
+export const editClient = async (clientId: string, clientValues: ClientValues) => {
 	await new Promise((r) => setTimeout(r, 2000));
 	const { data } = await dbInstance.put("/clients", {
 		...clientValues,
-		id: clientID,
+		id: clientId,
 	});
 	return data;
 };
