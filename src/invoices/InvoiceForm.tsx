@@ -143,176 +143,199 @@ const InvoiceForm = ({
 					{errors.meta?.items.message}
 				</p>
 			)}
-			<form onSubmit={handleFormHookSubmit(handleSubmit)} className='flex flex-col gap-5'>
-				<Controller
-					name='date'
-					control={control}
-					render={({ field: { onChange, value } }) => (
-						<DesktopDatePicker
-							onChange={(value) => onChange(value?.valueOf())}
-							value={value ? dayjs(value) : null}
-							label='Date'
-							disabled={disabled}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									error={!!errors.date}
-									helperText={
-										errors.date ? (
-											<span data-test='client-date-error'>{errors.date?.message}</span>
-										) : (
-											"mm/dd/yyyy"
-										)
-									}
-									inputProps={{ ...params.inputProps, "data-test": "client-date" }}
-									InputLabelProps={{
-										shrink: true,
-									}}
-								/>
-							)}
-						/>
-					)}
-				/>
-				<Controller
-					name='dueDate'
-					control={control}
-					render={({ field: { onChange, value } }) => (
-						<DesktopDatePicker
-							onChange={(value) => onChange(value?.valueOf())}
-							value={value ? dayjs(value) : null}
-							label='Due Date'
-							disabled={disabled}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									error={!!errors.dueDate}
-									helperText={
-										errors.dueDate ? (
-											<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
-										) : (
-											"mm/dd/yyyy"
-										)
-									}
-									inputProps={{ ...params.inputProps, "data-test": "client-due-date" }}
-									InputLabelProps={{
-										shrink: true,
-									}}
-								/>
-							)}
-						/>
-					)}
-				/>
-				<TextField
-					{...register("invoice_number")}
-					label='Invoice Number'
-					placeholder='1234'
-					error={!!errors.invoice_number}
-					helperText={
-						errors.invoice_number && (
-							<span data-test='client-invoice-number-error'>{errors.invoice_number?.message}</span>
-						)
-					}
-					disabled={disabled}
-					inputProps={{ "data-test": "client-invoice-number" }}
-				/>
-				<TextField
-					{...register("projectCode")}
-					label='Invoice Project Code'
-					placeholder='A1234567'
-					error={!!errors.projectCode}
-					helperText={
-						errors.projectCode && (
-							<span data-test='client-invoice-project-code-error'>
-								{errors.projectCode?.message}
-							</span>
-						)
-					}
-					disabled={disabled}
-					inputProps={{ "data-test": "client-invoice-project-code" }}
-				/>
-				<Controller
-					name='clientCompany'
-					control={control}
-					render={({ field: { onChange, value } }) => (
-						<Autocomplete
-							disablePortal
-							onChange={(e, value) => onChange(value)}
-							value={value || null}
-							options={clientsCompanyNames}
-							getOptionLabel={(option) => option.companyName}
-							isOptionEqualToValue={(option, value) => option.id === value.id}
-							loading={isLoadingClientsCompanyNames}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									error={!!errors.clientCompany}
-									helperText={
-										errors.clientCompany && (
-											<span data-test='client-invoice-client-error'>
-												{errors.clientCompany?.message}
-											</span>
-										)
-									}
-									disabled={disabled}
-									label='Client Company Name'
-								/>
-							)}
-						/>
-					)}
-				/>
-				{itemsFields.map((field, i) => (
-					<div
-						className='grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative'
-						key={`invoice-item-${field.id}`}
-					>
-						<div className='absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2'>{`Invoice Item ${i}`}</div>
-						<TextField
-							{...register(`meta.items.${i}.description`)}
-							error={!!errors.meta?.items?.[i]?.description}
-							helperText={
-								errors.meta?.items?.[i]?.description && (
-									<span data-test='client-invoice-item-description-error'>
-										{errors.meta?.items[i]?.description?.message}
-									</span>
-								)
-							}
-							disabled={disabled}
-							label='Description'
-						/>
-						<Controller
-							name={`meta.items.${i}.value`}
-							control={control}
-							render={({ field: { onChange, value } }) => (
-								<TextField
-									onChange={(e) => {
-										onChange(parseInt(e.target.value) || 0);
-									}}
-									error={!!errors.meta?.items?.[i]?.value}
-									value={value || ""}
-									helperText={
-										errors.meta?.items?.[i]?.value && (
-											<span data-test='client-invoice-item-value-error'>
-												{errors.meta?.items[i]?.value?.message}
-											</span>
-										)
-									}
-									disabled={disabled}
-									label={`Value`}
-								/>
-							)}
-						/>
-						{i !== 0 && (
-							<Button
-								variant='outlined'
+			<form
+				onSubmit={handleFormHookSubmit(handleSubmit)}
+				className='grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20'
+			>
+				<div className='grid gap-5 py-4'>
+					<Controller
+						name='date'
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<DesktopDatePicker
+								onChange={(value) => onChange(value?.valueOf())}
+								value={value ? dayjs(value) : null}
+								label='Date'
 								disabled={disabled}
-								data-test='add-invoice-item'
-								onClick={() => removeItem(i)}
-							>
-								Remove Invoice Item
-							</Button>
+								renderInput={(params) => (
+									<TextField
+										{...params}
+										error={!!errors.date}
+										helperText={
+											errors.date ? (
+												<span data-test='client-date-error'>{errors.date?.message}</span>
+											) : (
+												"mm/dd/yyyy"
+											)
+										}
+										inputProps={{ ...params.inputProps, "data-test": "client-date" }}
+										InputLabelProps={{
+											shrink: true,
+										}}
+									/>
+								)}
+							/>
 						)}
-					</div>
-				))}
+					/>
+					<Controller
+						name='dueDate'
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<DesktopDatePicker
+								onChange={(value) => onChange(value?.valueOf())}
+								value={value ? dayjs(value) : null}
+								label='Due Date'
+								disabled={disabled}
+								renderInput={(params) => (
+									<TextField
+										{...params}
+										error={!!errors.dueDate}
+										helperText={
+											errors.dueDate ? (
+												<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
+											) : (
+												"mm/dd/yyyy"
+											)
+										}
+										inputProps={{ ...params.inputProps, "data-test": "client-due-date" }}
+										InputLabelProps={{
+											shrink: true,
+										}}
+									/>
+								)}
+							/>
+						)}
+					/>
+					<TextField
+						{...register("invoice_number")}
+						label='Invoice Number'
+						placeholder='1234'
+						error={!!errors.invoice_number}
+						helperText={
+							errors.invoice_number && (
+								<span data-test='client-invoice-number-error'>
+									{errors.invoice_number?.message}
+								</span>
+							)
+						}
+						disabled={disabled}
+						inputProps={{ "data-test": "client-invoice-number" }}
+					/>
+					<TextField
+						{...register("projectCode")}
+						label='Invoice Project Code'
+						placeholder='A1234567'
+						error={!!errors.projectCode}
+						helperText={
+							errors.projectCode && (
+								<span data-test='client-invoice-project-code-error'>
+									{errors.projectCode?.message}
+								</span>
+							)
+						}
+						disabled={disabled}
+						inputProps={{ "data-test": "client-invoice-project-code" }}
+					/>
+					<Controller
+						name='clientCompany'
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<Autocomplete
+								disablePortal
+								onChange={(e, value) => onChange(value)}
+								value={value || null}
+								options={clientsCompanyNames}
+								getOptionLabel={(option) => option.companyName}
+								isOptionEqualToValue={(option, value) => option.id === value.id}
+								loading={isLoadingClientsCompanyNames}
+								renderInput={(params) => (
+									<TextField
+										{...params}
+										error={!!errors.clientCompany}
+										helperText={
+											errors.clientCompany && (
+												<span data-test='client-invoice-client-error'>
+													{errors.clientCompany?.message}
+												</span>
+											)
+										}
+										disabled={disabled}
+										label='Client Company Name'
+									/>
+								)}
+							/>
+						)}
+					/>
+				</div>
+				<div className='grid gap-5 h-full md:overflow-y-scroll py-4'>
+					{itemsFields.map((field, i) => (
+						<div
+							className='grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative'
+							key={`invoice-item-${field.id}`}
+						>
+							<div className='absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2'>{`Invoice Item ${i}`}</div>
+							<TextField
+								{...register(`meta.items.${i}.description`)}
+								error={!!errors.meta?.items?.[i]?.description}
+								helperText={
+									errors.meta?.items?.[i]?.description && (
+										<span data-test='client-invoice-item-description-error'>
+											{errors.meta?.items[i]?.description?.message}
+										</span>
+									)
+								}
+								disabled={disabled}
+								label='Description'
+							/>
+							<Controller
+								name={`meta.items.${i}.value`}
+								control={control}
+								render={({ field: { onChange, value } }) => (
+									<TextField
+										onChange={(e) => {
+											onChange(parseInt(e.target.value) || 0);
+										}}
+										error={!!errors.meta?.items?.[i]?.value}
+										value={value || ""}
+										helperText={
+											errors.meta?.items?.[i]?.value && (
+												<span data-test='client-invoice-item-value-error'>
+													{errors.meta?.items[i]?.value?.message}
+												</span>
+											)
+										}
+										disabled={disabled}
+										label={`Value`}
+									/>
+								)}
+							/>
+							{i !== 0 && (
+								<Button
+									variant='outlined'
+									disabled={disabled}
+									data-test='add-invoice-item'
+									onClick={() => removeItem(i)}
+								>
+									Remove Invoice Item
+								</Button>
+							)}
+						</div>
+					))}
+					<Button
+						variant='outlined'
+						className='py-12'
+						disabled={disabled}
+						data-test='add-invoice-item'
+						onClick={() =>
+							append({
+								description: "",
+								value: 0,
+							})
+						}
+					>
+						Add Invoice Item +
+					</Button>
+				</div>
 				<Controller
 					name={`value`}
 					control={control}
@@ -327,24 +350,17 @@ const InvoiceForm = ({
 							}
 							disabled={disabled}
 							label={`Total Value`}
+							className='col-span-1 md:col-span-2'
 						/>
 					)}
 				/>
 				<Button
-					variant='outlined'
-					className='py-12'
+					type='submit'
+					variant='contained'
 					disabled={disabled}
-					data-test='add-invoice-item'
-					onClick={() =>
-						append({
-							description: "",
-							value: 0,
-						})
-					}
+					data-test='submit-client'
+					className='col-span-1 md:col-span-2'
 				>
-					Add Invoice Item +
-				</Button>
-				<Button type='submit' variant='contained' disabled={disabled} data-test='submit-client'>
 					{submitText || "Submit"}
 				</Button>
 			</form>

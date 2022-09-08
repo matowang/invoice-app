@@ -16,7 +16,7 @@ const NewInvoicePage = () => {
 	return (
 		<AuthGuard>
 			<div className='my-40 mx-20 flex flex-col items-center relative'>
-				<div className='max-w-md w-full'>
+				<div className='max-w-4xl w-full'>
 					<h1>Edit Invoice</h1>
 					<EditInvoiceForm
 						invoiceId={router.query.id}
