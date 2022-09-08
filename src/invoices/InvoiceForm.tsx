@@ -20,39 +20,44 @@ import { ReactNode, useEffect } from "react";
 //     "id": "1644492391138"
 // },
 
-const InvoiceValuesSchema = z.object({
-	date: z
-		.number({ required_error: "Date is required", invalid_type_error: "Must be a valid date." })
-		.int("Must be a valid date."),
-	dueDate: z.number().int().min(1, "Must be a valid date."),
-	invoice_number: z.string().min(3, "Invoice Number must be 3 or more characters."),
-	projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
-	meta: z
-		.object({
-			items: z
-				.array(
-					z.object({
-						description: z.string().min(3, "Item Description must be 3 or more characters."),
-						value: z.number().positive(),
-					})
-				)
-				.min(1, "Must include atleast 1 invoice item"),
-		})
-		.optional(),
-	clientCompany: z.object(
-		{
-			id: z.string().min(1),
-			companyName: z.string({
+const InvoiceValuesSchema = z
+	.object({
+		date: z
+			.number({ required_error: "Date is required", invalid_type_error: "Must be a valid date." })
+			.int("Must be a valid date."),
+		dueDate: z.number().int().min(1, "Must be a valid date."),
+		invoice_number: z.string().min(3, "Invoice Number must be 3 or more characters."),
+		projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
+		meta: z
+			.object({
+				items: z
+					.array(
+						z.object({
+							description: z.string().min(3, "Item Description must be 3 or more characters."),
+							value: z.number().positive(),
+						})
+					)
+					.min(1, "Must include atleast 1 invoice item"),
+			})
+			.optional(),
+		clientCompany: z.object(
+			{
+				id: z.string().min(1),
+				companyName: z.string({
+					required_error: "Company Name is Required",
+					invalid_type_error: "Must be a valid Company Name",
+				}),
+			},
+			{
 				required_error: "Company Name is Required",
 				invalid_type_error: "Must be a valid Company Name",
-			}),
-		},
-		{
-			required_error: "Company Name is Required",
-			invalid_type_error: "Must be a valid Company Name",
-		}
-	),
-});
+			}
+		),
+	})
+	.refine(({ date, dueDate }) => dueDate >= date, {
+		message: "Due Date must be later than Date",
+		path: ["dueDate"],
+	});
 
 export type InvoiceFormValues = z.infer<typeof InvoiceValuesSchema>;
 
@@ -264,7 +269,6 @@ const InvoiceForm = ({
 							control={control}
 							render={({ field: { onChange, value } }) => (
 								<TextField
-									type='number'
 									onChange={(e) => onChange(parseInt(e.target.value))}
 									error={!!errors.meta?.items?.[i]?.value}
 									value={value || ""}
