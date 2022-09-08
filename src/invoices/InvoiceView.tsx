@@ -8,6 +8,8 @@ import {
 	TableRow,
 } from "@mui/material";
 
+import dayjs from "dayjs";
+
 import { InvoiceFormValues } from "./InvoiceForm";
 
 interface InvoiceViewProps {
@@ -43,12 +45,12 @@ export const InvoiceView = ({ invoiceData }: InvoiceViewProps) => {
 		},
 		{
 			name: "Date",
-			value: date,
+			value: dayjs(date).format("ll"),
 			test: "invoice-date",
 		},
 		{
 			name: "Date Due",
-			value: dueDate,
+			value: dayjs(dueDate).format("ll"),
 			test: "invoice-due-date",
 		},
 	];

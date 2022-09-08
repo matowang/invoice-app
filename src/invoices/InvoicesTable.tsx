@@ -20,6 +20,8 @@ import { InvoiceWithClientsDTO } from "../api/invoices";
 import { useMenuOpen } from "../hooks/useMenuOpen";
 import { useState } from "react";
 
+import dayjs from "dayjs";
+
 interface InvoicesTableProps {
 	invoices?: InvoiceWithClientsDTO[];
 	loading: boolean;
@@ -86,7 +88,7 @@ const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) 
 										{client.companyDetails.name}
 									</TableCell>
 									<TableCell align='right' data-test='invoice-date'>
-										{invoice.date}
+										{dayjs(invoice.date).format("ll")}
 									</TableCell>
 									<TableCell align='right' data-test='invoice-project'>
 										{client.name}
