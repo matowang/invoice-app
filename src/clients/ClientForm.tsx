@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
+import { useEffect } from "react";
 
 const ClientValuesSchema = z.object({
 	email: z.string().email(),
@@ -24,13 +25,21 @@ interface ClientFormProps {
 	formError?: string | null;
 	disabled?: boolean;
 	defaultValues?: ClientValues;
+	resetOnSuccessfulSubmit?: boolean;
 }
 
-const ClientForm = ({ onSubmit, formError, disabled, defaultValues }: ClientFormProps) => {
+const ClientForm = ({
+	onSubmit,
+	formError,
+	disabled,
+	defaultValues,
+	resetOnSuccessfulSubmit,
+}: ClientFormProps) => {
 	const {
 		register,
 		handleSubmit: handleFormHookSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitSuccessful },
+		reset,
 	} = useForm<ClientValues>({
 		resolver: zodResolver(ClientValuesSchema),
 		defaultValues,
@@ -39,6 +48,13 @@ const ClientForm = ({ onSubmit, formError, disabled, defaultValues }: ClientForm
 		if (disabled) return;
 		await onSubmit?.(data);
 	};
+
+	//clear values on submit
+	useEffect(() => {
+		if (resetOnSuccessfulSubmit && isSubmitSuccessful)
+			reset(undefined, { keepDefaultValues: true });
+	}, [isSubmitSuccessful, reset, resetOnSuccessfulSubmit]);
+
 	return (
 		<>
 			{formError && (

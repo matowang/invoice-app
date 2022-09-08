@@ -22,23 +22,19 @@ const CreateClientForm = ({ onSubmitSuccess }: CreateClientForm) => {
 			<ClientForm
 				formError={formError}
 				disabled={isLoading}
+				resetOnSuccessfulSubmit
 				onSubmit={(clientValues) => {
 					mutate(clientValues, {
 						onSuccess: () => {
 							showAlert(
-								<span data-test='form-success'>
-									Added Client Successfully.
-								</span>,
+								<span data-test='form-success'>Added Client Successfully.</span>,
 								"success"
 							);
 							onSubmitSuccess?.();
 							setFormError(null);
 						},
 						onError: (err) => {
-							if (
-								!axios.isAxiosError(err) ||
-								typeof err.response?.data !== "string"
-							)
+							if (!axios.isAxiosError(err) || typeof err.response?.data !== "string")
 								return showAlert("Something went wrong.");
 							showAlert(err.response.data);
 							setFormError(err.response.data);

@@ -79,7 +79,7 @@ const InvoiceForm = ({
 	defaultValues,
 	clientsCompanyNames,
 	isLoadingClientsCompanyNames,
-	resetOnSuccesfulSubmit,
+	resetOnSuccesfulSubmit: resetOnSuccessfulSubmit,
 	submitText,
 }: InvoiceFormProps) => {
 	const {
@@ -113,8 +113,9 @@ const InvoiceForm = ({
 
 	//clear values on submit
 	useEffect(() => {
-		if (resetOnSuccesfulSubmit && isSubmitSuccessful) reset(undefined, { keepDefaultValues: true });
-	}, [isSubmitSuccessful, reset, resetOnSuccesfulSubmit]);
+		if (resetOnSuccessfulSubmit && isSubmitSuccessful)
+			reset(undefined, { keepDefaultValues: true });
+	}, [isSubmitSuccessful, reset, resetOnSuccessfulSubmit]);
 
 	return (
 		<>
