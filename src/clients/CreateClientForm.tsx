@@ -15,7 +15,6 @@ const CreateClientForm = ({ onSubmitSuccess }: CreateClientForm) => {
 	const { showAlert } = useAlert();
 	const [formError, setFormError] = useState<string | null>(null);
 	const { mutate, isLoading } = useCreateClient();
-	//TODO Clear Form on Creation
 	return (
 		<>
 			<LinearLoader loading={isLoading} />

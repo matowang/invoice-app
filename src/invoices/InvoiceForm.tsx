@@ -1,6 +1,6 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
@@ -53,6 +53,10 @@ const InvoiceValuesSchema = z
 				invalid_type_error: "Must be a valid Company Name",
 			}
 		),
+		value: z
+			.number()
+			.optional()
+			.transform((value) => value || 0),
 	})
 	.refine(({ date, dueDate }) => dueDate >= date, {
 		message: "Due Date must be later than Date",
@@ -88,6 +92,7 @@ const InvoiceForm = ({
 		control,
 		register,
 		reset,
+		setValue,
 	} = useForm<InvoiceFormValues>({
 		resolver: zodResolver(InvoiceValuesSchema),
 		defaultValues: {
@@ -97,6 +102,7 @@ const InvoiceForm = ({
 			...defaultValues,
 		},
 	});
+
 	const {
 		fields: itemsFields,
 		append,
@@ -107,6 +113,7 @@ const InvoiceForm = ({
 	});
 
 	const handleSubmit = async (data: InvoiceFormValues) => {
+		console.log(data);
 		if (disabled) return;
 		await onSubmit?.(data);
 	};
@@ -116,6 +123,13 @@ const InvoiceForm = ({
 		if (resetOnSuccessfulSubmit && isSubmitSuccessful)
 			reset(undefined, { keepDefaultValues: true });
 	}, [isSubmitSuccessful, reset, resetOnSuccessfulSubmit]);
+
+	//set value sum
+	const items = useWatch({ name: "meta.items", control: control });
+	useEffect(() => {
+		const total = items.reduce((a, { value }) => a + value, 0);
+		setValue("value", total);
+	}, [items, setValue]);
 
 	return (
 		<>
@@ -234,7 +248,7 @@ const InvoiceForm = ({
 									error={!!errors.clientCompany}
 									helperText={
 										errors.clientCompany && (
-											<span data-test='client-invoice-project-code-error'>
+											<span data-test='client-invoice-client-error'>
 												{errors.clientCompany?.message}
 											</span>
 										)
@@ -257,7 +271,7 @@ const InvoiceForm = ({
 							error={!!errors.meta?.items?.[i]?.description}
 							helperText={
 								errors.meta?.items?.[i]?.description && (
-									<span data-test='client-invoice-project-code-error'>
+									<span data-test='client-invoice-item-description-error'>
 										{errors.meta?.items[i]?.description?.message}
 									</span>
 								)
@@ -270,12 +284,14 @@ const InvoiceForm = ({
 							control={control}
 							render={({ field: { onChange, value } }) => (
 								<TextField
-									onChange={(e) => onChange(parseInt(e.target.value))}
+									onChange={(e) => {
+										onChange(parseInt(e.target.value) || 0);
+									}}
 									error={!!errors.meta?.items?.[i]?.value}
 									value={value || ""}
 									helperText={
 										errors.meta?.items?.[i]?.value && (
-											<span data-test='client-invoice-project-code-error'>
+											<span data-test='client-invoice-item-value-error'>
 												{errors.meta?.items[i]?.value?.message}
 											</span>
 										)
@@ -297,6 +313,23 @@ const InvoiceForm = ({
 						)}
 					</div>
 				))}
+				<Controller
+					name={`value`}
+					control={control}
+					render={({ field: { value } }) => (
+						<TextField
+							error={!!errors.value}
+							value={value || 0}
+							helperText={
+								errors.value && (
+									<span data-test='client-invoice-value-error'>{errors.value?.message}</span>
+								)
+							}
+							disabled={disabled}
+							label={`Total Value`}
+						/>
+					)}
+				/>
 				<Button
 					variant='outlined'
 					className='py-12'
