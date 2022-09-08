@@ -2,7 +2,7 @@ import { dbInstance } from "./auth";
 import { InvoiceFormValues } from "../invoices/InvoiceForm";
 import { transformInvoiceValue } from "../util/transformInvoiceData";
 import { INVOICES_PAGE_LIMIT } from "./base";
-import { CompanyDetails } from "../user/CompanyDetailsForm";
+import { ClientDTO } from "./clients";
 
 export type InvoiceDTO = {
 	id: string;
@@ -16,25 +16,11 @@ export type InvoiceDTO = {
 	value: number;
 };
 
-export type InvoiceAPIValues = {
-	date: number;
-	dueDate: number;
-	invoice_number: string;
-	client_id: string;
-	projectCode?: string;
-	meta?: Record<string, any>;
-	value: number;
-};
+export type InvoiceAPIValues = Omit<InvoiceDTO, "id" | "user_id">;
 
 export type InvoiceWithClientsDTO = {
 	invoice: InvoiceDTO;
-	client: {
-		user_id: string;
-		email: string;
-		name: string;
-		companyDetails: CompanyDetails;
-		id: string;
-	};
+	client: Pick<ClientDTO, "user_id" | "email" | "name" | "companyDetails" | "id">;
 };
 
 export const getInvoices = async ({ page }: { page: number }) => {
