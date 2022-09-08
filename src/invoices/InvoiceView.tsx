@@ -8,7 +8,6 @@ import {
 	TableRow,
 } from "@mui/material";
 import { useMemo } from "react";
-import Error404 from "../components/Error404";
 import { InvoiceFormValues } from "./InvoiceForm";
 
 interface InvoiceViewProps {
@@ -29,8 +28,6 @@ export const InvoiceView = ({ invoiceData }: InvoiceViewProps) => {
 		() => invoiceData.meta?.items.reduce((a, item) => a + item.value, 0) || 0,
 		[invoiceData.meta?.items]
 	);
-
-	if (!invoiceData) return <Error404 />;
 
 	const dataItems = [
 		{
