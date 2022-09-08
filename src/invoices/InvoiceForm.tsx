@@ -250,7 +250,7 @@ const InvoiceForm = ({
 						className='grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative'
 						key={`invoice-item-${field.id}`}
 					>
-						<div className='absolute bg-white top-0 left-2 -translate-y-1/2 p-2 text-xs text-slate-500'>{`Invoice Item ${i}`}</div>
+						<div className='absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2'>{`Invoice Item ${i}`}</div>
 						<TextField
 							{...register(`meta.items.${i}.description`)}
 							error={!!errors.meta?.items?.[i]?.description}

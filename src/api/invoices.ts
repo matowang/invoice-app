@@ -37,7 +37,7 @@ export const getInvoices = async ({ page }: { page: number }) => {
 };
 
 export const getInvoice = async (id: string) => {
-	await new Promise((r) => setTimeout(r, 5000));
+	await new Promise((r) => setTimeout(r, 1000));
 	const { data } = await dbInstance.get<{ success: boolean; invoice: InvoiceDTO }>(
 		`/invoices/${id}`
 	);
