@@ -1,11 +1,10 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { Button, TextField } from "@mui/material";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
+import DatePicker from "../components/DatePickerField";
+import AutocompleteField from "../components/AutoComplete";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { z } from "zod";
-
-import dayjs from "dayjs";
 
 import { ClientCompanyNameDTO } from "../api/clients";
 import { ReactNode, useEffect } from "react";
@@ -152,28 +151,15 @@ const InvoiceForm = ({
 						name='date'
 						control={control}
 						render={({ field: { onChange, value } }) => (
-							<DesktopDatePicker
-								onChange={(value) => onChange(value?.valueOf())}
-								value={value ? dayjs(value) : null}
+							<DatePicker
+								onChange={onChange}
+								inputProps={{ "data-test": "client-date" }}
+								value={value}
 								label='Date'
+								errorMsg={
+									errors.date && <span data-test='client-date-error'>{errors.date?.message}</span>
+								}
 								disabled={disabled}
-								renderInput={(params) => (
-									<TextField
-										{...params}
-										error={!!errors.date}
-										helperText={
-											errors.date ? (
-												<span data-test='client-date-error'>{errors.date?.message}</span>
-											) : (
-												"mm/dd/yyyy"
-											)
-										}
-										inputProps={{ ...params.inputProps, "data-test": "client-date" }}
-										InputLabelProps={{
-											shrink: true,
-										}}
-									/>
-								)}
 							/>
 						)}
 					/>
@@ -181,28 +167,17 @@ const InvoiceForm = ({
 						name='dueDate'
 						control={control}
 						render={({ field: { onChange, value } }) => (
-							<DesktopDatePicker
-								onChange={(value) => onChange(value?.valueOf())}
-								value={value ? dayjs(value) : null}
+							<DatePicker
+								onChange={onChange}
+								inputProps={{ "data-test": "client-due-date" }}
 								label='Due Date'
+								value={value}
+								errorMsg={
+									errors.dueDate && (
+										<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
+									)
+								}
 								disabled={disabled}
-								renderInput={(params) => (
-									<TextField
-										{...params}
-										error={!!errors.dueDate}
-										helperText={
-											errors.dueDate ? (
-												<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
-											) : (
-												"mm/dd/yyyy"
-											)
-										}
-										inputProps={{ ...params.inputProps, "data-test": "client-due-date" }}
-										InputLabelProps={{
-											shrink: true,
-										}}
-									/>
-								)}
 							/>
 						)}
 					/>
@@ -240,29 +215,23 @@ const InvoiceForm = ({
 						name='clientCompany'
 						control={control}
 						render={({ field: { onChange, value } }) => (
-							<Autocomplete
-								disablePortal
-								onChange={(e, value) => onChange(value)}
-								value={value || null}
+							<AutocompleteField
+								onChange={onChange}
+								value={value}
 								options={clientsCompanyNames}
+								label='Client Company Name'
 								getOptionLabel={(option) => option.companyName}
 								isOptionEqualToValue={(option, value) => option.id === value.id}
-								loading={isLoadingClientsCompanyNames}
-								renderInput={(params) => (
-									<TextField
-										{...params}
-										error={!!errors.clientCompany}
-										helperText={
-											errors.clientCompany && (
-												<span data-test='client-invoice-client-error'>
-													{errors.clientCompany?.message}
-												</span>
-											)
-										}
-										disabled={disabled}
-										label='Client Company Name'
-									/>
-								)}
+								disabled={disabled}
+								loading={!!isLoadingClientsCompanyNames}
+								inputProps={{ "data-test": "client-invoice-client" }}
+								errorMsg={
+									errors.clientCompany && (
+										<span data-test='client-invoice-client-error'>
+											{errors.clientCompany?.message}
+										</span>
+									)
+								}
 							/>
 						)}
 					/>
