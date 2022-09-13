@@ -13,10 +13,7 @@ import InvoicesTableContainer from "../../src/invoices/InvoicesTableContainer";
 const InvoicesPage = () => {
 	const router = useRouter();
 	const page = useMemo(
-		() =>
-			typeof router.query.page === "string"
-				? parseInt(router.query.page)
-				: undefined,
+		() => (typeof router.query.page === "string" ? parseInt(router.query.page) : undefined),
 		[router.query]
 	);
 	const { totalPages } = useInvoices({ page });
@@ -52,7 +49,7 @@ const InvoicesPage = () => {
 				<header className='flex justify-between items-end'>
 					<h2 className='m-0'>Invoices</h2>
 					<div className='flex gap-2'>
-						<Link href='/add-invoice'>
+						<Link href='/invoices/new'>
 							<a className='no-underline'>
 								<Button variant='outlined'>Add Invoice</Button>
 							</a>
@@ -62,11 +59,7 @@ const InvoicesPage = () => {
 				<InvoicesTableContainer page={page} />
 			</div>
 			<div className='flex justify-center mt-10'>
-				<Pagination
-					count={totalPages}
-					page={page}
-					onChange={handlePageChange}
-				/>
+				<Pagination count={totalPages} page={page} onChange={handlePageChange} />
 			</div>
 		</AuthGuard>
 	);

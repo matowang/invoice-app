@@ -4,24 +4,31 @@ import { TextField, TextFieldProps } from "@mui/material";
 import dayjs from "dayjs";
 
 import { ReactNode } from "react";
+import { Control, FieldValues, Path, useController } from "react-hook-form";
 
-interface DatePickerProps {
-	onChange: (...event: any[]) => void;
-	value: number;
+interface DatePickerProps<TFieldValues extends FieldValues> {
 	disabled?: boolean;
 	label?: string;
 	errorMsg?: ReactNode;
 	inputProps: TextFieldProps["inputProps"];
+	control: Control<TFieldValues>;
+	name: Path<TFieldValues>;
 }
 
-const DatePicker = ({
-	onChange,
-	value,
+const DatePickerField = <TFieldValues extends FieldValues>({
 	disabled,
 	errorMsg,
 	inputProps,
 	label,
-}: DatePickerProps) => {
+	name,
+	control,
+}: DatePickerProps<TFieldValues>) => {
+	const {
+		field: { onChange, value },
+	} = useController({
+		name,
+		control,
+	});
 	return (
 		<DesktopDatePicker
 			onChange={(value) => onChange(value?.valueOf())}
@@ -42,4 +49,4 @@ const DatePicker = ({
 		/>
 	);
 };
-export default DatePicker;
+export default DatePickerField;

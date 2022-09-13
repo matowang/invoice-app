@@ -1,10 +1,9 @@
 import { Autocomplete, TextField, TextFieldProps } from "@mui/material";
 
 import { ReactNode } from "react";
+import { Control, FieldValues, Path, useController } from "react-hook-form";
 
-interface AutocompleteFieldProps<TOption> {
-	onChange: (...event: any[]) => void;
-	value: TOption;
+interface AutocompleteFieldProps<TOption, TFieldValues extends FieldValues> {
 	options: TOption[];
 	disabled?: boolean;
 	label?: string;
@@ -13,11 +12,11 @@ interface AutocompleteFieldProps<TOption> {
 	getOptionLabel?: (option: TOption) => string;
 	isOptionEqualToValue: (option: TOption, value: TOption) => boolean;
 	loading: boolean;
+	control: Control<TFieldValues>;
+	name: Path<TFieldValues>;
 }
 
-const AutocompleteField = <TOption extends unknown>({
-	onChange,
-	value,
+const AutocompleteField = <TOption extends unknown, TFieldValues extends FieldValues>({
 	options,
 	disabled,
 	label,
@@ -26,7 +25,15 @@ const AutocompleteField = <TOption extends unknown>({
 	getOptionLabel,
 	isOptionEqualToValue,
 	loading,
-}: AutocompleteFieldProps<TOption>) => {
+	control,
+	name,
+}: AutocompleteFieldProps<TOption, TFieldValues>) => {
+	const {
+		field: { onChange, value },
+	} = useController({
+		name,
+		control,
+	});
 	return (
 		<Autocomplete
 			disablePortal

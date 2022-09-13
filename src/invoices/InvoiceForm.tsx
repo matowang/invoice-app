@@ -1,13 +1,14 @@
 import { Button, TextField } from "@mui/material";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
-import DatePicker from "../components/DatePickerField";
-import AutocompleteField from "../components/AutoComplete";
+import DatePickerField from "../components/DatePickerField";
+import AutocompleteField from "../components/AutoCompleteField";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { ClientCompanyNameDTO } from "../api/clients";
 import { ReactNode, useEffect } from "react";
+import NumberField from "../components/NumberField";
 
 // "invoice": {
 //     "user_id": "111",
@@ -24,7 +25,13 @@ const InvoiceValuesSchema = z
 		date: z
 			.number({ required_error: "Date is required", invalid_type_error: "Must be a valid date." })
 			.int("Must be a valid date."),
-		dueDate: z.number().int().min(1, "Must be a valid date."),
+		dueDate: z
+			.number({
+				required_error: "Due Date is required",
+				invalid_type_error: "Must be a valid date.",
+			})
+			.int()
+			.min(1, "Must be a valid date."),
 		invoice_number: z.string().min(3, "Invoice Number must be 3 or more characters."),
 		projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
 		meta: z
@@ -147,39 +154,27 @@ const InvoiceForm = ({
 				className='grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20'
 			>
 				<div className='grid gap-5 py-4'>
-					<Controller
+					<DatePickerField
 						name='date'
 						control={control}
-						render={({ field: { onChange, value } }) => (
-							<DatePicker
-								onChange={onChange}
-								inputProps={{ "data-test": "client-date" }}
-								value={value}
-								label='Date'
-								errorMsg={
-									errors.date && <span data-test='client-date-error'>{errors.date?.message}</span>
-								}
-								disabled={disabled}
-							/>
-						)}
+						inputProps={{ "data-test": "client-date" }}
+						label='Date'
+						errorMsg={
+							errors.date && <span data-test='client-date-error'>{errors.date?.message}</span>
+						}
+						disabled={disabled}
 					/>
-					<Controller
+					<DatePickerField
 						name='dueDate'
 						control={control}
-						render={({ field: { onChange, value } }) => (
-							<DatePicker
-								onChange={onChange}
-								inputProps={{ "data-test": "client-due-date" }}
-								label='Due Date'
-								value={value}
-								errorMsg={
-									errors.dueDate && (
-										<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
-									)
-								}
-								disabled={disabled}
-							/>
-						)}
+						inputProps={{ "data-test": "client-due-date" }}
+						label='Due Date'
+						errorMsg={
+							errors.dueDate && (
+								<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
+							)
+						}
+						disabled={disabled}
 					/>
 					<TextField
 						{...register("invoice_number")}
@@ -211,29 +206,21 @@ const InvoiceForm = ({
 						disabled={disabled}
 						inputProps={{ "data-test": "client-invoice-project-code" }}
 					/>
-					<Controller
+					<AutocompleteField
 						name='clientCompany'
 						control={control}
-						render={({ field: { onChange, value } }) => (
-							<AutocompleteField
-								onChange={onChange}
-								value={value}
-								options={clientsCompanyNames}
-								label='Client Company Name'
-								getOptionLabel={(option) => option.companyName}
-								isOptionEqualToValue={(option, value) => option.id === value.id}
-								disabled={disabled}
-								loading={!!isLoadingClientsCompanyNames}
-								inputProps={{ "data-test": "client-invoice-client" }}
-								errorMsg={
-									errors.clientCompany && (
-										<span data-test='client-invoice-client-error'>
-											{errors.clientCompany?.message}
-										</span>
-									)
-								}
-							/>
-						)}
+						options={clientsCompanyNames}
+						label='Client Company Name'
+						getOptionLabel={(option) => option.companyName}
+						isOptionEqualToValue={(option, value) => option.id === value.id}
+						disabled={disabled}
+						loading={!!isLoadingClientsCompanyNames}
+						inputProps={{ "data-test": "client-invoice-client" }}
+						errorMsg={
+							errors.clientCompany && (
+								<span data-test='client-invoice-client-error'>{errors.clientCompany?.message}</span>
+							)
+						}
 					/>
 				</div>
 				<div className='grid gap-5 h-full md:overflow-y-scroll py-4'>
@@ -253,30 +240,23 @@ const InvoiceForm = ({
 										</span>
 									)
 								}
+								inputProps={{ "data-test": `client-invoice-item-description-${i}` }}
 								disabled={disabled}
 								label='Description'
 							/>
-							<Controller
+							<NumberField
 								name={`meta.items.${i}.value`}
 								control={control}
-								render={({ field: { onChange, value } }) => (
-									<TextField
-										onChange={(e) => {
-											onChange(parseInt(e.target.value) || 0);
-										}}
-										error={!!errors.meta?.items?.[i]?.value}
-										value={value || ""}
-										helperText={
-											errors.meta?.items?.[i]?.value && (
-												<span data-test='client-invoice-item-value-error'>
-													{errors.meta?.items[i]?.value?.message}
-												</span>
-											)
-										}
-										disabled={disabled}
-										label={`Value`}
-									/>
-								)}
+								label='Value'
+								disabled={disabled}
+								errorMsg={
+									errors.meta?.items?.[i]?.value && (
+										<span data-test='client-invoice-item-value-error'>
+											{errors.meta?.items[i]?.value?.message}
+										</span>
+									)
+								}
+								inputProps={{ "data-test": `client-invoice-item-value-${i}` }}
 							/>
 							{i !== 0 && (
 								<Button
