@@ -14,6 +14,7 @@ import {
 import TableRowStatusMessage from "../components/TableRowStatusMessage";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Link from "next/link";
+import DataTableHeadController from "../components/DataTableHeadController";
 
 import { ClientDTO } from "../api/clients";
 import { useMenuOpen } from "../hooks/useMenuOpen";
@@ -28,24 +29,29 @@ interface ClientsTableProps {
 const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => {
 	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
 	const [currentMenuId, setCurrentMenuId] = useState<string | null>(null);
+	const headFields = [
+		{ name: "clientName", label: "Client Name" },
+		{ name: "companyName", label: "Company" },
+		{ name: "invoicesCount", label: "Invoices Count" },
+		{ name: "total", label: "Total Billed" },
+	];
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 650 }} aria-label='client table' data-test='clients-table'>
 				<TableHead>
 					<TableRow>
-						<TableCell component='th' className='font-bold'>
-							Client Name
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Company
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Invoices Count
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Total Billed
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'></TableCell>
+						<DataTableHeadController
+							headFields={headFields}
+							RenderCell={(props) => (
+								<TableCell
+									{...props}
+									align={props.index === 0 ? "left" : "right"}
+									component='th'
+									className='font-bold'
+								/>
+							)}
+						/>
+						<TableCell />
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -70,7 +76,7 @@ const ClientsTable = ({ clients, loading, errorMessage }: ClientsTableProps) => 
 							</TableRow>
 						))
 					) : clients?.length === 0 ? (
-						<TableRowStatusMessage colSpan={6} status='empty'>
+						<TableRowStatusMessage colSpan={headFields.length + 1} status='empty'>
 							<span data-test='empty-placeholder'>No Clients to Show.</span>
 						</TableRowStatusMessage>
 					) : (
