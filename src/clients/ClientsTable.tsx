@@ -18,7 +18,7 @@ const fields = [
 	{ name: "clientName", label: "Client Name" },
 	{ name: "companyName", label: "Company" },
 	{ name: "invoicesCount", label: "Invoices Count" },
-	{ name: "total", label: "Total Billed" },
+	{ name: "totalBilled", label: "Total Billed" },
 	null,
 ];
 
