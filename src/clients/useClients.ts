@@ -1,14 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CLIENTS_PAGE_LIMIT } from "../api/base";
-import { getClients } from "../api/clients";
+import { getClients, GetClientsQuery } from "../api/clients";
 
-export const useClients = ({ page }: { page?: number }) => {
-	const [totalPages, setTotalPages] = useState<number | undefined>();
-	const result = useQuery(["clients", page], () => getClients({ page } as { page: number }), {
-		enabled: !!page,
-		onSuccess: (data) => setTotalPages(Math.ceil(data.total / CLIENTS_PAGE_LIMIT)),
-	});
+export const useClients = ({ page, sortBy, sortOrder }: GetClientsQuery = {}) => {
+	const result = useQuery(
+		["clients", page, sortBy, sortOrder],
+		() => getClients({ page, sortBy, sortOrder }),
+		{
+			enabled: !!page,
+			keepPreviousData: true,
+		}
+	);
+
+	const totalPages = useMemo(
+		() => (result.data ? Math.ceil(result.data.total / CLIENTS_PAGE_LIMIT) : 1),
+		[result.data]
+	);
+
 	return {
 		...result,
 		totalPages,

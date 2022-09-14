@@ -31,7 +31,7 @@ const Dashboard: NextPage = () => {
 							</Link>
 						</div>
 					</header>
-					<ClientsTableContainer page={1} />
+					<ClientsTableContainer query={{ page: 1 }} disableRouting />
 				</section>
 				<section>
 					<header className='flex justify-between items-end'>

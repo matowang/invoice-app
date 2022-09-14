@@ -1,27 +1,29 @@
 import { useRouter } from "next/router";
-import { ReactNode, MouseEvent } from "react";
+import { MouseEvent } from "react";
+import { SortOrder } from "../api/base";
 
-type SortOder = "asc" | "desc" | undefined;
+type DataTableField = { name: string; label: string };
 
 interface DataTableCellComponentProps {
 	onClick: (event: MouseEvent) => void;
+	field: DataTableField;
 	index: number;
-	children: ReactNode;
+	sortOrder: SortOrder | undefined;
 }
 
 interface TableHeaderProps {
-	headFields: { name: string; label: string }[];
-	RenderCell: (props: DataTableCellComponentProps) => JSX.Element;
+	headFields: DataTableField[];
+	renderCell: (props: DataTableCellComponentProps) => JSX.Element;
 	disableRouting?: boolean;
 }
 
-const DataTableHead = ({ headFields, RenderCell, disableRouting }: TableHeaderProps) => {
+const DataTableHead = ({ headFields, renderCell, disableRouting }: TableHeaderProps) => {
 	const router = useRouter();
 
 	const handleFieldClick = (event: MouseEvent, fieldName: string) => {
 		if (disableRouting) return;
 
-		let sortOrder: SortOder;
+		let sortOrder: SortOrder;
 		if (router.query.sortBy === fieldName) {
 			if (router.query.sortOrder === "asc") sortOrder = "desc";
 			else if (router.query.sortOrder === "desc") sortOrder = undefined;
@@ -37,15 +39,18 @@ const DataTableHead = ({ headFields, RenderCell, disableRouting }: TableHeaderPr
 
 	return (
 		<>
-			{headFields.map((field, i) => (
-				<RenderCell
-					onClick={(e) => handleFieldClick(e, field.name)}
-					key={`field-${field.name}-${i}`}
-					index={i}
-				>
-					{field.label}
-				</RenderCell>
-			))}
+			{headFields.map((field, i) =>
+				renderCell({
+					onClick: (e) => handleFieldClick(e, field.name),
+					field,
+					sortOrder:
+						router.query.sortBy === field.name &&
+						(router.query.sortOrder === "asc" || router.query.sortOrder === "desc")
+							? router.query.sortOrder
+							: undefined,
+					index: i,
+				})
+			)}
 		</>
 	);
 };

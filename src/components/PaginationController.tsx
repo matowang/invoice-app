@@ -1,41 +1,35 @@
-import {
-	Pagination,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-} from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, ReactNode } from "react";
+import { ReactNode } from "react";
 
-interface TableHeaderProps {
-	children: ReactNode;
-	pageLimit: number;
-	headFields: { name: string; label: string }[];
+interface RenderPageChangeProps {
+	page: number;
+	handlePageChange: (page: number) => void;
+	totalPages: number;
 }
 
-const DataTableHead = ({ children, pageLimit = 10, headFields }: TableHeaderProps) => {
+type renderPageChange = ({
+	page,
+	handlePageChange,
+	totalPages,
+}: RenderPageChangeProps) => ReactNode;
+
+interface TableHeaderProps {
+	children: renderPageChange;
+	totalPages?: number;
+}
+
+const PaginationController = ({ children, totalPages = 1 }: TableHeaderProps) => {
 	const router = useRouter();
 
-	const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
+	const page = typeof router.query.page === "string" ? parseInt(router.query.page) : 1;
+
+	const handlePageChange = (page: number) => {
 		router.push({
 			pathname: router.pathname,
 			query: { ...router.query, page: page },
 		});
 	};
 
-	return (
-		<TableHead>
-			<TableRow>
-				{headFields.map((field, i) => (
-					<TableCell component='th' className='font-bold' key={`field-${field.name}-${i}`}>
-						TableHeader
-					</TableCell>
-				))}
-			</TableRow>
-		</TableHead>
-	);
+	return <>{children({ page, handlePageChange, totalPages })}</>;
 };
-export default DataTableHead;
+export default PaginationController;
