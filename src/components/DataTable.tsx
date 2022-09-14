@@ -9,7 +9,6 @@ import {
 	Skeleton,
 	Paper,
 	TableContainer,
-	TableRowProps,
 } from "@mui/material";
 
 import DataTableHeadController from "./DataTableHeadController";
@@ -24,7 +23,7 @@ import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutl
 
 import { ReactNode } from "react";
 
-export type DataTableField = { name: string; label: string };
+export type DataTableField = { name: string; label: string; isSortable: boolean };
 
 interface DataTableProps<TData> {
 	rowsData?: TData[];

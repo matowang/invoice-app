@@ -1,7 +1,7 @@
 import { dbInstance } from "./auth";
 import { InvoiceFormValues } from "../invoices/InvoiceForm";
 import { transformInvoiceValue } from "../util/transformInvoiceData";
-import { INVOICES_PAGE_LIMIT } from "./base";
+import { INVOICES_PAGE_LIMIT, SortOrder } from "./base";
 import { ClientDTO } from "./clients";
 
 export type InvoiceDTO = {
@@ -23,16 +23,31 @@ export type InvoiceWithClientsDTO = {
 	client: Pick<ClientDTO, "user_id" | "email" | "name" | "companyDetails" | "id">;
 };
 
-export const getInvoices = async ({ page }: { page: number }) => {
-	await new Promise((r) => setTimeout(r, 1000));
+export type GetInvoicesQuery = {
+	page?: number;
+	sortBy?: "total" | "dueDate" | "creationDate" | "companyName";
+	sortOrder?: SortOrder;
+};
+
+const InvoicesSortMap = {
+	total: "price",
+	dueDate: "dueDate",
+	creationDate: "creation",
+	companyName: "companyName",
+};
+
+export const getInvoices = async ({ page = 1, sortBy, sortOrder }: GetInvoicesQuery) => {
+	await new Promise((r) => setTimeout(r, 500));
 	const params = {
 		limit: INVOICES_PAGE_LIMIT.toString(),
-		offset: ((page - 1) * INVOICES_PAGE_LIMIT).toString(),
+		offset: (page - 1) * INVOICES_PAGE_LIMIT,
+		sortBy: sortBy && InvoicesSortMap[sortBy],
+		sort: sortOrder,
 	};
 	const { data } = await dbInstance.get<{
 		invoices: InvoiceWithClientsDTO[];
 		total: number;
-	}>(`/invoices?${new URLSearchParams(params).toString()}`);
+	}>("/invoices", { params });
 	return data;
 };
 

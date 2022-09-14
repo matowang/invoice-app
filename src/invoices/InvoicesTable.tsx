@@ -1,141 +1,116 @@
-import {
-	TableContainer,
-	Paper,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
-	Typography,
-	Skeleton,
-	IconButton,
-	Menu,
-	MenuItem,
-} from "@mui/material";
-import TableRowStatusMessage from "../components/TableRowStatusMessage";
-import Link from "next/link";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { TableRow, TableCell } from "@mui/material";
+
+import DataTable from "../components/DataTable";
+import MenuActions from "../components/ActionsMenu";
+import { useRouter } from "next/router";
 
 import { InvoiceWithClientsDTO } from "../api/invoices";
-import { useMenuOpen } from "../hooks/useMenuOpen";
-import { useState } from "react";
 
 import dayjs from "dayjs";
 
 interface InvoicesTableProps {
 	invoices?: InvoiceWithClientsDTO[];
-	loading: boolean;
+	isLoading: boolean;
+	isFetching: boolean;
 	errorMessage?: string;
+	disableRouting?: boolean;
+	totalPages?: number;
 }
 
-const InvoicesTable = ({ invoices, loading, errorMessage }: InvoicesTableProps) => {
-	const { menuOpen, menuAnchorEl, handleMenuClick, handleMenuClose } = useMenuOpen();
-	const [currentMenuId, setCurrentMenuId] = useState<string | null>(null);
+const fields = [
+	{
+		name: "invoiceNumber",
+		label: "Invoice Number",
+		isSortable: false,
+	},
+	{
+		name: "companyName",
+		label: "Client Company",
+		isSortable: true,
+	},
+	{
+		name: "dueDate",
+		label: "Due Date",
+		isSortable: true,
+	},
+	{
+		name: "clientName",
+		label: "Client Name",
+		isSortable: false,
+	},
+	{
+		name: "total",
+		label: "Total",
+		isSortable: true,
+	},
+	{
+		name: "placeholder",
+		label: "",
+		isSortable: false,
+	},
+];
+
+const InvoicesTable = ({
+	invoices,
+	isLoading,
+	isFetching,
+	errorMessage,
+	disableRouting: disableRouting,
+	totalPages,
+}: InvoicesTableProps) => {
+	const router = useRouter();
+
 	return (
-		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 650 }} aria-label='invoice table' data-test='invoices-table'>
-				<TableHead>
-					<TableRow>
-						<TableCell component='th' className='font-bold'>
-							Invoice Number
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Client Company
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Due Date
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Client Name
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'>
-							Value
-						</TableCell>
-						<TableCell component='th' align='right' className='font-bold'></TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{loading ? (
-						Array.from(Array(10)).map((e, i) => (
-							<TableRow data-test='loading-overlay' key={i + "inv-skel"}>
-								<TableCell>
-									<Skeleton />
-								</TableCell>
-								<TableCell align='right'>
-									<Skeleton />
-								</TableCell>
-								<TableCell align='right'>
-									<Skeleton />
-								</TableCell>
-								<TableCell align='right'>
-									<Skeleton />
-								</TableCell>
-								<TableCell align='right'>
-									<Skeleton />
-								</TableCell>
-							</TableRow>
-						))
-					) : invoices?.length === 0 ? (
-						<TableRowStatusMessage colSpan={6} status='empty'>
-							<span data-test='empty-placeholder'>No Invoices to show</span>
-						</TableRowStatusMessage>
-					) : (
-						invoices?.map(({ invoice, client }) => (
-							<Link href={`/invoices/${invoice.id}/view`} key={invoice.id}>
-								<TableRow hover component='tr' data-test={`invoice-row-${invoice.id}`}>
-									<TableCell data-test='invoice-number'>{invoice.invoice_number}</TableCell>
-									<TableCell align='right' data-test='invoice-company'>
-										{client.companyDetails.name}
-									</TableCell>
-									<TableCell align='right' data-test='invoice-date'>
-										{dayjs(invoice.date).format("ll")}
-									</TableCell>
-									<TableCell align='right' data-test='invoice-project'>
-										{client.name}
-									</TableCell>
-									<TableCell align='right' data-test='invoice-price'>
-										{invoice.value}
-									</TableCell>
-									<TableCell align='right' sx={{ p: 0 }}>
-										<IconButton
-											data-test='invoice-actions'
-											onClick={(event) => {
-												handleMenuClick(event);
-												setCurrentMenuId(invoice.id);
-											}}
-										>
-											<MoreVertIcon />
-										</IconButton>
-										<Menu
-											anchorEl={menuAnchorEl}
-											open={menuOpen && invoice.id === currentMenuId}
-											onClose={handleMenuClose}
-										>
-											<Link href={`/invoices/${invoice.id}/edit`}>
-												<MenuItem onClick={handleMenuClose}>
-													<Typography sx={{ color: "inherit" }}>Edit Invoice</Typography>
-												</MenuItem>
-											</Link>
-											<MenuItem onClick={handleMenuClose}>Delete Invoice</MenuItem>
-											<Link href={`/invoices/${invoice.id}/view?print=true`}>
-												<MenuItem onClick={handleMenuClose}>
-													<Typography sx={{ color: "inherit" }}>Print Invoice</Typography>
-												</MenuItem>
-											</Link>
-										</Menu>
-									</TableCell>
-								</TableRow>
-							</Link>
-						))
-					)}
-					{errorMessage && (
-						<TableRowStatusMessage colSpan={6} status='error'>
-							<span date-test='invoices-fetch-error'>{errorMessage}</span>
-						</TableRowStatusMessage>
-					)}
-				</TableBody>
-			</Table>
-		</TableContainer>
+		<DataTable
+			fields={fields}
+			totalPages={totalPages}
+			isError={!!errorMessage}
+			isLoading={isLoading}
+			isFetching={isFetching}
+			errorMsg={errorMessage}
+			rowsData={invoices}
+			disableRouting={disableRouting}
+			tableProps={{ "data-test": "clients-table" }}
+		>
+			{({ invoice, client }) => (
+				<TableRow
+					hover
+					component='tr'
+					data-test={`invoice-row-${invoice.id}`}
+					key={invoice.id}
+					onClick={() => router.push(`/invoices/${invoice.id}/view`)}
+				>
+					<TableCell data-test='invoice-number'>{invoice.invoice_number}</TableCell>
+					<TableCell align='right' data-test='invoice-company'>
+						{client.companyDetails.name}
+					</TableCell>
+					<TableCell align='right' data-test='invoice-date'>
+						{dayjs(invoice.date).format("ll")}
+					</TableCell>
+					<TableCell align='right' data-test='invoice-project'>
+						{client.name}
+					</TableCell>
+					<TableCell align='right' data-test='invoice-price'>
+						{invoice.value}
+					</TableCell>
+					<TableCell align='right' sx={{ p: 0 }}>
+						<MenuActions
+							iconButtonProps={{ "data-test": "invoice-actions" }}
+							actions={[
+								{
+									label: "Edit Invoice",
+									onClick: () => router.push(`/invoices/${invoice.id}/edit`),
+								},
+								{
+									label: "Print Invoice",
+									onClick: () => router.push(`/invoices/${invoice.id}/view?print=true`),
+								},
+							]}
+						/>
+					</TableCell>
+				</TableRow>
+			)}
+		</DataTable>
 	);
 };
 

@@ -15,10 +15,10 @@ interface ClientsTableProps {
 }
 
 const fields = [
-	{ name: "clientName", label: "Client Name" },
-	{ name: "companyName", label: "Company" },
-	{ name: "invoicesCount", label: "Invoices Count" },
-	{ name: "totalBilled", label: "Total Billed" },
+	{ name: "clientName", label: "Client Name", isSortable: true },
+	{ name: "companyName", label: "Company", isSortable: true },
+	{ name: "invoicesCount", label: "Invoices Count", isSortable: true },
+	{ name: "totalBilled", label: "Total Billed", isSortable: true },
 	null,
 ];
 
@@ -27,7 +27,7 @@ const ClientsTable = ({
 	isLoading,
 	isFetching,
 	errorMessage,
-	disableRouting: disableRouting,
+	disableRouting,
 	totalPages,
 }: ClientsTableProps) => {
 	const router = useRouter();

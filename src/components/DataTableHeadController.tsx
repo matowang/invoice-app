@@ -6,7 +6,7 @@ import { SortOrder } from "../api/base";
 import { DataTableField } from "./DataTable";
 
 interface DataTableCellComponentProps {
-	onClick: (event: MouseEvent) => void;
+	onClick?: (event: MouseEvent) => void;
 	field: DataTableField;
 	index: number;
 	sortOrder: SortOrder | undefined;
@@ -43,9 +43,10 @@ const DataTableHeadController = ({ headFields, renderCell, disableRouting }: Tab
 			{headFields.map((field, i) =>
 				field ? (
 					renderCell({
-						onClick: (e) => handleFieldClick(e, field.name),
+						onClick: field.isSortable ? (e) => handleFieldClick(e, field.name) : undefined,
 						field,
 						sortOrder:
+							field.isSortable &&
 							router.query.sortBy === field.name &&
 							(router.query.sortOrder === "asc" || router.query.sortOrder === "desc")
 								? router.query.sortOrder

@@ -25,10 +25,10 @@ export type GetClientsQuery = {
 };
 
 export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => {
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 500));
 	const params = {
 		limit: CLIENTS_PAGE_LIMIT.toString(),
-		offset: ((page - 1) * CLIENTS_PAGE_LIMIT).toString(),
+		offset: (page - 1) * CLIENTS_PAGE_LIMIT,
 		sort: sortOrder,
 		sortBy: sortBy,
 	};

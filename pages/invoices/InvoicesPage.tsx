@@ -1,4 +1,4 @@
-import { Button, Pagination } from "@mui/material";
+import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -12,36 +12,24 @@ import InvoicesTableContainer from "../../src/invoices/InvoicesTableContainer";
 
 const InvoicesPage = () => {
 	const router = useRouter();
-	const page = useMemo(
-		() => (typeof router.query.page === "string" ? parseInt(router.query.page) : undefined),
-		[router.query]
-	);
-	const { totalPages } = useInvoices({ page });
 
 	useEffect(() => {
 		if (!router.isReady) return;
+		if (!router.query.page) return;
 		if (typeof router.query.page !== "string") {
-			router.replace(`/invoices?page=${1}`);
+			router.replace({
+				pathname: router.pathname,
+				query: { ...router.query, page: 1 },
+			});
 			return;
 		}
 		const page = parseInt(router.query.page);
-		if (page < 1) {
-			router.replace(`/invoices?pages=1`);
-		}
+		if (page < 1)
+			router.replace({
+				pathname: router.pathname,
+				query: { ...router.query, page: 1 },
+			});
 	}, [router, router.isReady]);
-
-	useEffect(() => {
-		if (!totalPages || !page) return;
-		if (totalPages < page) {
-			router.replace(`/invoices?page=${totalPages}`);
-		}
-	}, [page, router, totalPages]);
-
-	if (!page) return <PageLoader />;
-
-	const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
-		router.push(`/invoices?page=${page}`);
-	};
 
 	return (
 		<AuthGuard>
@@ -56,10 +44,7 @@ const InvoicesPage = () => {
 						</Link>
 					</div>
 				</header>
-				<InvoicesTableContainer page={page} />
-			</div>
-			<div className='flex justify-center mt-10'>
-				<Pagination count={totalPages} page={page} onChange={handlePageChange} />
+				<InvoicesTableContainer query={router.query} />
 			</div>
 		</AuthGuard>
 	);

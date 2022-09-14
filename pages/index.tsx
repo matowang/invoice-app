@@ -53,7 +53,7 @@ const Dashboard: NextPage = () => {
 							</Link>
 						</div>
 					</header>
-					<InvoicesTableContainer page={1} />
+					<InvoicesTableContainer query={{ page: 1 }} disableRouting />
 				</section>
 			</div>
 		</AuthGuard>

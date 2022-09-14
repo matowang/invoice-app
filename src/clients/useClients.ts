@@ -8,7 +8,6 @@ export const useClients = ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => 
 		["clients", page, sortBy, sortOrder],
 		() => getClients({ page, sortBy, sortOrder }),
 		{
-			enabled: !!page,
 			keepPreviousData: true,
 		}
 	);

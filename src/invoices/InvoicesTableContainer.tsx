@@ -1,19 +1,26 @@
-import { useInvoices } from './useInvoices';
-import InvoicesTable from './InvoicesTable';
+import InvoicesTable from "./InvoicesTable";
+
+import { useInvoices } from "./useInvoices";
+
+import { GetInvoicesQuery } from "../api/invoices";
 
 interface InvoicesTableContainerProps {
-    page?: number;
+	disableRouting?: boolean;
+	query: GetInvoicesQuery;
 }
 
-const InvoicesTableContainer = ({ page }: InvoicesTableContainerProps) => {
-
-    const { data, error, isLoading } = useInvoices({ page });
-    return (
-        <InvoicesTable
-            loading={isLoading}
-            errorMessage={error ? "Something went wrong." : undefined}
-            invoices={data?.invoices} />
-    )
-}
+const InvoicesTableContainer = ({ query, disableRouting }: InvoicesTableContainerProps) => {
+	const { data, error, isLoading, totalPages, isFetching } = useInvoices(query);
+	return (
+		<InvoicesTable
+			errorMessage={error ? "Something went wrong." : undefined}
+			invoices={data?.invoices}
+			totalPages={totalPages}
+			disableRouting={disableRouting}
+			isLoading={isLoading}
+			isFetching={isFetching}
+		/>
+	);
+};
 
 export default InvoicesTableContainer;
