@@ -1,3 +1,5 @@
+import { TableCell } from "@mui/material";
+
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 import { SortOrder } from "../api/base";
@@ -12,12 +14,12 @@ interface DataTableCellComponentProps {
 }
 
 interface TableHeaderProps {
-	headFields: DataTableField[];
+	headFields: (DataTableField | null)[];
 	renderCell: (props: DataTableCellComponentProps) => JSX.Element;
 	disableRouting?: boolean;
 }
 
-const DataTableHead = ({ headFields, renderCell, disableRouting }: TableHeaderProps) => {
+const DataTableHeadController = ({ headFields, renderCell, disableRouting }: TableHeaderProps) => {
 	const router = useRouter();
 
 	const handleFieldClick = (event: MouseEvent, fieldName: string) => {
@@ -40,18 +42,22 @@ const DataTableHead = ({ headFields, renderCell, disableRouting }: TableHeaderPr
 	return (
 		<>
 			{headFields.map((field, i) =>
-				renderCell({
-					onClick: (e) => handleFieldClick(e, field.name),
-					field,
-					sortOrder:
-						router.query.sortBy === field.name &&
-						(router.query.sortOrder === "asc" || router.query.sortOrder === "desc")
-							? router.query.sortOrder
-							: undefined,
-					index: i,
-				})
+				field ? (
+					renderCell({
+						onClick: (e) => handleFieldClick(e, field.name),
+						field,
+						sortOrder:
+							router.query.sortBy === field.name &&
+							(router.query.sortOrder === "asc" || router.query.sortOrder === "desc")
+								? router.query.sortOrder
+								: undefined,
+						index: i,
+					})
+				) : (
+					<TableCell key={i} />
+				)
 			)}
 		</>
 	);
 };
-export default DataTableHead;
+export default DataTableHeadController;
