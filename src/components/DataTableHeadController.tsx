@@ -3,8 +3,7 @@ import { TableCell } from "@mui/material";
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 import { SortOrder } from "../api/base";
-
-type DataTableField = { name: string; label: string };
+import { DataTableField } from "./DataTable";
 
 interface DataTableCellComponentProps {
 	onClick: (event: MouseEvent) => void;

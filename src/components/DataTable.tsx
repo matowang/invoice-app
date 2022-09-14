@@ -24,6 +24,8 @@ import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutl
 
 import { ReactNode } from "react";
 
+export type DataTableField = { name: string; label: string };
+
 interface DataTableProps<TData> {
 	rowsData?: TData[];
 	children: (rowItem: TData) => ReactNode;
@@ -32,10 +34,7 @@ interface DataTableProps<TData> {
 	isError: boolean;
 	errorMsg: ReactNode;
 	tableProps?: TableProps<React.ElementType>;
-	fields: ({
-		name: string;
-		label: string;
-	} | null)[]; // null represents placeholder fields
+	fields: (DataTableField | null)[]; // null represents placeholder fields
 	disableRouting?: boolean;
 	totalPages?: number;
 	pageLimit?: number;

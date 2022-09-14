@@ -13,6 +13,7 @@ const Clients = () => {
 
 	useEffect(() => {
 		if (!router.isReady) return;
+		if (!router.query.page) return;
 		if (typeof router.query.page !== "string") {
 			router.replace({
 				pathname: router.pathname,
@@ -28,7 +29,7 @@ const Clients = () => {
 			});
 	}, [router, router.isReady]);
 
-	if (!router.query.page) return <PageLoader />;
+	if (!router.query) return <PageLoader />;
 
 	return (
 		<AuthGuard>
