@@ -8,11 +8,13 @@ import { InvoiceWithClientsDTO } from "../api/invoices";
 
 import dayjs from "dayjs";
 
+import { ReactNode } from "react";
+
 interface InvoicesTableProps {
 	invoices?: InvoiceWithClientsDTO[];
 	isLoading: boolean;
 	isFetching: boolean;
-	errorMessage?: string;
+	errorMessage?: ReactNode;
 	disableRouting?: boolean;
 	totalPages?: number;
 }
@@ -70,7 +72,7 @@ const InvoicesTable = ({
 			errorMsg={errorMessage}
 			rowsData={invoices}
 			disableRouting={disableRouting}
-			tableProps={{ "data-test": "clients-table" }}
+			tableProps={{ "data-test": "invoices-table" }}
 		>
 			{({ invoice, client }) => (
 				<TableRow

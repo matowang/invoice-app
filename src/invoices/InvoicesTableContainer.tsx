@@ -13,7 +13,9 @@ const InvoicesTableContainer = ({ query, disableRouting }: InvoicesTableContaine
 	const { data, error, isLoading, totalPages, isFetching } = useInvoices(query);
 	return (
 		<InvoicesTable
-			errorMessage={error ? "Something went wrong." : undefined}
+			errorMessage={
+				error ? <span date-test='invoices-fetch-error'>Something went wrong.</span> : undefined
+			}
 			invoices={data?.invoices}
 			totalPages={totalPages}
 			disableRouting={disableRouting}

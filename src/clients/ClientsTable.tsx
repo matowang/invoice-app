@@ -4,12 +4,13 @@ import { ClientDTO } from "../api/clients";
 import DataTable from "../components/DataTable";
 import MenuActions from "../components/ActionsMenu";
 import { useRouter } from "next/router";
+import { ReactNode } from "react";
 
 interface ClientsTableProps {
 	clients?: ClientDTO[];
 	isLoading: boolean;
 	isFetching: boolean;
-	errorMessage?: string;
+	errorMessage?: ReactNode;
 	disableRouting?: boolean;
 	totalPages?: number;
 }

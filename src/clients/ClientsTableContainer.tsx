@@ -15,7 +15,9 @@ const ClientsTableContainer = ({ disableRouting, query }: ClientsTableContainerP
 			disableRouting={disableRouting}
 			isLoading={isLoading}
 			isFetching={isFetching}
-			errorMessage={error ? "Something went wrong." : undefined}
+			errorMessage={
+				error ? <span date-test='clients-fetch-error'>Something went wrong.</span> : undefined
+			}
 			clients={data?.clients}
 		/>
 	);
