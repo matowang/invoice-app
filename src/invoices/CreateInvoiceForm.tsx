@@ -27,6 +27,7 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 	const submitForm = useCallback(
 		(invoiceFormValues: InvoiceFormValues) => {
 			//We use a promise so that the InvoiceForm react-hook-form can know if submit was succesful
+			//TODO check if on success data is needed
 			return new Promise((resolve, reject) => {
 				mutate(invoiceFormValues, {
 					onSuccess: (data) => {
