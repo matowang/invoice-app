@@ -1,43 +1,48 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-import { Snackbar, Alert } from '@mui/material';
+import { ReactNode } from "react";
+import { Snackbar, Alert } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
-interface AlertContextType {
-    showAlert: (msg: ReactNode, type?: AlertColor) => void;
-}
+import create from "zustand";
 
 interface AlertProviderProps {
-    children: ReactNode
+	children: ReactNode;
 }
 
-const AlertContext = createContext<AlertContextType | null>(null);
+interface AlertState {
+	open: boolean;
+	alertType: AlertColor;
+	alertMsg: ReactNode;
+	showAlert: (msg: ReactNode, alertType?: AlertColor) => void;
+	closeAlert: () => void;
+}
+
+const useAlertStore = create<AlertState>((set) => ({
+	open: false,
+	alertType: "error",
+	alertMsg: "",
+	showAlert: (msg, alertType = "error") => {
+		console.log(alertType);
+		set({ open: true, alertMsg: msg, alertType: alertType });
+	},
+	closeAlert: () => set({ open: true }),
+}));
 
 export const useAlert = () => {
-    const ctx = useContext(AlertContext);
-    if (ctx === null)
-        throw new Error("You cannot use Alert Context without Alert Provider");
-    return ctx;
+	const showAlert = useAlertStore((state) => state.showAlert);
+	return { showAlert };
 };
 
 export const AlertProvider = ({ children }: AlertProviderProps) => {
-    const [open, setOpen] = useState<boolean>(false);
-    const [alertType, setAlertType] = useState<AlertColor>("success");
-    const [alertMessage, setAlterMessage] = useState<ReactNode>("Alert");
+	const { open, alertMsg, alertType, closeAlert } = useAlertStore((state) => state);
 
-    const showAlert = (msg: ReactNode, type: AlertColor = 'error'): void => {
-        setAlertType(type);
-        setAlterMessage(msg);
-        setOpen(true);
-    }
-
-    return (
-        <AlertContext.Provider value={{ showAlert }}>
-            {children}
-            <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                <Alert onClose={() => setOpen(false)} severity={alertType} sx={{ width: '100%' }}>
-                    {alertMessage}
-                </Alert>
-            </Snackbar>
-        </AlertContext.Provider>
-    )
-}
+	return (
+		<>
+			{children}
+			<Snackbar open={open} autoHideDuration={6000} onClose={closeAlert}>
+				<Alert onClose={closeAlert} severity={alertType} sx={{ width: "100%" }}>
+					{alertMsg}
+				</Alert>
+			</Snackbar>
+		</>
+	);
+};
