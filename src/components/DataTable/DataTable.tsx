@@ -29,7 +29,7 @@ interface DataTableProps<TData> {
 	isError: boolean;
 	errorMsg: ReactNode;
 	tableProps?: TableProps<React.ElementType>;
-	fields: (DataTableField | null)[]; // null represents placeholder fields
+	fields: DataTableField[]; // null represents placeholder fields
 	disableRouting?: boolean;
 	totalPages?: number;
 	pageLimit?: number;

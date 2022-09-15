@@ -20,7 +20,7 @@ const fields = [
 	{ name: "companyName", label: "Company", isSortable: true },
 	{ name: "invoicesCount", label: "Invoices Count", isSortable: true },
 	{ name: "totalBilled", label: "Total Billed", isSortable: true },
-	null,
+	{ name: "actions", label: "", isSortable: false },
 ];
 
 const ClientsTable = ({

@@ -1,5 +1,3 @@
-import { TableCell } from "@mui/material";
-
 import { useRouter } from "next/router";
 
 import { MouseEvent } from "react";
@@ -8,7 +6,7 @@ import { DataTableField } from "./DataTable";
 import { DataTableHeaderProps } from "./DataTableHeader";
 
 interface TableHeaderProps {
-	headFields: (DataTableField | null)[];
+	headFields: DataTableField[];
 	renderCell: (props: DataTableHeaderProps) => JSX.Element;
 	disableRouting?: boolean;
 }
@@ -36,21 +34,17 @@ const DataTableHeadController = ({ headFields, renderCell, disableRouting }: Tab
 	return (
 		<>
 			{headFields.map((field, i) =>
-				field ? (
-					renderCell({
-						onClick: field.isSortable ? (e) => handleFieldClick(e, field.name) : undefined,
-						field,
-						sortOrder:
-							field.isSortable &&
-							router.query.sortBy === field.name &&
-							(router.query.sortOrder === "asc" || router.query.sortOrder === "desc")
-								? router.query.sortOrder
-								: undefined,
-						index: i,
-					})
-				) : (
-					<TableCell key={i} />
-				)
+				renderCell({
+					onClick: field.isSortable ? (e) => handleFieldClick(e, field.name) : undefined,
+					field,
+					sortOrder:
+						field.isSortable &&
+						router.query.sortBy === field.name &&
+						(router.query.sortOrder === "asc" || router.query.sortOrder === "desc")
+							? router.query.sortOrder
+							: undefined,
+					index: i,
+				})
 			)}
 		</>
 	);

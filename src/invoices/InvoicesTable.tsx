@@ -46,7 +46,7 @@ const fields = [
 		isSortable: true,
 	},
 	{
-		name: "placeholder",
+		name: "actions",
 		label: "",
 		isSortable: false,
 	},
