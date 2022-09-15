@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from "react";
 
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../user/AuthContext";
 
 import { useRouter } from "next/router";
 

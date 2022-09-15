@@ -1,7 +1,7 @@
 import LoginForm from "./LoginForm";
 import LinearLoader from "../components/LinearLoader";
 
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../user/AuthContext";
 import { useState } from "react";
 import { useAlert } from "../contexts/AlertContext";
 

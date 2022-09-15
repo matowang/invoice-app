@@ -3,7 +3,7 @@ import AuthAPI from "../api/auth";
 import { useState } from "react";
 import { useAlert } from "../contexts/AlertContext";
 import LinearLoader from "../components/LinearLoader";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../user/AuthContext";
 
 interface CompanyDetailsFormContainerProps {
 	onSubmitSuccess: () => unknown;

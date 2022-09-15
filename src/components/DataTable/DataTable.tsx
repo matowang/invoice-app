@@ -62,6 +62,7 @@ const DataTable = <TData extends unknown>({
 									onClick={onClick}
 									sortOrder={sortOrder}
 									index={index}
+									key={field.name}
 								/>
 							)}
 						/>

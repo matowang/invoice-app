@@ -1,89 +1,79 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
-
 import AuthAPI, { setHeaderToken, UserDTO } from "../api/auth";
 
-interface AuthContextType {
+import create from "zustand";
+import { ReactNode, useEffect } from "react";
+
+interface AuthState {
 	loading: boolean;
-	login: (token: string) => void;
-	logout: () => void;
 	token: string | null;
 	user: UserDTO | null;
+	login: (token: string) => Promise<void>;
+	logout: () => void;
 	updateUser: (user: UserDTO) => void;
+	initAuth: () => Promise<void>;
 }
 
-interface AuthProviderProps {
-	children?: ReactNode;
-}
-
-const AuthContext = createContext<null | AuthContextType>(null);
-
-export const useAuth = () => {
-	const ctx = useContext(AuthContext);
-	if (ctx === null) {
-		throw new Error("You can't the Auth Context with no Auth Context Provider.");
-	}
-	return ctx;
-};
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const [loading, setLoading] = useState(true);
-	const [token, setToken] = useState<string | null>(null);
-	const [user, setUser] = useState<UserDTO | null>(null);
-
-	const queryClient = useQueryClient();
-
-	const login = async (token: string) => {
+export const useAuthStore = create<AuthState>((set) => ({
+	loading: true,
+	token: null,
+	user: null,
+	login: async (token: string) => {
 		setCookie(null, "token", token, {
 			maxAge: 30 * 24 * 60 * 60,
 			path: "/",
 		});
 		const user = await AuthAPI.validateToken(token);
 		if (user) {
-			setToken(token);
-			setUser(user);
-			setHeaderToken(token, logout);
+			set((state) => {
+				setHeaderToken(token, state.logout);
+				return { token, user };
+			});
 		} else {
 			destroyCookie(null, "token");
 		}
-	};
-
-	const logout = useCallback(() => {
+	},
+	logout: () => {
 		console.log("LOGOUT");
 		destroyCookie(null, "token");
-		setToken(null);
-		setUser(null);
-		queryClient.clear();
-	}, [queryClient]);
-
-	const updateUser = (user: UserDTO) => {
-		setUser(user);
-	};
-
-	const initAuth = useCallback(async () => {
-		setLoading(true);
+		set({ token: null, user: null });
+	},
+	updateUser: (user) => set({ user }),
+	initAuth: async () => {
+		set({ loading: true });
 		const { token } = parseCookies();
-		if (!token) return setLoading(false);
+		if (!token) return set({ loading: false });
 		const user = await AuthAPI.validateToken(token);
 		if (user) {
-			setToken(token);
-			setUser(user);
-			setHeaderToken(token, logout);
+			set((state) => {
+				setHeaderToken(token, state.logout);
+				return { token, user };
+			});
 		} else {
 			destroyCookie(null, "token");
 		}
-		setLoading(false);
-	}, [logout]);
+		set({ loading: false });
+	},
+}));
 
+export const useAuth = () => {
+	const queryClient = useQueryClient();
+	const authState = useAuthStore((state) => state);
+	return {
+		...authState,
+		logout: () => {
+			authState.logout();
+			queryClient.clear();
+		},
+	};
+};
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+	const { initAuth } = useAuth();
 	useEffect(() => {
 		initAuth();
 	}, [initAuth]);
-
-	return (
-		<AuthContext.Provider value={{ loading, login, logout, token, user, updateUser }}>
-			{children}
-		</AuthContext.Provider>
-	);
+	return <>{children}</>;
 };
