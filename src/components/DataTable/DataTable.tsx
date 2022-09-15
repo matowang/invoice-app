@@ -1,6 +1,5 @@
 import {
 	Table,
-	TableCell,
 	TableHead,
 	TableProps,
 	TableRow,
@@ -13,13 +12,10 @@ import {
 
 import DataTableHeadController from "./DataTableHeadController";
 import PaginationController from "./PaginationController";
+import DataTableHeader from "./DataTableHeader";
 
-//import LinearLoader from "./LinearLoader";
 import FillTable from "../FillTable";
 import TableRowStatusMessage from "../TableRowStatusMessage";
-
-import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
-import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
 
 import { ReactNode } from "react";
 
@@ -59,33 +55,15 @@ const DataTable = <TData extends unknown>({
 					<TableRow>
 						<DataTableHeadController
 							headFields={fields}
-							renderCell={({ field, onClick, sortOrder, index }) => (
-								<TableCell
-									onClick={onClick}
-									align='right'
-									component='th'
-									className='font-bold cursor-pointer'
-									key={field.name}
-								>
-									<span
-										className={`flex content-center relative${index !== 0 ? " justify-end" : ""}`}
-									>
-										<div className='relative'>
-											{sortOrder && (
-												<div className='absolute left-0 -translate-x-full'>
-													{sortOrder === "asc" ? (
-														<ArrowCircleUpOutlinedIcon fontSize='small' />
-													) : (
-														<ArrowCircleDownOutlinedIcon fontSize='small' />
-													)}
-												</div>
-											)}
-											{field.label}
-										</div>
-									</span>
-								</TableCell>
-							)}
 							disableRouting={disableRouting}
+							renderCell={({ field, onClick, sortOrder, index }) => (
+								<DataTableHeader
+									field={field}
+									onClick={onClick}
+									sortOrder={sortOrder}
+									index={index}
+								/>
+							)}
 						/>
 					</TableRow>
 				</TableHead>

@@ -1,20 +1,15 @@
 import { TableCell } from "@mui/material";
 
 import { useRouter } from "next/router";
-import { MouseEvent } from "react";
-import { SortOrder } from "../api/base";
-import { DataTableField } from "./DataTable";
 
-interface DataTableCellComponentProps {
-	onClick?: (event: MouseEvent) => void;
-	field: DataTableField;
-	index: number;
-	sortOrder: SortOrder | undefined;
-}
+import { MouseEvent } from "react";
+import { SortOrder } from "../../api/base";
+import { DataTableField } from "./DataTable";
+import { DataTableHeaderProps } from "./DataTableHeader";
 
 interface TableHeaderProps {
 	headFields: (DataTableField | null)[];
-	renderCell: (props: DataTableCellComponentProps) => JSX.Element;
+	renderCell: (props: DataTableHeaderProps) => JSX.Element;
 	disableRouting?: boolean;
 }
 
