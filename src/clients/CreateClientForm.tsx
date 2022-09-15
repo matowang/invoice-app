@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { useAlert } from "../components/AlertContext";
+import { useAlert } from "../contexts/AlertContext";
 import { useCreateClient } from "./useCreateClient";
 import { useState } from "react";
 

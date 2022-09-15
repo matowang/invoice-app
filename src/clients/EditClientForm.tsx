@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { useAlert } from "../components/AlertContext";
+import { useAlert } from "../contexts/AlertContext";
 import { useEditClient } from "./useEditClient";
 import { Fragment, useEffect, useState } from "react";
 

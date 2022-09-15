@@ -1,7 +1,7 @@
 import { TableRow, TableCell } from "@mui/material";
 
 import { ClientDTO } from "../api/clients";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";

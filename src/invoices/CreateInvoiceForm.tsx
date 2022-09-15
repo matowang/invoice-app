@@ -4,7 +4,7 @@ import LinearLoader from "../components/LinearLoader";
 import InvoiceForm, { InvoiceFormValues } from "./InvoiceForm";
 
 import { useClientCompanyNames } from "../clients/useClientsCompanyNames";
-import { useAlert } from "../components/AlertContext";
+import { useAlert } from "../contexts/AlertContext";
 import { useCreateInvoice } from "./useCreateInvoice";
 
 import axios from "axios";

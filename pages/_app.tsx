@@ -5,14 +5,14 @@ import { CacheProvider } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "../src/user/AuthContext";
-import { AlertProvider } from "../src/components/AlertContext";
+import { AlertProvider } from "../src/contexts/AlertContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import ErrorBoundary from "../src/components/ErrorBoundary";
+import ErrorBoundary from "../src/contexts/ErrorBoundary";
 
 import createEmotionCache from "../src/util/createEmotionCache";
 import MUITheme from "../MUITheme";

@@ -3,7 +3,7 @@ import LinearLoader from "../components/LinearLoader";
 
 import { useAuth } from "./AuthContext";
 import { useState } from "react";
-import { useAlert } from "../components/AlertContext";
+import { useAlert } from "../contexts/AlertContext";
 
 import AuthAPI from "../api/auth";
 import axios from "axios";
@@ -31,9 +31,7 @@ const LoginFormContainer = () => {
 						if (axios.isAxiosError(err) && err.response?.status === 400) {
 							setFormError("The entered Email or Password is wrong.");
 						} else {
-							showAlert(
-								<span data-test='form-error'>Something went wrong</span>
-							);
+							showAlert(<span data-test='form-error'>Something went wrong</span>);
 						}
 						setDisabled(false);
 					}

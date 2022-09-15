@@ -1,14 +1,14 @@
 import { Button, TextField } from "@mui/material";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
-import DatePickerField from "../components/DatePickerField";
-import AutocompleteField from "../components/AutoCompleteField";
+import DatePickerField from "../components/formFields/DatePickerField";
+import AutocompleteField from "../components/formFields/AutoCompleteField";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { ClientCompanyNameDTO } from "../api/clients";
 import { ReactNode, useEffect } from "react";
-import NumberField from "../components/NumberField";
+import NumberField from "../components/formFields/NumberField";
 
 // "invoice": {
 //     "user_id": "111",

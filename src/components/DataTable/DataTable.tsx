@@ -15,8 +15,8 @@ import DataTableHeadController from "./DataTableHeadController";
 import PaginationController from "./PaginationController";
 
 //import LinearLoader from "./LinearLoader";
-import FillTable from "./FillTable";
-import TableRowStatusMessage from "./TableRowStatusMessage";
+import FillTable from "../FillTable";
+import TableRowStatusMessage from "../TableRowStatusMessage";
 
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";

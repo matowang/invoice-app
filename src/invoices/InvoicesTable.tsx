@@ -1,6 +1,6 @@
 import { TableRow, TableCell } from "@mui/material";
 
-import DataTable from "../components/DataTable";
+import DataTable from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
 import { useRouter } from "next/router";
 

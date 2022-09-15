@@ -6,7 +6,7 @@ import { Skeleton } from "@mui/material";
 import Error404 from "../components/Error404";
 
 import { useClientCompanyNames } from "../clients/useClientsCompanyNames";
-import { useAlert } from "../components/AlertContext";
+import { useAlert } from "../contexts/AlertContext";
 import { useInvoice } from "./useInvoice";
 import { useEditInvoice } from "./useEditInvoice";
 
