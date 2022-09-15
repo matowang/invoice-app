@@ -29,11 +29,19 @@ const fields = [
 		name: "companyName",
 		label: "Client Company",
 		isSortable: true,
+		"data-test": "company-name-header",
+	},
+	{
+		name: "creationDate",
+		label: "Creation Date",
+		isSortable: true,
+		"data-test": "creation-date-header",
 	},
 	{
 		name: "dueDate",
 		label: "Due Date",
 		isSortable: true,
+		"data-test": "due-date-header",
 	},
 	{
 		name: "clientName",
@@ -44,6 +52,7 @@ const fields = [
 		name: "total",
 		label: "Total",
 		isSortable: true,
+		"data-test": "total-header",
 	},
 	{
 		name: "actions",
@@ -88,6 +97,9 @@ const InvoicesTable = ({
 					</TableCell>
 					<TableCell align='right' data-test='invoice-date'>
 						{dayjs(invoice.date).format("ll")}
+					</TableCell>
+					<TableCell align='right' data-test='invoice-due-date'>
+						{dayjs(invoice.dueDate).format("ll")}
 					</TableCell>
 					<TableCell align='right' data-test='invoice-project'>
 						{client.name}

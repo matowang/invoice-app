@@ -5,6 +5,7 @@ import {
 	TableRow,
 	TableBody,
 	Pagination,
+	PaginationItem,
 	Skeleton,
 	Paper,
 	TableContainer,
@@ -19,7 +20,12 @@ import TableRowStatusMessage from "../TableRowStatusMessage";
 
 import { ReactNode } from "react";
 
-export type DataTableField = { name: string; label: string; isSortable: boolean };
+export type DataTableField = {
+	name: string;
+	label: string;
+	isSortable: boolean;
+	"data-test"?: string;
+};
 
 interface DataTableProps<TData> {
 	rowsData?: TData[];
@@ -90,7 +96,7 @@ const DataTable = <TData extends unknown>({
 						</>
 					) : (
 						<TableRowStatusMessage colSpan={fields.length} status='empty'>
-							<span data-test='empty-placeholder'>No Clients to Show.</span>
+							<span data-test='empty-message'>No data to show.</span>
 						</TableRowStatusMessage>
 					)}
 				</TableBody>
@@ -103,17 +109,20 @@ const DataTable = <TData extends unknown>({
 							<Skeleton variant='circular' height={30} width={30} />
 							<Skeleton variant='circular' height={30} width={30} />
 						</div>
-					) : (
+					) : totalPages && totalPages > 1 ? (
 						<PaginationController totalPages={totalPages}>
 							{({ handlePageChange, page, totalPages }) => (
 								<Pagination
+									renderItem={(item) => (
+										<PaginationItem {...item} date-test={`page-${item.page}`} />
+									)}
 									count={totalPages}
 									page={page}
 									onChange={(e, page) => handlePageChange(page)}
 								/>
 							)}
 						</PaginationController>
-					)}
+					) : undefined}
 				</div>
 			)}
 		</TableContainer>

@@ -29,7 +29,7 @@ export type GetInvoicesQuery = {
 	sortOrder?: SortOrder;
 };
 
-const InvoicesSortMap = {
+const InvoicesSortByMap = {
 	total: "price",
 	dueDate: "dueDate",
 	creationDate: "creation",
@@ -41,7 +41,7 @@ export const getInvoices = async ({ page = 1, sortBy, sortOrder }: GetInvoicesQu
 	const params = {
 		limit: INVOICES_PAGE_LIMIT.toString(),
 		offset: (page - 1) * INVOICES_PAGE_LIMIT,
-		sortBy: sortBy && InvoicesSortMap[sortBy],
+		sortBy: sortBy && InvoicesSortByMap[sortBy],
 		sort: sortOrder,
 	};
 	const { data } = await dbInstance.get<{

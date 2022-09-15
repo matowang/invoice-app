@@ -19,10 +19,11 @@ const DataTableHeader = ({ field, onClick, sortOrder, index }: DataTableHeaderPr
 		onClick={onClick}
 		align='right'
 		component='th'
-		className='font-bold cursor-pointer'
+		className='font-bold cursor-pointer group'
 		key={field.name}
+		data-test={field["data-test"]}
 	>
-		<span className={`flex content-center relative${index !== 0 ? " justify-end" : ""}`}>
+		<span className={`flex content-center relative justify-end group-first:justify-start`}>
 			<div className='relative'>
 				{sortOrder && (
 					<div className='absolute left-0 -translate-x-full'>
