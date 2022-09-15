@@ -4,7 +4,6 @@ import type { AppProps } from "next/app";
 import { CacheProvider } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
-import { AuthProvider } from "../src/user/AuthContext";
 import { AlertProvider } from "../src/contexts/AlertContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -23,7 +22,10 @@ const queryClient = new QueryClient();
 import Layout from "../src/layout";
 import Head from "next/head";
 
+import { useInitAuth } from "../src/user/AuthContext";
+
 function MyApp({ Component, pageProps }: AppProps) {
+	useInitAuth();
 	return (
 		<ErrorBoundary>
 			<StyledEngineProvider injectFirst>
@@ -33,14 +35,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 						<QueryClientProvider client={queryClient}>
 							<LocalizationProvider dateAdapter={AdapterDayjs}>
 								<AlertProvider>
-									<AuthProvider>
-										<Layout>
-											<Head>
-												<meta name='viewport' content='initial-scale=1, width=device-width' />
-											</Head>
-											<Component {...pageProps} />
-										</Layout>
-									</AuthProvider>
+									<Layout>
+										<Head>
+											<meta name='viewport' content='initial-scale=1, width=device-width' />
+										</Head>
+										<Component {...pageProps} />
+									</Layout>
 								</AlertProvider>
 							</LocalizationProvider>
 							<ReactQueryDevtools initialIsOpen={false} />

@@ -4,7 +4,7 @@ import { setCookie, destroyCookie, parseCookies } from "nookies";
 import AuthAPI, { setHeaderToken, UserDTO } from "../api/auth";
 
 import create from "zustand";
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 
 interface AuthState {
 	loading: boolean;
@@ -16,7 +16,7 @@ interface AuthState {
 	initAuth: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
 	loading: true,
 	token: null,
 	user: null,
@@ -47,10 +47,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 		if (!token) return set({ loading: false });
 		const user = await AuthAPI.validateToken(token);
 		if (user) {
-			set((state) => {
-				setHeaderToken(token, state.logout);
-				return { token, user };
-			});
+			setHeaderToken(token, get().logout);
+			set({ token, user });
 		} else {
 			destroyCookie(null, "token");
 		}
@@ -59,21 +57,21 @@ export const useAuthStore = create<AuthState>((set) => ({
 }));
 
 export const useAuth = () => {
-	const queryClient = useQueryClient();
 	const authState = useAuthStore((state) => state);
+	const queryClient = useQueryClient();
 	return {
 		...authState,
 		logout: () => {
-			authState.logout();
 			queryClient.clear();
+			authState.logout();
 		},
+		isLoggedIn: !authState.loading && !!authState.user,
 	};
 };
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-	const { initAuth } = useAuth();
+export const useInitAuth = () => {
+	const initAuth = useAuthStore((state) => state.initAuth);
 	useEffect(() => {
 		initAuth();
 	}, [initAuth]);
-	return <>{children}</>;
 };

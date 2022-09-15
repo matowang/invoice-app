@@ -18,7 +18,7 @@ const CreateClientForm = ({ onSubmitSuccess }: CreateClientForm) => {
 
 	const handleSubmit = useCallback(
 		(clientValues: ClientValues) => {
-			//We use a promise so that the InvoiceForm react-hook-form can know if submit was succesful
+			//We use a promise so that react-hook-form can know if submit was succesful
 			return new Promise<void>((resolve, reject) => {
 				mutate(clientValues, {
 					onSuccess: () => {
@@ -46,8 +46,8 @@ const CreateClientForm = ({ onSubmitSuccess }: CreateClientForm) => {
 			<ClientForm
 				formError={formError}
 				disabled={isLoading}
-				resetOnSuccessfulSubmit
 				onSubmit={handleSubmit}
+				resetOnSuccessfulSubmit
 			/>
 		</>
 	);
