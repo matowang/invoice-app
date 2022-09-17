@@ -2,20 +2,21 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { ReactNode } from "react";
 
 interface SelectFieldProps {
-	value: string;
-	options: { value: string | number; label: ReactNode }[];
-	onChange: (value: string | number) => void;
+	value?: string;
+	options: { value?: string | number; label: ReactNode }[];
+	onChange: (value?: string | number) => void;
+	label?: ReactNode;
 }
 
-const SelectField = ({ value, options, onChange }: SelectFieldProps) => {
+const SelectField = ({ value, options, onChange, label }: SelectFieldProps) => {
 	return (
-		<FormControl>
-			<InputLabel>Age</InputLabel>
+		<FormControl fullWidth>
+			<InputLabel>{label}</InputLabel>
 			<Select
 				labelId='demo-simple-select-label'
 				id='demo-simple-select'
 				value={value}
-				label='Age'
+				label={label}
 				onChange={(e) => onChange(e.target.value)}
 			>
 				{options.map(({ value, label }) => (

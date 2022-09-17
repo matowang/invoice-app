@@ -1,17 +1,17 @@
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 
-import { useInvoices } from "../../src/invoices/useInvoices";
-
-import PageLoader from "../../src/components/PageLoader";
 import AuthGuard from "../../src/user/AuthGuard";
 
 import InvoicesTableContainer from "../../src/invoices/InvoicesTableContainer";
+import SelectField from "../../src/components/formFields/SelectField";
+import { useClientCompanyNames } from "../../src/clients/useClientsCompanyNames";
 
 const InvoicesPage = () => {
 	const router = useRouter();
+	const { data } = useClientCompanyNames();
 
 	useEffect(() => {
 		if (!router.isReady) return;
@@ -37,9 +37,31 @@ const InvoicesPage = () => {
 				<header className='flex justify-between items-end'>
 					<h2 className='m-0'>Invoices</h2>
 					<div className='flex gap-2'>
+						<div className='relative w-52'>
+							<SelectField
+								label='Company'
+								value={
+									typeof router.query.clientId === "string" ? router.query.clientId : undefined
+								}
+								//TODO Add Empty for All query
+								options={
+									data
+										? [...data.map(({ id, companyName }) => ({ value: id, label: companyName }))]
+										: []
+								}
+								onChange={(value) =>
+									router.replace({
+										pathname: router.pathname,
+										query: { ...router.query, clientId: value },
+									})
+								}
+							/>
+						</div>
 						<Link href='/invoices/new'>
 							<a className='no-underline'>
-								<Button variant='outlined'>Add Invoice</Button>
+								<Button variant='outlined' className='h-full'>
+									Add Invoice
+								</Button>
 							</a>
 						</Link>
 					</div>
