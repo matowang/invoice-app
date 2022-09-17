@@ -24,7 +24,7 @@ const useAlertStore = create<AlertState>((set) => ({
 		console.log(alertType);
 		set({ open: true, alertMsg: msg, alertType: alertType });
 	},
-	closeAlert: () => set({ open: true }),
+	closeAlert: () => set({ open: false }),
 }));
 
 export const useAlert = () => {
@@ -34,11 +34,10 @@ export const useAlert = () => {
 
 export const AlertProvider = ({ children }: AlertProviderProps) => {
 	const { open, alertMsg, alertType, closeAlert } = useAlertStore((state) => state);
-
 	return (
 		<>
 			{children}
-			<Snackbar open={open} autoHideDuration={6000} onClose={closeAlert}>
+			<Snackbar open={open} autoHideDuration={6000} key={Date.now()} onClose={closeAlert}>
 				<Alert onClose={closeAlert} severity={alertType} sx={{ width: "100%" }}>
 					{alertMsg}
 				</Alert>

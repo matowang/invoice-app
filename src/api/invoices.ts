@@ -3,6 +3,7 @@ import { InvoiceFormValues } from "../invoices/InvoiceForm";
 import { transformInvoiceValue } from "../util/transformInvoiceData";
 import { INVOICES_PAGE_LIMIT, SortOrder } from "./base";
 import { ClientDTO } from "./clients";
+import { string } from "zod";
 
 export type InvoiceDTO = {
 	id: string;
@@ -27,6 +28,13 @@ export type GetInvoicesQuery = {
 	page?: number;
 	sortBy?: "total" | "dueDate" | "creationDate" | "companyName";
 	sortOrder?: SortOrder;
+	clientId?: string;
+	//Below are not required params
+	startDueDate: number;
+	endDueDate: number;
+	startDate: number;
+	endDate: number;
+	projectCode: string;
 };
 
 const InvoicesSortByMap = {
@@ -36,13 +44,29 @@ const InvoicesSortByMap = {
 	companyName: "companyName",
 };
 
-export const getInvoices = async ({ page = 1, sortBy, sortOrder }: GetInvoicesQuery) => {
+export const getInvoices = async ({
+	page = 1,
+	sortBy,
+	sortOrder,
+	clientId,
+	startDueDate,
+	endDueDate,
+	startDate,
+	endDate,
+	projectCode,
+}: GetInvoicesQuery) => {
 	await new Promise((r) => setTimeout(r, 500));
 	const params = {
 		limit: INVOICES_PAGE_LIMIT.toString(),
 		offset: (page - 1) * INVOICES_PAGE_LIMIT,
 		sortBy: sortBy && InvoicesSortByMap[sortBy],
 		sort: sortOrder,
+		clientId,
+		startDueDate,
+		endDueDate,
+		startDate,
+		endDate,
+		projectCode,
 	};
 	const { data } = await dbInstance.get<{
 		invoices: InvoiceWithClientsDTO[];
