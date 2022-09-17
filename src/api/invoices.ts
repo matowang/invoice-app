@@ -29,12 +29,12 @@ export type GetInvoicesQuery = {
 	sortBy?: "total" | "dueDate" | "creationDate" | "companyName";
 	sortOrder?: SortOrder;
 	clientId?: string;
-	//Below are not required params
-	startDueDate: number;
-	endDueDate: number;
-	startDate: number;
-	endDate: number;
-	projectCode: string;
+	//Below are not required params for incremental project
+	startDueDate?: number;
+	endDueDate?: number;
+	startDate?: number;
+	endDate?: number;
+	projectCode?: string;
 };
 
 const InvoicesSortByMap = {
