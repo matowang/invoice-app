@@ -40,20 +40,25 @@ const InvoicesPage = () => {
 						<div className='relative w-52'>
 							<SelectField
 								label='Company'
-								value={
-									typeof router.query.clientId === "string" ? router.query.clientId : undefined
-								}
+								value={typeof router.query.clientId === "string" ? router.query.clientId : ""}
 								//TODO Add Empty for All query
 								options={
 									data
-										? [...data.map(({ id, companyName }) => ({ value: id, label: companyName }))]
+										? [
+												...data.map(({ id, companyName }) => ({ value: id, label: companyName })),
+												{ value: "", label: "All Clients" },
+										  ]
 										: []
 								}
 								onChange={(value) =>
-									router.replace({
-										pathname: router.pathname,
-										query: { ...router.query, clientId: value },
-									})
+									router.replace(
+										JSON.parse(
+											JSON.stringify({
+												pathname: router.pathname,
+												query: { ...router.query, clientId: value || undefined },
+											})
+										)
+									)
 								}
 							/>
 						</div>
