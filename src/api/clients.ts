@@ -85,8 +85,28 @@ export const getClientsCompanyNames = async () => {
 
 export const createClient = async (clientValues: ClientValues) => {
 	//await new Promise((r) => setTimeout(r, 2000));
-	const { data } = await dbInstance.post("/clients", clientValues);
-	return data;
+	const { name, vatNumber, regNumber, address } = clientValues.companyDetails;
+	const { data } = await dbInstance.post("/graphql", {
+		query: `mutation AddClient($email: String, $name: String, $companyDetails: CompanyDetails) {
+			addClient(email: $email, name: $name, companyDetails: $companyDetails){
+			  id
+			}
+		  }		  
+		  `,
+		variables: {
+			...clientValues,
+			companyDetails: {
+				name,
+				vatNumber,
+				regNumber,
+				address,
+				//TODO allow swift and iban for company details
+				// swift: clientValues.companyDetails.swift,
+				// iban: clientValues.companyDetails.iban,
+			},
+		},
+	});
+	return data.data;
 };
 
 export const editClient = async (clientId: string, clientValues: ClientValues) => {

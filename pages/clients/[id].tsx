@@ -3,7 +3,6 @@ import AuthGuard from "../../src/user/AuthGuard";
 import PageLoader from "../../src/components/PageLoader";
 
 import { useRouter } from "next/router";
-import axios from "axios";
 
 const EditClient = () => {
 	const router = useRouter();
