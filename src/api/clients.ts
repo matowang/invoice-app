@@ -26,17 +26,43 @@ export type GetClientsQuery = {
 
 export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => {
 	await new Promise((r) => setTimeout(r, 500));
-	const params = {
-		limit: CLIENTS_PAGE_LIMIT.toString(),
+
+	const variables: any = {
+		limit: CLIENTS_PAGE_LIMIT,
 		offset: (page - 1) * CLIENTS_PAGE_LIMIT,
-		sort: sortOrder,
-		sortBy: sortBy,
 	};
-	const { data } = await dbInstance.get<{
-		clients: ClientDTO[];
-		total: number;
-	}>(`/clients`, { params });
-	return data;
+
+	if (sortBy && sortOrder) variables.sort = { [sortBy]: sortOrder };
+
+	const { data } = await dbInstance.post<{
+		data: {
+			clients: { results: ClientDTO[] };
+			total: number;
+		};
+	}>(`/graphql`, {
+		query: `query GetClients($sort: ClientListSortSchema = {}, $limit: Int, $offset: Int) {
+			clients(sort: $sort, limit: $limit, offset: $offset) {
+			  results {
+				id
+				user_id
+				email
+				name
+				companyDetails {
+				  name
+				  vatNumber
+				  regNumber
+				  address
+				}
+				totalBilled
+				invoicesCount
+			  }
+			  total
+			}
+		  }
+		  `,
+		variables,
+	});
+	return { ...data.data, clients: data.data.clients.results };
 };
 
 export const getClient = async (clientId: string) => {

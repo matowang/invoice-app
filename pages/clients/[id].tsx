@@ -22,11 +22,11 @@ const EditClient = () => {
 					<h1>Edit Client</h1>
 					<EditClientForm
 						clientId={router.query.id}
-						onGetClientError={(err) => {
-							if (axios.isAxiosError(err)) {
-								if (err.response?.status === 404) return router.push("/404");
-							}
-						}}
+						// onGetClientError={(err) => {
+						// 	if (axios.isAxiosError(err)) {
+						// 		if (err.response?.status === 404) return router.push("/404");
+						// 	}
+						// }}
 					/>
 				</div>
 			</div>

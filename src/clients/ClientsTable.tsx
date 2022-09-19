@@ -32,7 +32,6 @@ const ClientsTable = ({
 	totalPages,
 }: ClientsTableProps) => {
 	const router = useRouter();
-
 	return (
 		<DataTable
 			fields={fields}

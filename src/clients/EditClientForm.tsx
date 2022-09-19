@@ -11,9 +11,9 @@ import { getClient } from "../api/clients";
 import { Skeleton } from "@mui/material";
 
 interface EditClientFormProps {
-	onSubmitSuccess?: () => unknown;
+	onSubmitSuccess?: () => void;
 	clientId: string;
-	onGetClientError: (err: unknown) => unknown;
+	onGetClientError?: (err: unknown) => void;
 }
 
 const EditClientForm = ({ onSubmitSuccess, clientId, onGetClientError }: EditClientFormProps) => {
@@ -24,12 +24,13 @@ const EditClientForm = ({ onSubmitSuccess, clientId, onGetClientError }: EditCli
 
 	const { mutate, isLoading: editClientIsLoading } = useEditClient();
 
+	//TODO use react query
 	useEffect(() => {
 		getClient(clientId)
 			.then((data) => setInitValues(data))
 			.catch((err) => {
 				showAlert("Something went wrong.");
-				onGetClientError(err);
+				onGetClientError?.(err);
 			});
 	}, [clientId, onGetClientError, showAlert]);
 
