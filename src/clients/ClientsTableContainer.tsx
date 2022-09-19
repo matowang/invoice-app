@@ -4,7 +4,7 @@ import { GetClientsQuery } from "../api/clients";
 
 interface ClientsTableContainerProps {
 	disableRouting?: boolean;
-	query: GetClientsQuery;
+	query?: GetClientsQuery;
 }
 
 const ClientsTableContainer = ({ disableRouting, query }: ClientsTableContainerProps) => {

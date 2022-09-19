@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { CLIENTS_PAGE_LIMIT } from "../api/base";
 import { getClients, GetClientsQuery } from "../api/clients";
 
-export const useClients = ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => {
+export const useClients = ({ page = 1, sortBy, sortOrder }: GetClientsQuery = {}) => {
 	const result = useQuery(
 		["clients", page, sortBy, sortOrder],
 		() => getClients({ page, sortBy, sortOrder }),
@@ -13,10 +13,9 @@ export const useClients = ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => 
 	);
 
 	const totalPages = useMemo(
-		() => (result.data ? Math.ceil(result.data.total / CLIENTS_PAGE_LIMIT) : 1),
+		() => (result.data ? Math.ceil(result.data.total / CLIENTS_PAGE_LIMIT) : undefined),
 		[result.data]
 	);
-
 	return {
 		...result,
 		totalPages,

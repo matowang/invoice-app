@@ -36,8 +36,7 @@ export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuer
 
 	const { data } = await dbInstance.post<{
 		data: {
-			clients: { results: ClientDTO[] };
-			total: number;
+			clients: { results: ClientDTO[]; total: number };
 		};
 	}>(`/graphql`, {
 		query: `query GetClients($sort: ClientListSortSchema = {}, $limit: Int, $offset: Int) {
@@ -62,7 +61,7 @@ export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuer
 		  `,
 		variables,
 	});
-	return { ...data.data, clients: data.data.clients.results };
+	return { clients: data.data.clients.results, total: data.data.clients.total };
 };
 
 export const getClient = async (clientId: string) => {
