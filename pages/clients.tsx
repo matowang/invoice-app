@@ -10,7 +10,7 @@ import { useClients } from "../src/clients/useClients";
 
 import { GetServerSideProps } from "next";
 
-const Clients = ({ query }: { query: any }) => {
+const Clients = ({ query }: { query: any | null }) => {
 	const { totalPages } = useClients();
 	usePaginationGaurd({ totalPages });
 

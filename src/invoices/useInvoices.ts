@@ -14,7 +14,7 @@ export const useInvoices = ({
 	startDate,
 	endDate,
 	projectCode,
-}: GetInvoicesQuery) => {
+}: GetInvoicesQuery = {}) => {
 	const result = useQuery(
 		["invoices", page, sortBy, sortOrder, clientId],
 		() =>
