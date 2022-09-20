@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from "@mui/material";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 interface FillTableProps {
 	rows: number;
@@ -9,10 +9,10 @@ interface FillTableProps {
 
 const FillTable = ({ rows, cols, children }: FillTableProps) => (
 	<>
-		{Array.from(Array(rows)).map((t, i) => (
-			<TableRow key={`empty-row-${i}`}>
-				{Array.from(Array(cols)).map((t, i) => (
-					<TableCell key={`fill-table-${i}`}>{children}</TableCell>
+		{Array.from(Array(rows)).map((t, row) => (
+			<TableRow key={`empty-row-${row}`}>
+				{Array.from(Array(cols)).map((t, col) => (
+					<TableCell key={`fill-table-${col}`}>{children}</TableCell>
 				))}
 			</TableRow>
 		))}

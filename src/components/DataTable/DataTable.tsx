@@ -9,10 +9,7 @@ import {
 	Skeleton,
 	Paper,
 	TableContainer,
-	MenuItem,
-	Select,
-	FormControl,
-	InputLabel,
+	TableCell,
 } from "@mui/material";
 
 import DataTableHeadController from "./DataTableHeadController";
@@ -31,9 +28,23 @@ export type DataTableField = {
 	"data-test"?: string;
 };
 
+export type Row = {
+	label: ReactNode;
+	"data-test"?: string;
+};
+
+export type Cell = {
+	label: ReactNode;
+	"data-test"?: string;
+};
+
+interface RowProps {
+	onClick?: () => void;
+	"data-test"?: string;
+}
+
 interface DataTableProps<TData> {
 	rowsData?: TData[];
-	children: (rowItem: TData) => ReactNode;
 	isLoading: boolean;
 	isFetching?: boolean;
 	isError: boolean;
@@ -43,11 +54,13 @@ interface DataTableProps<TData> {
 	disableRouting?: boolean;
 	totalPages?: number;
 	pageLimit?: number;
+	rowProps: (data: TData) => RowProps;
+	rowDataTransform: (data: TData) => Cell[];
+	renderRowActions?: (data: TData) => ReactNode;
 }
 
 const DataTable = <TData extends unknown>({
 	rowsData,
-	children,
 	tableProps,
 	isLoading,
 	isFetching,
@@ -57,7 +70,11 @@ const DataTable = <TData extends unknown>({
 	disableRouting,
 	totalPages,
 	pageLimit = 10,
+	rowProps,
+	rowDataTransform,
+	renderRowActions,
 }: DataTableProps<TData>) => {
+	const cols = renderRowActions ? fields.length + 1 : fields.length;
 	return (
 		<TableContainer component={Paper}>
 			<Table {...tableProps}>
@@ -76,30 +93,44 @@ const DataTable = <TData extends unknown>({
 								/>
 							)}
 						/>
+						{renderRowActions && <TableCell />}
 					</TableRow>
 				</TableHead>
 				<TableBody>
 					{isError ? (
-						<TableRowStatusMessage colSpan={5} status='error'>
+						<TableRowStatusMessage colSpan={cols} status='error'>
 							{errorMsg}
 						</TableRowStatusMessage>
 					) : isLoading ? (
 						<FillTable
 							data-test='loading-overlay'
 							rows={pageLimit - (rowsData?.length || 0)}
-							cols={fields.length}
+							cols={cols}
 						>
 							<Skeleton />
 						</FillTable>
 					) : rowsData && rowsData.length > 0 ? (
 						<>
-							{rowsData.map((item) => children(item))}
-							<FillTable rows={pageLimit - (rowsData.length || 0)} cols={fields.length}>
+							{rowsData.map((item, i) => (
+								<TableRow hover key={i} {...rowProps(item)}>
+									{rowDataTransform(item).map((cell, i) => (
+										<TableCell data-test={cell["data-test"]} align={i ? "right" : "left"}>
+											{cell.label}
+										</TableCell>
+									))}
+									{renderRowActions && (
+										<TableCell sx={{ p: 0 }} align='right'>
+											{renderRowActions(item)}
+										</TableCell>
+									)}
+								</TableRow>
+							))}
+							<FillTable rows={pageLimit - (rowsData.length || 0)} cols={cols}>
 								.
 							</FillTable>
 						</>
 					) : (
-						<TableRowStatusMessage colSpan={fields.length} status='empty'>
+						<TableRowStatusMessage colSpan={cols} status='empty'>
 							<span data-test='empty-message'>No data to show.</span>
 						</TableRowStatusMessage>
 					)}

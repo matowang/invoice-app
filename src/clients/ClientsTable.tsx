@@ -1,10 +1,10 @@
-import { TableRow, TableCell } from "@mui/material";
-
-import { ClientDTO } from "../api/clients";
-import DataTable from "../components/DataTable/DataTable";
+import DataTable, { Cell } from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
+
 import { useRouter } from "next/router";
+
 import { ReactNode } from "react";
+import { ClientDTO } from "../api/clients";
 
 interface ClientsTableProps {
 	clients?: ClientDTO[];
@@ -20,7 +20,18 @@ const fields = [
 	{ name: "companyName", label: "Company", isSortable: true },
 	{ name: "invoicesCount", label: "Invoices Count", isSortable: true },
 	{ name: "totalBilled", label: "Total Billed", isSortable: true },
-	{ name: "actions", label: "", isSortable: false },
+];
+
+const rowDataTransform: (data: ClientDTO) => Cell[] = ({
+	name,
+	companyDetails,
+	invoicesCount,
+	totalBilled,
+}) => [
+	{ label: name, "data-test": "client-name" },
+	{ label: companyDetails.name, "data-test": "client-companyName" },
+	{ label: invoicesCount, "data-test": "invoicesCount" },
+	{ label: totalBilled, "data-test": "client-totalBilled" },
 ];
 
 const ClientsTable = ({
@@ -43,45 +54,28 @@ const ClientsTable = ({
 			rowsData={clients}
 			disableRouting={disableRouting}
 			tableProps={{ "data-test": "clients-table" }}
-		>
-			{(client) => (
-				<TableRow
-					hover
-					data-test={`client-row-${client.id}`}
-					onClick={() => router.push(`/clients/${client.id}`)}
-					key={client.id}
-				>
-					<TableCell component='th' data-test='client-name'>
-						{client.name}
-					</TableCell>
-					<TableCell align='right' data-test='client-companyName'>
-						{client.companyDetails.name}
-					</TableCell>
-					<TableCell align='right' data-test='client-invoicesCount'>
-						{client.invoicesCount}
-					</TableCell>
-					<TableCell align='right' data-test='client-totalBilled'>
-						{client.totalBilled}
-					</TableCell>
-					<TableCell align='right' sx={{ p: 0 }}>
-						<MenuActions
-							iconButtonProps={{ "data-test": "client-actions" }}
-							key={client.id + "actions"}
-							actions={[
-								{
-									label: "Edit Client",
-									onClick: () => router.push(`clients/${client.id}`),
-								},
-								// {
-								// 	label: "Delete Client",
-								// 	onClick: () => router.push(`clients/${client.id}`),
-								// },
-							]}
-						/>
-					</TableCell>
-				</TableRow>
+			rowProps={(client) => ({
+				"data-test": `client-row-${client.id}`,
+				onClick: () => router.push(`/clients/${client.id}`),
+			})}
+			rowDataTransform={rowDataTransform}
+			renderRowActions={(client) => (
+				<MenuActions
+					iconButtonProps={{ "data-test": "client-actions" }}
+					key={client.id + "actions"}
+					actions={[
+						{
+							label: "Edit Client",
+							onClick: () => router.push(`clients/${client.id}`),
+						},
+						// {
+						// 	label: "Delete Client",
+						// 	onClick: () => router.push(`clients/${client.id}`),
+						// },
+					]}
+				/>
 			)}
-		</DataTable>
+		/>
 	);
 };
 

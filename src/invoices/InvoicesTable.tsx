@@ -1,6 +1,4 @@
-import { TableRow, TableCell } from "@mui/material";
-
-import DataTable from "../components/DataTable/DataTable";
+import DataTable, { Cell } from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
 import { useRouter } from "next/router";
 
@@ -54,13 +52,34 @@ const fields = [
 		isSortable: true,
 		"data-test": "total-header",
 	},
-	{
-		name: "actions",
-		label: "",
-		isSortable: false,
-	},
 ];
 
+const rowDataTransform: (data: InvoiceWithClientsDTO) => Cell[] = ({ invoice, client }) => [
+	{
+		label: invoice.invoice_number,
+		"date-test": "invoice-number",
+	},
+	{
+		label: client.companyDetails.name,
+		"date-test": "invoice-company",
+	},
+	{
+		label: dayjs(invoice.date).format("ll"),
+		"date-test": "invoice-date",
+	},
+	{
+		label: dayjs(invoice.dueDate).format("ll"),
+		"date-test": "invoice-due-date",
+	},
+	{
+		label: client.name,
+		"date-test": "invoice-client",
+	},
+	{
+		label: invoice.value,
+		"date-test": "invoice-price",
+	},
+];
 const InvoicesTable = ({
 	invoices,
 	isLoading,
@@ -82,49 +101,27 @@ const InvoicesTable = ({
 			rowsData={invoices}
 			disableRouting={disableRouting}
 			tableProps={{ "data-test": "invoices-table" }}
-		>
-			{({ invoice, client }) => (
-				<TableRow
-					hover
-					component='tr'
-					data-test={`invoice-row-${invoice.id}`}
-					key={invoice.id}
-					onClick={() => router.push(`/invoices/${invoice.id}/view`)}
-				>
-					<TableCell data-test='invoice-number'>{invoice.invoice_number}</TableCell>
-					<TableCell align='right' data-test='invoice-company'>
-						{client.companyDetails.name}
-					</TableCell>
-					<TableCell align='right' data-test='invoice-date'>
-						{dayjs(invoice.date).format("ll")}
-					</TableCell>
-					<TableCell align='right' data-test='invoice-due-date'>
-						{dayjs(invoice.dueDate).format("ll")}
-					</TableCell>
-					<TableCell align='right' data-test='invoice-project'>
-						{client.name}
-					</TableCell>
-					<TableCell align='right' data-test='invoice-price'>
-						{invoice.value}
-					</TableCell>
-					<TableCell align='right' sx={{ p: 0 }}>
-						<MenuActions
-							iconButtonProps={{ "data-test": "invoice-actions" }}
-							actions={[
-								{
-									label: "Edit Invoice",
-									onClick: () => router.push(`/invoices/${invoice.id}/edit`),
-								},
-								{
-									label: "Print Invoice",
-									onClick: () => router.push(`/invoices/${invoice.id}/view?print=true`),
-								},
-							]}
-						/>
-					</TableCell>
-				</TableRow>
+			rowProps={({ invoice }) => ({
+				"data-test": `invoice-row-${invoice.id}`,
+				onClick: () => router.push(`/invoices/${invoice.id}/view`),
+			})}
+			rowDataTransform={rowDataTransform}
+			renderRowActions={({ invoice }) => (
+				<MenuActions
+					iconButtonProps={{ "data-test": "invoice-actions" }}
+					actions={[
+						{
+							label: "Edit Invoice",
+							onClick: () => router.push(`/invoices/${invoice.id}/edit`),
+						},
+						{
+							label: "Print Invoice",
+							onClick: () => router.push(`/invoices/${invoice.id}/view?print=true`),
+						},
+					]}
+				/>
 			)}
-		</DataTable>
+		/>
 	);
 };
 
