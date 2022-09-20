@@ -113,7 +113,7 @@ const DataTable = <TData extends unknown>({
 							{rowsData.map((item, i) => (
 								<TableRow hover key={i} {...rowProps(item)}>
 									{rowDataTransform(item).map((cell, i) => (
-										<TableCell data-test={cell["data-test"]} align={i ? "right" : "left"}>
+										<TableCell data-test={cell["data-test"]} align={i ? "right" : "left"} key={i}>
 											{cell.label}
 										</TableCell>
 									))}

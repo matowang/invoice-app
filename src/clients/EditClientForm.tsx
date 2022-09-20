@@ -2,13 +2,15 @@ import axios from "axios";
 
 import { useAlert } from "../contexts/AlertContext";
 import { useEditClient } from "./useEditClient";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 
 import ClientForm, { ClientValues } from "./ClientForm";
 import LinearLoader from "../components/LinearLoader";
 
-import { getClient } from "../api/clients";
 import { Skeleton } from "@mui/material";
+import Error404 from "../components/Error404";
+
+import { useClient } from "./useClient";
 
 interface EditClientFormProps {
 	onSubmitSuccess?: () => void;
@@ -19,22 +21,45 @@ interface EditClientFormProps {
 const EditClientForm = ({ onSubmitSuccess, clientId, onGetClientError }: EditClientFormProps) => {
 	const { showAlert } = useAlert();
 	const [formError, setFormError] = useState<string | null>(null);
+	const { mutate, isLoading: editClientIsLoading } = useEditClient(clientId);
 
-	const [initValues, setInitValues] = useState<ClientValues | undefined>();
+	const { data, isError, error } = useClient(clientId, { keepPreviousData: true });
 
-	const { mutate, isLoading: editClientIsLoading } = useEditClient();
-
-	//TODO use react query
-	useEffect(() => {
-		getClient(clientId)
-			.then((data) => setInitValues(data))
-			.catch((err) => {
-				showAlert("Something went wrong.");
-				onGetClientError?.(err);
+	const onSubmit = useCallback(
+		(clientValues: ClientValues) => {
+			return new Promise((resolve, reject) => {
+				mutate(
+					{
+						...clientValues,
+						id: clientId,
+					},
+					{
+						onSuccess: (data) => {
+							showAlert(
+								<span data-test='form-success'>Edited Client Successfully.</span>,
+								"success"
+							);
+							onSubmitSuccess?.();
+							setFormError(null);
+							resolve(data);
+						},
+						onError: (err) => {
+							if (!axios.isAxiosError(err) || typeof err.response?.data !== "string")
+								return showAlert("Something went wrong.");
+							showAlert(err.response.data);
+							setFormError(err.response.data);
+							reject();
+						},
+					}
+				);
 			});
-	}, [clientId, onGetClientError, showAlert]);
+		},
+		[clientId, mutate, onSubmitSuccess, showAlert]
+	);
 
-	if (!initValues) {
+	if (isError && axios.isAxiosError(error) && error.response?.status === 404) return <Error404 />;
+
+	if (!data) {
 		return (
 			<Fragment key='loading-edit-client-form'>
 				<LinearLoader loading />
@@ -51,33 +76,10 @@ const EditClientForm = ({ onSubmitSuccess, clientId, onGetClientError }: EditCli
 		<Fragment key='loaded-edit-client-form'>
 			<LinearLoader loading={editClientIsLoading} />
 			<ClientForm
-				formError={formError}
+				formError={isError ? "Something went wrong. Please refresh." : formError}
 				disabled={editClientIsLoading}
-				defaultValues={initValues}
-				onSubmit={(clientValues) => {
-					mutate(
-						{
-							...clientValues,
-							id: clientId,
-						},
-						{
-							onSuccess: () => {
-								showAlert(
-									<span data-test='form-success'>Edited Client Successfully.</span>,
-									"success"
-								);
-								onSubmitSuccess?.();
-								setFormError(null);
-							},
-							onError: (err) => {
-								if (!axios.isAxiosError(err) || typeof err.response?.data !== "string")
-									return showAlert("Something went wrong.");
-								showAlert(err.response.data);
-								setFormError(err.response.data);
-							},
-						}
-					);
-				}}
+				defaultValues={data}
+				onSubmit={onSubmit}
 			/>
 		</Fragment>
 	);

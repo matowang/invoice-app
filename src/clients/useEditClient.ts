@@ -6,13 +6,14 @@ interface EditClientValues extends ClientValues {
 	id: string;
 }
 
-export const useEditClient = () => {
+export const useEditClient = (clientId: string) => {
 	const queryClient = useQueryClient();
 	return useMutation(
-		(editClientValues: EditClientValues) => editClient(editClientValues.id, editClientValues),
+		(editClientValues: EditClientValues) => editClient(clientId, editClientValues),
 		{
 			onSuccess: async () => {
-				queryClient.removeQueries(["clients"]);
+				queryClient.removeQueries(["clients", "single", clientId]);
+				queryClient.invalidateQueries(["clients"]);
 			},
 		}
 	);

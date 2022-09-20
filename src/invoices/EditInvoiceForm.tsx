@@ -62,6 +62,9 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceId }: EditInvoiceFormProps) =
 		[mutate, onSubmitSuccess, showAlert]
 	);
 
+	if (isGetInvoiceError && axios.isAxiosError(error) && error.response?.status === 404)
+		return <Error404 />;
+
 	if (!invoiceData)
 		return (
 			<>
@@ -73,8 +76,6 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceId }: EditInvoiceFormProps) =
 				</div>
 			</>
 		);
-
-	if (axios.isAxiosError(error) && error.response?.status === 404) return <Error404 />;
 
 	return (
 		<>

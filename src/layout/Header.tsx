@@ -30,7 +30,7 @@ const Header = () => {
 				</Link>
 				<ul className='flex gap-12 list-none'>
 					{navItems.map((item) => (
-						<li>
+						<li key={item.href}>
 							<Link href={item.href}>
 								<a className='text-white no-underline' data-active={router.pathname === item.href}>
 									<Button color='inherit'>{item.label}</Button>
