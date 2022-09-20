@@ -12,8 +12,8 @@ import { ReactNode } from "react";
 
 interface InvoicesTableProps {
 	invoices?: InvoiceWithClientsDTO[];
-	isLoading: boolean;
-	isFetching: boolean;
+	isLoading?: boolean;
+	isFetching?: boolean;
 	errorMessage?: ReactNode;
 	disableRouting?: boolean;
 	totalPages?: number;
@@ -76,8 +76,8 @@ const InvoicesTable = ({
 			fields={fields}
 			totalPages={totalPages}
 			isError={!!errorMessage}
-			isLoading={isLoading}
-			isFetching={isFetching}
+			isLoading={!!isLoading}
+			isFetching={!!isFetching}
 			errorMsg={errorMessage}
 			rowsData={invoices}
 			disableRouting={disableRouting}
