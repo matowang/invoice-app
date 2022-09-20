@@ -43,7 +43,6 @@ const DataTableHeadController = ({ headFields, renderCell, disableRouting }: Tab
 						(router.query.sortOrder === "asc" || router.query.sortOrder === "desc")
 							? router.query.sortOrder
 							: undefined,
-					index: i,
 				})
 			)}
 		</>

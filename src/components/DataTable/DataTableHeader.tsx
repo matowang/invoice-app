@@ -10,17 +10,15 @@ import { MouseEventHandler } from "react";
 export interface DataTableHeaderProps {
 	onClick?: MouseEventHandler<HTMLTableCellElement>;
 	field: DataTableField;
-	index: number;
-	sortOrder: SortOrder | undefined;
+	sortOrder?: SortOrder;
 }
 
-const DataTableHeader = ({ field, onClick, sortOrder, index }: DataTableHeaderProps) => (
+const DataTableHeader = ({ field, onClick, sortOrder }: DataTableHeaderProps) => (
 	<TableCell
 		onClick={onClick}
 		align='right'
 		component='th'
 		className='font-bold cursor-pointer group'
-		key={field.name}
 		data-test={field["data-test"]}
 	>
 		<span className={`flex content-center relative justify-end group-first:justify-start`}>

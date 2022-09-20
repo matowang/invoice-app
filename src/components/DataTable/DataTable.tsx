@@ -83,12 +83,11 @@ const DataTable = <TData extends unknown>({
 						<DataTableHeadController
 							headFields={fields}
 							disableRouting={disableRouting}
-							renderCell={({ field, onClick, sortOrder, index }) => (
+							renderCell={({ field, onClick, sortOrder }) => (
 								<DataTableHeader
 									field={field}
 									onClick={onClick}
 									sortOrder={sortOrder}
-									index={index}
 									key={field.name}
 								/>
 							)}
