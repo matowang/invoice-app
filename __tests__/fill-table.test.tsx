@@ -1,27 +1,27 @@
 import { Table, TableBody } from "@mui/material";
 import { render } from "@testing-library/react";
-import TableRowStatusMessage from "../src/components/TableRowStatusMessage";
+import FillTable from "../src/components/FillTable";
 
 describe("table row message", () => {
-	it("renders empty properly", () => {
+	it("renders fill properly", () => {
 		const { container } = render(
 			<Table>
 				<TableBody>
-					<TableRowStatusMessage colSpan={10} status='empty'>
-						Status
-					</TableRowStatusMessage>
+					<FillTable cols={10} rows={20}>
+						Fill
+					</FillTable>
 				</TableBody>
 			</Table>
 		);
 		expect(container).toMatchSnapshot();
 	});
-	it("renders error properly", () => {
+	it("renders . properly", () => {
 		const { container } = render(
 			<Table>
 				<TableBody>
-					<TableRowStatusMessage colSpan={3} status='error'>
-						Status
-					</TableRowStatusMessage>
+					<FillTable cols={100} rows={200}>
+						.
+					</FillTable>
 				</TableBody>
 			</Table>
 		);

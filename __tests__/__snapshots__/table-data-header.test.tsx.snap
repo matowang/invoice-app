@@ -2,53 +2,79 @@
 
 exports[`table row message renders non-sortable properly 1`] = `
 <div>
-  <th
-    class="MuiTableCell-root MuiTableCell-alignRight MuiTableCell-sizeMedium font-bold cursor-pointer group css-r7oxtk-MuiTableCell-root"
-    data-test="test"
+  <table
+    class="MuiTable-root css-rqglhn-MuiTable-root"
   >
-    <span
-      class="flex content-center relative justify-end group-first:justify-start"
+    <thead
+      class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
     >
-      <div
-        class="relative"
+      <tr
+        class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
       >
-        Test
-      </div>
-    </span>
-  </th>
+        <th
+          class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignRight MuiTableCell-sizeMedium font-bold cursor-pointer group css-1azl6jz-MuiTableCell-root"
+          data-test="test"
+          scope="col"
+        >
+          <span
+            class="flex content-center relative justify-end group-first:justify-start"
+          >
+            <div
+              class="relative"
+            >
+              Test
+            </div>
+          </span>
+        </th>
+      </tr>
+    </thead>
+  </table>
 </div>
 `;
 
 exports[`table row message renders sortable properly 1`] = `
 <div>
-  <th
-    class="MuiTableCell-root MuiTableCell-alignRight MuiTableCell-sizeMedium font-bold cursor-pointer group css-r7oxtk-MuiTableCell-root"
-    data-test="test"
+  <table
+    class="MuiTable-root css-rqglhn-MuiTable-root"
   >
-    <span
-      class="flex content-center relative justify-end group-first:justify-start"
+    <thead
+      class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
     >
-      <div
-        class="relative"
+      <tr
+        class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
       >
-        <div
-          class="absolute left-0 -translate-x-full"
+        <th
+          class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignRight MuiTableCell-sizeMedium font-bold cursor-pointer group css-1azl6jz-MuiTableCell-root"
+          data-test="test"
+          scope="col"
         >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
-            data-testid="ArrowCircleUpOutlinedIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
+          <span
+            class="flex content-center relative justify-end group-first:justify-start"
           >
-            <path
-              d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0 2c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zm-1-10v4h2v-4h3l-4-4-4 4h3z"
-            />
-          </svg>
-        </div>
-        Test
-      </div>
-    </span>
-  </th>
+            <div
+              class="relative"
+            >
+              <div
+                class="absolute left-0 -translate-x-full"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                  data-testid="ArrowCircleUpOutlinedIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0 2c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zm-1-10v4h2v-4h3l-4-4-4 4h3z"
+                  />
+                </svg>
+              </div>
+              Test
+            </div>
+          </span>
+        </th>
+      </tr>
+    </thead>
+  </table>
 </div>
 `;
