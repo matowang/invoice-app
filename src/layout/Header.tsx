@@ -33,7 +33,7 @@ const Header = () => {
 						<li>
 							<Link href={item.href}>
 								<a className='text-white no-underline' data-active={router.pathname === item.href}>
-									{item.label}
+									<Button color='inherit'>{item.label}</Button>
 								</a>
 							</Link>
 						</li>
