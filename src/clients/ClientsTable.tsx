@@ -72,10 +72,10 @@ const ClientsTable = ({
 									label: "Edit Client",
 									onClick: () => router.push(`clients/${client.id}`),
 								},
-								{
-									label: "Delete Client",
-									onClick: () => router.push(`clients/${client.id}`),
-								},
+								// {
+								// 	label: "Delete Client",
+								// 	onClick: () => router.push(`clients/${client.id}`),
+								// },
 							]}
 						/>
 					</TableCell>

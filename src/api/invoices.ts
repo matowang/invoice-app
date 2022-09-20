@@ -85,15 +85,24 @@ export const getInvoice = async (id: string) => {
 
 export const editInvoice = async (invoiceId: string, invoiceValues: InvoiceFormValues) => {
 	await new Promise((r) => setTimeout(r, 2000));
-	const { data } = await dbInstance.put("/invoices", {
+	const { data } = await dbInstance.put<any>("/invoices", {
 		...transformInvoiceValue(invoiceValues),
 		id: invoiceId,
 	});
 	return data;
 };
 
+export const deleteInvoice = async (invoiceId: string) => {
+	await new Promise((r) => setTimeout(r, 2000));
+	const { data } = await dbInstance.delete(`/invoices?${invoiceId}`);
+	return data;
+};
+
 export const createInvoice = async (invoiceFormValues: InvoiceFormValues) => {
 	await new Promise((r) => setTimeout(r, 2000));
-	const { data } = await dbInstance.post("/invoices", transformInvoiceValue(invoiceFormValues));
+	const { data } = await dbInstance.post<any>(
+		"/invoices",
+		transformInvoiceValue(invoiceFormValues)
+	);
 	return data;
 };
