@@ -47,6 +47,11 @@ const fields = [
 		isSortable: false,
 	},
 	{
+		name: "projectCode",
+		label: "Project",
+		isSortable: false,
+	},
+	{
 		name: "total",
 		label: "Total",
 		isSortable: true,
@@ -57,27 +62,31 @@ const fields = [
 const rowDataTransform: (data: InvoiceWithClientsDTO) => Cell[] = ({ invoice, client }) => [
 	{
 		label: invoice.invoice_number,
-		"date-test": "invoice-number",
+		"data-test": "invoice-number",
 	},
 	{
 		label: client.companyDetails.name,
-		"date-test": "invoice-company",
+		"data-test": "invoice-company",
 	},
 	{
 		label: dayjs(invoice.date).format("ll"),
-		"date-test": "invoice-date",
+		"data-test": "invoice-date",
 	},
 	{
 		label: dayjs(invoice.dueDate).format("ll"),
-		"date-test": "invoice-due-date",
+		"data-test": "invoice-due-date",
 	},
 	{
 		label: client.name,
-		"date-test": "invoice-client",
+		"data-test": "invoice-client",
+	},
+	{
+		label: invoice.projectCode,
+		"data-test": "invoice-project",
 	},
 	{
 		label: invoice.value,
-		"date-test": "invoice-price",
+		"data-test": "invoice-price",
 	},
 ];
 const InvoicesTable = ({
