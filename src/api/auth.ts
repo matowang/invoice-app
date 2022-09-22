@@ -74,12 +74,12 @@ export const setHeaderToken = (token: string, onTokenInvalid?: () => unknown) =>
 };
 
 const login = async (loginValues: LoginValues) => {
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 100));
 	return await axiosInstance.post<LoginDTO>(`/login`, loginValues);
 };
 
 const register = async (registerValues: RegisterValues) => {
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 100));
 	return await axiosInstance.post<RegisterDTO>(`/register`, registerValues);
 };
 

@@ -38,7 +38,9 @@
 
 import companyDetails from "../fixtures/company-details.json";
 
-Cypress.Commands.add("signup and login", (user) => {
+import { faker } from "@faker-js/faker";
+
+Cypress.Commands.add("signupAndLogin", (user) => {
 	it("cannot access without login", () => {
 		cy.clearCookies();
 		cy.visit("http://localhost:3000/company-details");

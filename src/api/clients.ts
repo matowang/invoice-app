@@ -25,7 +25,7 @@ export type GetClientsQuery = {
 };
 
 export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => {
-	await new Promise((r) => setTimeout(r, 500));
+	await new Promise((r) => setTimeout(r, 100));
 
 	const variables: any = {
 		limit: CLIENTS_PAGE_LIMIT,
@@ -65,7 +65,7 @@ export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuer
 };
 
 export const getClient = async (clientId: string) => {
-	await new Promise((r) => setTimeout(r, 1000));
+	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.get<{
 		success: boolean;
 		client: ClientDTO;
@@ -74,7 +74,7 @@ export const getClient = async (clientId: string) => {
 };
 
 export const getClientsCompanyNames = async () => {
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.get<{
 		success: boolean;
 		clients: ClientCompanyNameDTO[];
@@ -109,7 +109,7 @@ export const createClient = async (clientValues: ClientValues) => {
 };
 
 export const editClient = async (clientId: string, clientValues: ClientValues) => {
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.put("/clients", {
 		...clientValues,
 		id: clientId,

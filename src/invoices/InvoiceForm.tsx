@@ -94,7 +94,7 @@ const InvoiceForm = ({
 }: InvoiceFormProps) => {
 	const {
 		handleSubmit: handleFormHookSubmit,
-		formState: { errors, isSubmitSuccessful },
+		formState: { errors, isSubmitSuccessful, isSubmitted },
 		control,
 		register,
 		reset,
@@ -133,9 +133,12 @@ const InvoiceForm = ({
 	//set value sum
 	const items = useWatch({ name: "meta.items", control: control });
 	useEffect(() => {
+		if (!isSubmitted) return;
 		const total = items.reduce((a, { value }) => a + value, 0);
-		setValue("value", total);
-	}, [items, setValue]);
+		setValue("value", total, { shouldValidate: true });
+	}, [items, setValue, isSubmitted]);
+
+	console.log(errors);
 
 	return (
 		<>
@@ -157,21 +160,21 @@ const InvoiceForm = ({
 					<DatePickerField
 						name='date'
 						control={control}
-						inputProps={{ "data-test": "client-date" }}
+						inputProps={{ "data-test": "invoice-date" }}
 						label='Date'
 						errorMsg={
-							errors.date && <span data-test='client-date-error'>{errors.date?.message}</span>
+							errors.date && <span data-test='invoice-date-error'>{errors.date.message}</span>
 						}
 						disabled={disabled}
 					/>
 					<DatePickerField
 						name='dueDate'
 						control={control}
-						inputProps={{ "data-test": "client-due-date" }}
+						inputProps={{ "data-test": "invoice-due-date" }}
 						label='Due Date'
 						errorMsg={
 							errors.dueDate && (
-								<span data-test='client-due-date-error'>{errors.dueDate?.message}</span>
+								<span data-test='invoice-due-date-error'>{errors.dueDate.message}</span>
 							)
 						}
 						disabled={disabled}
@@ -183,13 +186,11 @@ const InvoiceForm = ({
 						error={!!errors.invoice_number}
 						helperText={
 							errors.invoice_number && (
-								<span data-test='client-invoice-number-error'>
-									{errors.invoice_number?.message}
-								</span>
+								<span data-test='invoice-number-error'>{errors.invoice_number?.message}</span>
 							)
 						}
 						disabled={disabled}
-						inputProps={{ "data-test": "client-invoice-number" }}
+						inputProps={{ "data-test": "invoice-number" }}
 					/>
 					<TextField
 						{...register("projectCode")}
@@ -198,13 +199,11 @@ const InvoiceForm = ({
 						error={!!errors.projectCode}
 						helperText={
 							errors.projectCode && (
-								<span data-test='client-invoice-project-code-error'>
-									{errors.projectCode?.message}
-								</span>
+								<span data-test='invoice-project-code-error'>{errors.projectCode?.message}</span>
 							)
 						}
 						disabled={disabled}
-						inputProps={{ "data-test": "client-invoice-project-code" }}
+						inputProps={{ "data-test": "invoice-project-code" }}
 					/>
 					<AutocompleteField
 						name='clientCompany'
@@ -215,19 +214,20 @@ const InvoiceForm = ({
 						isOptionEqualToValue={(option, value) => option.id === value.id}
 						disabled={disabled}
 						loading={!!isLoadingClientsCompanyNames}
-						inputProps={{ "data-test": "client-invoice-client" }}
+						inputProps={{ "data-test": "invoice-company-id" }}
 						errorMsg={
 							errors.clientCompany && (
-								<span data-test='client-invoice-client-error'>{errors.clientCompany?.message}</span>
+								<span data-test='invoice-company-id-error'>{errors.clientCompany?.message}</span>
 							)
 						}
 					/>
 				</div>
-				<div className='grid gap-5 h-full md:overflow-y-scroll py-4'>
+				<div className='grid gap-5 h-full md:overflow-y-scroll'>
 					{itemsFields.map((field, i) => (
 						<div
 							className='grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative'
 							key={`invoice-item-${field.id}`}
+							data-test={`invoice-item-${i}`}
 						>
 							<div className='absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2'>{`Invoice Item ${i}`}</div>
 							<TextField
@@ -235,12 +235,12 @@ const InvoiceForm = ({
 								error={!!errors.meta?.items?.[i]?.description}
 								helperText={
 									errors.meta?.items?.[i]?.description && (
-										<span data-test='client-invoice-item-description-error'>
+										<span data-test='invoice-item-description-error'>
 											{errors.meta?.items[i]?.description?.message}
 										</span>
 									)
 								}
-								inputProps={{ "data-test": `client-invoice-item-description-${i}` }}
+								inputProps={{ "data-test": `invoice-item-description` }}
 								disabled={disabled}
 								label='Description'
 							/>
@@ -251,18 +251,18 @@ const InvoiceForm = ({
 								disabled={disabled}
 								errorMsg={
 									errors.meta?.items?.[i]?.value && (
-										<span data-test='client-invoice-item-value-error'>
+										<span data-test='invoice-item-value-error'>
 											{errors.meta?.items[i]?.value?.message}
 										</span>
 									)
 								}
-								inputProps={{ "data-test": `client-invoice-item-value-${i}` }}
+								inputProps={{ "data-test": `invoice-item-value` }}
 							/>
 							{i !== 0 && (
 								<Button
 									variant='outlined'
 									disabled={disabled}
-									data-test='add-invoice-item'
+									data-test='invoice-remove-item'
 									onClick={() => removeItem(i)}
 								>
 									Remove Invoice Item
@@ -274,7 +274,7 @@ const InvoiceForm = ({
 						variant='outlined'
 						className='py-12'
 						disabled={disabled}
-						data-test='add-invoice-item'
+						data-test='invoice-add-item'
 						onClick={() =>
 							append({
 								description: "",
@@ -293,13 +293,12 @@ const InvoiceForm = ({
 							error={!!errors.value}
 							value={value || 0}
 							helperText={
-								errors.value && (
-									<span data-test='client-invoice-value-error'>{errors.value?.message}</span>
-								)
+								errors.value && <span data-test='invoice-value-error'>{errors.value.message}</span>
 							}
 							disabled={disabled}
 							label={`Total Value`}
 							className='col-span-1 md:col-span-2'
+							inputProps={{ "data-test": "invoice-value" }}
 						/>
 					)}
 				/>
@@ -307,7 +306,7 @@ const InvoiceForm = ({
 					type='submit'
 					variant='contained'
 					disabled={disabled}
-					data-test='submit-client'
+					data-test='submit-invoice'
 					className='col-span-1 md:col-span-2'
 				>
 					{submitText || "Submit"}

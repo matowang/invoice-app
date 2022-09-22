@@ -1,6 +1,6 @@
 describe("/clients", () => {
 	it("has all fields", () => {
-		cy.visit("/invoices");
+		cy.visit("/clients");
 		cy.get('[data-test="client-name"');
 		cy.get('[data-test="client-companyName"');
 		cy.get('[data-test="client-totalBilled’"');

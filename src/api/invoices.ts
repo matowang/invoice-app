@@ -55,7 +55,7 @@ export const getInvoices = async ({
 	endDate,
 	projectCode,
 }: GetInvoicesQuery) => {
-	await new Promise((r) => setTimeout(r, 500));
+	await new Promise((r) => setTimeout(r, 100));
 	const params = {
 		limit: INVOICES_PAGE_LIMIT.toString(),
 		offset: (page - 1) * INVOICES_PAGE_LIMIT,
@@ -76,7 +76,7 @@ export const getInvoices = async ({
 };
 
 export const getInvoice = async (id: string) => {
-	await new Promise((r) => setTimeout(r, 1000));
+	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.get<{ success: boolean; invoice: InvoiceDTO }>(
 		`/invoices/${id}`
 	);
@@ -84,7 +84,7 @@ export const getInvoice = async (id: string) => {
 };
 
 export const editInvoice = async (invoiceId: string, invoiceValues: InvoiceFormValues) => {
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.put<any>("/invoices", {
 		...transformInvoiceValue(invoiceValues),
 		id: invoiceId,
@@ -93,7 +93,7 @@ export const editInvoice = async (invoiceId: string, invoiceValues: InvoiceFormV
 };
 
 export const deleteInvoice = async (invoiceId: string) => {
-	await new Promise((r) => setTimeout(r, 2000));
+	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.delete(`/invoices?${invoiceId}`);
 	return data;
 };
