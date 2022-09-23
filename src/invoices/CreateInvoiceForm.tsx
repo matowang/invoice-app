@@ -27,14 +27,13 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 	const submitForm = useCallback(
 		(invoiceFormValues: InvoiceFormValues) => {
 			//We use a promise so that the InvoiceForm react-hook-form can know if submit was succesful
-			//TODO check if on success data is needed
-			return new Promise((resolve, reject) => {
+			return new Promise<void>((resolve, reject) => {
 				mutate(invoiceFormValues, {
-					onSuccess: (data) => {
+					onSuccess: () => {
 						showAlert(<span data-test='form-success'>Added Invoice Successfully.</span>, "success");
 						onSubmitSuccess?.();
 						setFormError(null);
-						resolve(data);
+						resolve();
 					},
 					onError: (err) => {
 						if (!axios.isAxiosError(err) || typeof err.response?.data !== "string")
