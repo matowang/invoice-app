@@ -50,7 +50,7 @@ interface DataTableProps<TData> {
 	isError: boolean;
 	errorMsg: ReactNode;
 	tableProps?: TableProps<React.ElementType>;
-	fields: DataTableField[]; // null represents placeholder fields
+	fields: DataTableField[];
 	disableRouting?: boolean;
 	totalPages?: number;
 	pageLimit?: number;

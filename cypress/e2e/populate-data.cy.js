@@ -1,10 +1,6 @@
 import { faker } from "@faker-js/faker";
 
 describe("populate data", () => {
-	// it("login", () => {
-
-	// });
-
 	it("reset", () => {
 		cy.request(`http://localhost:3139/reset`);
 	});
