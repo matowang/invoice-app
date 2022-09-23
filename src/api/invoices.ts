@@ -55,7 +55,7 @@ export const getInvoices = async ({
 	endDate,
 	projectCode,
 }: GetInvoicesQuery) => {
-	await new Promise((r) => setTimeout(r, 100));
+	await new Promise((r) => setTimeout(r, 500));
 	const params = {
 		limit: INVOICES_PAGE_LIMIT.toString(),
 		offset: (page - 1) * INVOICES_PAGE_LIMIT,

@@ -130,7 +130,7 @@ const DataTable = <TData extends unknown>({
 						</>
 					) : (
 						<TableRowStatusMessage colSpan={cols} status='empty'>
-							<span data-test='empty-message'>No data to show.</span>
+							<span data-test='empty-placeholder'>No data to show.</span>
 						</TableRowStatusMessage>
 					)}
 				</TableBody>

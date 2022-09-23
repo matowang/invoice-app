@@ -17,7 +17,13 @@ import createEmotionCache from "../src/util/createEmotionCache";
 import MUITheme from "../MUITheme";
 
 const emotionCache = createEmotionCache();
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: false,
+		},
+	},
+});
 
 import Layout from "../src/layout";
 import Head from "next/head";

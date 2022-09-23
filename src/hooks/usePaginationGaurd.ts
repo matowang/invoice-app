@@ -5,9 +5,8 @@ interface UsePaginationGaurdProps {
 	totalPages?: number;
 }
 
-export const usePaginationGaurd = ({ totalPages = Infinity }: UsePaginationGaurdProps) => {
+export const usePaginationGaurd = ({ totalPages }: UsePaginationGaurdProps) => {
 	const router = useRouter();
-
 	useEffect(() => {
 		if (!router.isReady) return;
 		if (!router.query.page) return;
@@ -26,7 +25,7 @@ export const usePaginationGaurd = ({ totalPages = Infinity }: UsePaginationGaurd
 			});
 			return;
 		}
-		if (page > totalPages) {
+		if (totalPages && page > totalPages) {
 			router.replace({
 				pathname: router.pathname,
 				query: { ...router.query, page: totalPages },

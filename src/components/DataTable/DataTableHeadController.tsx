@@ -18,16 +18,19 @@ const DataTableHeadController = ({ headFields, renderCell, disableRouting }: Tab
 		if (disableRouting) return;
 
 		let sortOrder: SortOrder;
+		let sortBy: string | undefined = fieldName;
 		if (router.query.sortBy === fieldName) {
 			if (router.query.sortOrder === "asc") sortOrder = "desc";
-			else if (router.query.sortOrder === "desc") sortOrder = undefined;
-			else sortOrder = "asc";
+			else if (router.query.sortOrder === "desc") {
+				sortOrder = undefined;
+				sortBy = undefined;
+			} else sortOrder = "asc";
 		} else {
 			sortOrder = "asc";
 		}
 		router.push({
 			pathname: router.pathname,
-			query: { ...router.query, sortOrder, sortBy: fieldName },
+			query: JSON.parse(JSON.stringify({ ...router.query, sortOrder, sortBy })),
 		});
 	};
 

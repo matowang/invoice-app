@@ -106,7 +106,7 @@ const InvoicesTable = ({
 			isError={!!errorMessage}
 			isLoading={!!isLoading}
 			isFetching={!!isFetching}
-			errorMsg={errorMessage}
+			errorMsg={<span data-test='invoices-fetch-error'>{errorMessage}</span>}
 			rowsData={invoices}
 			disableRouting={disableRouting}
 			tableProps={{ "data-test": "invoices-table" }}

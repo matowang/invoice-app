@@ -32,7 +32,7 @@ export const useInvoices = ({
 		{ keepPreviousData: true }
 	);
 	const totalPages = useMemo(
-		() => (result.data ? Math.ceil(result.data.total / INVOICES_PAGE_LIMIT) : 1),
+		() => (result.data ? Math.ceil(result.data.total / INVOICES_PAGE_LIMIT) : undefined),
 		[result.data]
 	);
 	return {
