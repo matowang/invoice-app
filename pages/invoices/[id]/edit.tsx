@@ -17,7 +17,7 @@ const NewInvoicePage = () => {
 		<AuthGuard>
 			<div className='my-40 mx-20 flex flex-col items-center relative'>
 				<div className='max-w-4xl w-full'>
-					<h1>Edit Invoice</h1>
+					<h1 className='my-3 text-lg'>Edit Invoice</h1>
 					<EditInvoiceForm
 						invoiceId={router.query.id}
 						// onGetInvoiceError={(err) => {

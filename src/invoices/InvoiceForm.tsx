@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, InputLabel, FormLabel } from "@mui/material";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import DatePickerField from "../components/formFields/DatePickerField";
 import AutocompleteField from "../components/formFields/AutoCompleteField";
@@ -222,7 +222,7 @@ const InvoiceForm = ({
 						}
 					/>
 				</div>
-				<div className='grid gap-5 h-full md:overflow-y-scroll'>
+				<div className='grid gap-5 py-4 h-full md:overflow-y-scroll'>
 					{itemsFields.map((field, i) => (
 						<div
 							className='grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative'

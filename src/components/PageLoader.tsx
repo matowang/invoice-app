@@ -1,7 +1,9 @@
+import CircularProgress from "@mui/material/CircularProgress";
+
 const PageLoader = () => (
-    <div className="flex items-center justify-items-center">
-        <h1>Loading</h1>
-    </div>
-)
+	<div className='flex justify-center w-full p-20'>
+		<CircularProgress size={100} thickness={1} />
+	</div>
+);
 
 export default PageLoader;

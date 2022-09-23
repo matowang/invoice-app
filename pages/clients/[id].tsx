@@ -18,7 +18,7 @@ const EditClient = () => {
 		<AuthGuard>
 			<div className='my-40 mx-20 flex flex-col items-center relative'>
 				<div className='max-w-md w-full'>
-					<h1>Edit Client</h1>
+					<h1 className='my-3 text-lg'>Edit Client</h1>
 					<EditClientForm
 						clientId={router.query.id}
 						// onGetClientError={(err) => {
