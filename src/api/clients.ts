@@ -79,7 +79,7 @@ export const getClientsCompanyNames = async () => {
 };
 
 export const createClient = async (clientValues: ClientValues) => {
-	const { name, vatNumber, regNumber, address } = clientValues.companyDetails;
+	const { name, vatNumber, regNumber, address, swift, iban } = clientValues.companyDetails;
 	const { data } = await dbInstance.post("/graphql", {
 		query: `mutation AddClient($email: String, $name: String, $companyDetails: CompanyDetails) {
 			addClient(email: $email, name: $name, companyDetails: $companyDetails){
@@ -94,9 +94,8 @@ export const createClient = async (clientValues: ClientValues) => {
 				vatNumber,
 				regNumber,
 				address,
-				//TODO allow swift and iban for company details
-				// swift: clientValues.companyDetails.swift,
-				// iban: clientValues.companyDetails.iban,
+				swift,
+				iban,
 			},
 		},
 	});
