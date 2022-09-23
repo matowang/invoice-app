@@ -1,5 +1,5 @@
 import { ClientValues } from "../clients/ClientForm";
-import { dbInstance } from "./auth";
+import { dbInstance } from "./base";
 import { CompanyDetails } from "../user/CompanyDetailsForm";
 import { CLIENTS_PAGE_LIMIT, SortOrder } from "./base";
 
@@ -25,8 +25,6 @@ export type GetClientsQuery = {
 };
 
 export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => {
-	await new Promise((r) => setTimeout(r, 100));
-
 	const variables: any = {
 		limit: CLIENTS_PAGE_LIMIT,
 		offset: (page - 1) * CLIENTS_PAGE_LIMIT,
@@ -65,7 +63,6 @@ export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuer
 };
 
 export const getClient = async (clientId: string) => {
-	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.get<{
 		success: boolean;
 		client: ClientDTO;
@@ -74,7 +71,6 @@ export const getClient = async (clientId: string) => {
 };
 
 export const getClientsCompanyNames = async () => {
-	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.get<{
 		success: boolean;
 		clients: ClientCompanyNameDTO[];
@@ -83,7 +79,6 @@ export const getClientsCompanyNames = async () => {
 };
 
 export const createClient = async (clientValues: ClientValues) => {
-	//await new Promise((r) => setTimeout(r, 2000));
 	const { name, vatNumber, regNumber, address } = clientValues.companyDetails;
 	const { data } = await dbInstance.post("/graphql", {
 		query: `mutation AddClient($email: String, $name: String, $companyDetails: CompanyDetails) {
@@ -109,7 +104,6 @@ export const createClient = async (clientValues: ClientValues) => {
 };
 
 export const editClient = async (clientId: string, clientValues: ClientValues) => {
-	await new Promise((r) => setTimeout(r, 100));
 	const { data } = await dbInstance.put("/clients", {
 		...clientValues,
 		id: clientId,

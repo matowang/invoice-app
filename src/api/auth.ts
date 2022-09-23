@@ -4,6 +4,8 @@ import { LoginValues } from "../user/LoginForm";
 import { RegisterValues } from "../user/RegisterForm";
 import { CompanyDetails } from "../user/CompanyDetailsForm";
 
+import { dbInstance } from "./base";
+
 export type LoginDTO = {
 	user_id: string;
 	email: string;
@@ -32,59 +34,15 @@ const axiosInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-export const dbInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
-
-let requestInterceptor: number;
-let responseInterceptor: number;
-export const setHeaderToken = (token: string, onTokenInvalid?: () => unknown) => {
-	dbInstance.interceptors.request.eject(requestInterceptor);
-	dbInstance.interceptors.request.eject(responseInterceptor);
-	requestInterceptor = dbInstance.interceptors.request.use(
-		function (config) {
-			// Do something before request is sent
-			config = {
-				...config,
-				headers: {
-					...config.headers,
-					"x-access-token": token,
-				},
-			};
-			return config;
-		},
-		function (error) {
-			// Do something with request error
-			return Promise.reject(error);
-		}
-	);
-	responseInterceptor = dbInstance.interceptors.response.use(
-		function (response) {
-			// Any status code that lie within the range of 2xx cause this function to trigger
-			return response;
-		},
-		function (error) {
-			// Any status codes that falls outside the range of 2xx cause this function to trigger
-			if (axios.isAxiosError(error) && error.response?.data === "Invalid Token" && onTokenInvalid) {
-				return onTokenInvalid();
-			}
-			return Promise.reject(error);
-		}
-	);
-};
-
 const login = async (loginValues: LoginValues) => {
-	await new Promise((r) => setTimeout(r, 100));
 	return await axiosInstance.post<LoginDTO>(`/login`, loginValues);
 };
 
 const register = async (registerValues: RegisterValues) => {
-	await new Promise((r) => setTimeout(r, 100));
 	return await axiosInstance.post<RegisterDTO>(`/register`, registerValues);
 };
 
 const validateToken = async (token: string): Promise<UserDTO | null> => {
-	//await new Promise(r => setTimeout(r, 2000));
 	try {
 		const { data } = await axiosInstance.get("/me", {
 			headers: {

@@ -1,7 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 
-import AuthAPI, { setHeaderToken, UserDTO } from "../api/auth";
+import AuthAPI, { UserDTO } from "../api/auth";
+import { setHeaderToken } from "../api/base";
 
 import create from "zustand";
 import { useEffect } from "react";
