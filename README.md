@@ -2,14 +2,16 @@
 
 1. Make a copy of `.env.example` and rename to `.env.local`
 
-2. Run the following
+2. Run the [Invoice Rest API](https://git.toptal.com/vishal-shah/invoicebackendapi)
+
+3. Run the following
 
 ```bash
 npm run dev
 # or
 yarn dev
 ```
-3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## 🧪 Testing
 
