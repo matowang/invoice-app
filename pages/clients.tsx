@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
 import Link from "next/link";
 
+import AddIcon from "@mui/icons-material/Add";
+
 import AuthGuard from "../src/user/AuthGuard";
 
 import ClientsTableContainer from "../src/clients/ClientsTableContainer";
@@ -22,7 +24,9 @@ const Clients = ({ query }: { query: any | null }) => {
 					<div>
 						<Link href='/clients/new'>
 							<a className='no-underline'>
-								<Button variant='outlined'>Add Client</Button>
+								<Button variant='outlined' startIcon={<AddIcon />}>
+									Add Client
+								</Button>
 							</a>
 						</Link>
 					</div>

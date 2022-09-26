@@ -8,6 +8,8 @@ import {
 	TableRow,
 } from "@mui/material";
 
+import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
+
 import dayjs from "dayjs";
 
 import { InvoiceFormValues } from "./InvoiceForm";

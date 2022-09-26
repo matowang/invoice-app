@@ -1,11 +1,14 @@
 import DataTable, { Cell } from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
-import { useRouter } from "next/router";
 
-import { InvoiceWithClientsDTO } from "../api/invoices";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
 
 import dayjs from "dayjs";
 
+import { useRouter } from "next/router";
+
+import { InvoiceWithClientsDTO } from "../api/invoices";
 import { ReactNode } from "react";
 
 interface InvoicesTableProps {
@@ -122,10 +125,12 @@ const InvoicesTable = ({
 						{
 							label: "Edit Invoice",
 							onClick: () => router.push(`/invoices/${invoice.id}/edit`),
+							icon: <EditOutlinedIcon />,
 						},
 						{
 							label: "Print Invoice",
 							onClick: () => router.push(`/invoices/${invoice.id}/view?print=true`),
+							icon: <PrintOutlinedIcon />,
 						},
 					]}
 				/>
