@@ -88,7 +88,7 @@ const rowDataTransform: (data: InvoiceWithClientsDTO) => Cell[] = ({ invoice, cl
 		"data-test": "invoice-project",
 	},
 	{
-		label: invoice.value,
+		label: `$${invoice.value.toLocaleString()}`,
 		"data-test": "invoice-price",
 	},
 ];

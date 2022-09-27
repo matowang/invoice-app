@@ -33,7 +33,7 @@ const rowDataTransform: (data: ClientDTO) => Cell[] = ({
 	{ label: name, "data-test": "client-name" },
 	{ label: companyDetails.name, "data-test": "client-companyName" },
 	{ label: invoicesCount, "data-test": "client-invoicesCount" },
-	{ label: totalBilled, "data-test": "client-totalBilled" },
+	{ label: `$${totalBilled.toLocaleString()}`, "data-test": "client-totalBilled" },
 ];
 
 const ClientsTable = ({
