@@ -3,8 +3,7 @@ import axios from "axios";
 import { LoginValues } from "../user/LoginForm";
 import { RegisterValues } from "../user/RegisterForm";
 import { CompanyDetails } from "../user/CompanyDetailsForm";
-
-import { dbInstance } from "./base";
+import { devDelay } from "./base";
 
 export type LoginDTO = {
 	user_id: string;
@@ -30,29 +29,35 @@ export type UserDTO = {
 if (!process.env.NEXT_PUBLIC_API_URL)
 	throw new Error("No NEXT_PUBLIC_API_URL environment variable");
 
-const axiosInstance = axios.create({
+export const authInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-axiosInstance.interceptors.response.use(async (response) => {
-	// add artificial delay for dev env
-	if (process.env.NODE_ENV === "development") {
-		await new Promise((r) => setTimeout(r, 500));
+// add artificial delay for dev env
+let delayInterceptor = authInstance.interceptors.response.use(
+	async (response) => {
+		authInstance.interceptors.response.eject(delayInterceptor);
+		await devDelay(500);
+		return response;
+	},
+	async (error) => {
+		await devDelay(500);
+		return Promise.reject(error);
 	}
-	return response;
-});
+);
 
-const login = async (loginValues: LoginValues) => {
-	return await axiosInstance.post<LoginDTO>(`/login`, loginValues);
+export const login = async (loginValues: LoginValues) => {
+	const res = await authInstance.post<LoginDTO>(`/login`, loginValues);
+	return res;
 };
 
-const register = async (registerValues: RegisterValues) => {
-	return await axiosInstance.post<RegisterDTO>(`/register`, registerValues);
+export const register = async (registerValues: RegisterValues) => {
+	return await authInstance.post<RegisterDTO>(`/register`, registerValues);
 };
 
-const validateToken = async (token: string): Promise<UserDTO | null> => {
+export const validateToken = async (token: string): Promise<UserDTO | null> => {
 	try {
-		const { data } = await axiosInstance.get("/me", {
+		const { data } = await authInstance.get("/me", {
 			headers: {
 				"x-access-token": token,
 			},
@@ -65,10 +70,10 @@ const validateToken = async (token: string): Promise<UserDTO | null> => {
 	}
 };
 
-const setCompanyDetails = async (newCompanyDetails: CompanyDetails): Promise<UserDTO> => {
+export const setCompanyDetails = async (newCompanyDetails: CompanyDetails): Promise<UserDTO> => {
 	const {
 		data: { user },
-	} = await dbInstance.put<{ success: boolean; user: UserDTO }>("/me/company", newCompanyDetails);
+	} = await authInstance.put<{ success: boolean; user: UserDTO }>("/me/company", newCompanyDetails);
 	return user;
 };
 

@@ -1,5 +1,11 @@
 import axios from "axios";
 
+export const devDelay = async (ms: number) => {
+	if (process.env.NODE_ENV === "development") {
+		await new Promise((r) => setTimeout(r, ms));
+	}
+};
+
 export const CLIENTS_PAGE_LIMIT = 10;
 export const INVOICES_PAGE_LIMIT = 10;
 
@@ -7,13 +13,18 @@ export const dbInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-dbInstance.interceptors.response.use(async (response) => {
-	// add artificial delay for dev env
-	if (process.env.NODE_ENV === "development") {
-		await new Promise((r) => setTimeout(r, 2000));
+// add artificial delay for dev env
+let delayInterceptor = dbInstance.interceptors.response.use(
+	async (response) => {
+		dbInstance.interceptors.response.eject(delayInterceptor);
+		await devDelay(500);
+		return response;
+	},
+	async (error) => {
+		await devDelay(500);
+		return Promise.reject(error);
 	}
-	return response;
-});
+);
 
 let requestInterceptor: number;
 let responseInterceptor: number;

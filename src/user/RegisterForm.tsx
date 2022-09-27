@@ -59,7 +59,7 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
 					error={!!errors.name}
 					helperText={errors.name && <span data-test='name-error'>{errors.name?.message}</span>}
 					disabled={disabled}
-					data-test='name'
+					inputProps={{ "data-test": "name" }}
 				/>
 				<TextField
 					{...register("email")}
@@ -68,7 +68,7 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
 					error={!!errors.email}
 					helperText={errors.email && <span data-test='email-error'>{errors.email?.message}</span>}
 					disabled={disabled}
-					data-test='email'
+					inputProps={{ "data-test": "email" }}
 				/>
 				<TextField
 					type='password'
@@ -79,7 +79,7 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
 						errors.password && <span data-test='password-error'>{errors.password?.message}</span>
 					}
 					disabled={disabled}
-					data-test='password'
+					inputProps={{ "data-test": "password" }}
 				/>
 				<TextField
 					type='password'
@@ -92,7 +92,7 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
 						)
 					}
 					disabled={disabled}
-					data-test='confirm-password'
+					inputProps={{ "data-test": "confirm-password" }}
 				/>
 				<Button
 					type='submit'

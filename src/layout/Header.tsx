@@ -6,10 +6,13 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import PixOutlinedIcon from "@mui/icons-material/PixOutlined";
 import BusinessIcon from "@mui/icons-material/Business";
 
-import { useAuth } from "../user/AuthContext";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
 import MenuActions from "../components/ActionsMenu";
+
+import { useAuth } from "../user/AuthContext";
+import { useRouter } from "next/router";
+
 import React from "react";
 
 const navItems = [

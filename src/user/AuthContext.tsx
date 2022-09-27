@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 
-import AuthAPI, { UserDTO } from "../api/auth";
+import { validateToken, UserDTO } from "../api/auth";
 import { setHeaderToken } from "../api/base";
 
 import create from "zustand";
@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			maxAge: 30 * 24 * 60 * 60,
 			path: "/",
 		});
-		const user = await AuthAPI.validateToken(token);
+		const user = await validateToken(token);
 		if (user) {
 			set((state) => {
 				setHeaderToken(token, state.logout);
@@ -46,7 +46,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		set({ loading: true });
 		const { token } = parseCookies();
 		if (!token) return set({ loading: false });
-		const user = await AuthAPI.validateToken(token);
+		const user = await validateToken(token);
 		if (user) {
 			setHeaderToken(token, get().logout);
 			set({ token, user });
