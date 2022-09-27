@@ -2,6 +2,9 @@ import { Button } from "@mui/material";
 import Link from "next/link";
 import type { NextPage } from "next";
 
+import AddIcon from "@mui/icons-material/Add";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+
 import AuthGuard from "../src/user/AuthGuard";
 
 import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
@@ -17,14 +20,18 @@ const Dashboard: NextPage = () => {
 						<div className='flex gap-2'>
 							<Link href='/clients/new'>
 								<a className='no-underline'>
-									<Button variant='outlined' data-test='add-client'>
+									<Button variant='outlined' data-test='add-client' startIcon={<AddIcon />}>
 										Add Client
 									</Button>
 								</a>
 							</Link>
 							<Link href='/clients'>
 								<a className='no-underline'>
-									<Button variant='outlined' data-test='view-all-clients'>
+									<Button
+										variant='outlined'
+										data-test='view-all-clients'
+										startIcon={<RemoveRedEyeOutlinedIcon />}
+									>
 										See all
 									</Button>
 								</a>
@@ -39,14 +46,18 @@ const Dashboard: NextPage = () => {
 						<div className='flex gap-2'>
 							<Link href='/invoices/new'>
 								<a className='no-underline'>
-									<Button variant='outlined' data-test='add-invoice'>
+									<Button variant='outlined' data-test='add-invoice' startIcon={<AddIcon />}>
 										Add Invoice
 									</Button>
 								</a>
 							</Link>
 							<Link href='/invoices'>
 								<a className='no-underline'>
-									<Button variant='outlined' data-test='view-all-invoices'>
+									<Button
+										variant='outlined'
+										data-test='view-all-invoices'
+										startIcon={<RemoveRedEyeOutlinedIcon />}
+									>
 										See all
 									</Button>
 								</a>

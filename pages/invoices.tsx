@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
 import Link from "next/link";
 
+import AddIcon from "@mui/icons-material/Add";
+
 import AuthGuard from "../src/user/AuthGuard";
 import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
 import SelectField from "../src/components/formFields/SelectField";
@@ -51,7 +53,7 @@ const InvoicesPage = ({ query }: { query: any | null }) => {
 						</div>
 						<Link href='/invoices/new'>
 							<a className='no-underline'>
-								<Button variant='outlined' className='h-full'>
+								<Button variant='outlined' className='h-full' startIcon={<AddIcon />}>
 									Add Invoice
 								</Button>
 							</a>

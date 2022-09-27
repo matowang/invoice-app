@@ -1,11 +1,15 @@
-import { useRouter } from "next/router";
-
 import { Button } from "@mui/material";
-import Error404 from "../../../src/components/Error404";
 import Link from "next/link";
+
 import PageLoader from "../../../src/components/PageLoader";
+import Error404 from "../../../src/components/Error404";
+
 import InvoicePrintContainer from "../../../src/invoices/InvoicePrintContainer";
 import InvoiceViewContainer from "../../../src/invoices/InvoiceViewContainer";
+
+import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
+
+import { useRouter } from "next/router";
 
 const InvoiceView = () => {
 	const router = useRouter();
@@ -26,7 +30,7 @@ const InvoiceView = () => {
 			<InvoiceViewContainer invoiceId={router.query.id} />
 			<Link href={`/invoices/${router.query.id}/view?print=true`}>
 				<a>
-					<Button variant='contained' className='self-start mt-6'>
+					<Button variant='contained' className='self-start mt-6' startIcon={<PrintOutlinedIcon />}>
 						Print
 					</Button>
 				</a>

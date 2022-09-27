@@ -1,6 +1,8 @@
 import DataTable, { Cell } from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
 
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+
 import { useRouter } from "next/router";
 
 import { ReactNode } from "react";
@@ -50,7 +52,7 @@ const ClientsTable = ({
 			isError={!!errorMessage}
 			isLoading={isLoading}
 			isFetching={isFetching}
-			errorMsg={<span data-test='clients-fetch-error'>errorMessage</span>}
+			errorMsg={<span data-test='clients-fetch-error'>{errorMessage}</span>}
 			rowsData={clients}
 			disableRouting={disableRouting}
 			tableProps={{ "data-test": "clients-table" }}
@@ -67,11 +69,8 @@ const ClientsTable = ({
 						{
 							label: "Edit Client",
 							onClick: () => router.push(`clients/${client.id}`),
+							icon: <EditOutlinedIcon />,
 						},
-						// {
-						// 	label: "Delete Client",
-						// 	onClick: () => router.push(`clients/${client.id}`),
-						// },
 					]}
 				/>
 			)}
