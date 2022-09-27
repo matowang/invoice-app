@@ -1,15 +1,14 @@
 import CreateClientForm from "../../src/clients/CreateClientForm";
+import PageContainer from "../../src/components/PageContainer";
 import AuthGuard from "../../src/user/AuthGuard";
 
 const NewClient = () => {
 	return (
 		<AuthGuard>
-			<div className='my-40 mx-20 flex flex-col items-center relative'>
-				<div className='max-w-md w-full'>
-					<h1 className='my-3 text-lg'>Create New Client</h1>
-					<CreateClientForm />
-				</div>
-			</div>
+			<PageContainer>
+				<h1 className='my-3 text-lg text-center'>Create New Client</h1>
+				<CreateClientForm />
+			</PageContainer>
 		</AuthGuard>
 	);
 };

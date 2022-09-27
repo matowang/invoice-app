@@ -23,7 +23,7 @@ const InvoicesPage = ({ query }: { query: any | null }) => {
 
 	return (
 		<AuthGuard>
-			<div className='mt-20 mx-10'>
+			<div className='py-32 mx-10 md:mx-20'>
 				<header className='flex justify-between items-end'>
 					<h2 className='m-0'>Invoices</h2>
 					<div className='flex gap-2'>

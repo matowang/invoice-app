@@ -34,6 +34,14 @@ const axiosInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
+axiosInstance.interceptors.response.use(async (response) => {
+	// add artificial delay for dev env
+	if (process.env.NODE_ENV === "development") {
+		await new Promise((r) => setTimeout(r, 500));
+	}
+	return response;
+});
+
 const login = async (loginValues: LoginValues) => {
 	return await axiosInstance.post<LoginDTO>(`/login`, loginValues);
 };

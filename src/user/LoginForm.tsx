@@ -1,4 +1,5 @@
 import { Button, TextField } from "@mui/material";
+import Link from "next/link";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +38,6 @@ const LoginForm = ({ onSubmit, formError, disabled }: LoginFormProps) => {
 
 	return (
 		<>
-			<h1 className='my-3 text-lg'>Login</h1>
 			{formError && (
 				<p className='text-red-400' data-test='form-error'>
 					{formError}
@@ -64,9 +64,24 @@ const LoginForm = ({ onSubmit, formError, disabled }: LoginFormProps) => {
 					}
 					disabled={disabled}
 				/>
-				<Button type='submit' variant='contained' disabled={disabled} data-test='submit-login'>
-					Login
-				</Button>
+				<div className='grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch justify-items-stretch w-full h-14'>
+					<Button
+						type='submit'
+						variant='contained'
+						disabled={disabled}
+						data-test='submit-login'
+						sx={{ borderRadius: 8 }}
+					>
+						Login
+					</Button>
+					<Link href='/signup'>
+						<a className='no-underline w-full'>
+							<Button variant='outlined' className='w-full h-full' sx={{ borderRadius: 8 }}>
+								Sign Up
+							</Button>
+						</a>
+					</Link>
+				</div>
 			</form>
 		</>
 	);

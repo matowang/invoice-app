@@ -154,7 +154,7 @@ const InvoiceForm = ({
 			)}
 			<form
 				onSubmit={handleFormHookSubmit(handleSubmit)}
-				className='grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20'
+				className='grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20 '
 			>
 				<div className='grid gap-5 py-4'>
 					<DatePickerField

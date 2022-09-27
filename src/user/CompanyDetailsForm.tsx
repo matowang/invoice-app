@@ -47,7 +47,6 @@ const CompanyDetailsForm = ({
 
 	return (
 		<>
-			<h1>Enter Company Details</h1>
 			{formError && (
 				<p className='text-red-400' data-test='form-error'>
 					{formError}

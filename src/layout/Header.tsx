@@ -1,14 +1,16 @@
-import { AppBar, Button, Skeleton, Toolbar } from "@mui/material";
+import { Avatar, Button, Skeleton } from "@mui/material";
 
-import AdbIcon from "@mui/icons-material/Adb";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import PixOutlinedIcon from "@mui/icons-material/PixOutlined";
+import BusinessIcon from "@mui/icons-material/Business";
 
 import { useAuth } from "../user/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import MenuActions from "../components/ActionsMenu";
+import React from "react";
 
 const navItems = [
 	{
@@ -27,42 +29,60 @@ const Header = () => {
 	const { loading, logout, token } = useAuth();
 	const router = useRouter();
 	return (
-		<AppBar position='fixed'>
-			<Toolbar>
-				<PixOutlinedIcon sx={{ mr: 1 }} />
-				<Link href='/'>
-					<a className='no-underline' data-active={router.pathname === "/"}>
-						<h1 className='text-white text-lg'>Outvoice</h1>
-					</a>
-				</Link>
-				<ul className='flex gap-12 list-none'>
-					{navItems.map((item) => (
-						<li key={item.href}>
-							<Link href={item.href}>
-								<a className='text-white no-underline' data-active={router.pathname === item.href}>
-									<Button color='inherit' startIcon={item?.icon}>
-										{item.label}
-									</Button>
-								</a>
-							</Link>
-						</li>
-					))}
-				</ul>
-				{loading ? (
-					<Skeleton sx={{ ml: "auto" }} width={100} />
-				) : token ? (
-					<Button
-						sx={{ ml: "auto" }}
-						color='inherit'
-						onClick={logout}
-						data-test='logout-button'
-						endIcon={<LogoutOutlinedIcon />}
-					>
-						Logout
-					</Button>
-				) : null}
-			</Toolbar>
-		</AppBar>
+		<div className='fixed flex w-full top-0 items-center px-10 md:px-20 py-5 z-10 '>
+			<Link href='/'>
+				<a
+					className='no-underline flex items-center text-gray-800'
+					data-active={router.pathname === "/"}
+				>
+					<PixOutlinedIcon sx={{ mr: 1 }} />
+					<h1 className='text-lg mr-0 md:mr-8'>Outvoice</h1>
+				</a>
+			</Link>
+			{loading ? (
+				<Skeleton sx={{ ml: "auto" }} width={100} />
+			) : token ? (
+				<>
+					<ul className='flex pl-2 md:gap-6 list-none'>
+						{navItems.map((item) => (
+							<React.Fragment key={item.href}>
+								<hr />
+								<li>
+									<Link href={item.href}>
+										<a
+											className='text-gray-800 no-underline'
+											data-active={router.pathname === item.href}
+										>
+											<Button color='inherit' startIcon={item?.icon}>
+												{item.label}
+											</Button>
+										</a>
+									</Link>
+								</li>
+							</React.Fragment>
+						))}
+					</ul>
+					<div className='ml-auto'>
+						<MenuActions
+							actions={[
+								{
+									label: "Logout",
+									onClick: logout,
+									icon: <LogoutOutlinedIcon />,
+									"data-test": "logout-button",
+								},
+								{
+									label: "My Company Details",
+									onClick: () => router.push("/company-details"),
+									icon: <BusinessIcon />,
+								},
+							]}
+							icon={<Avatar />}
+						/>
+					</div>
+				</>
+			) : null}
+		</div>
 	);
 };
 

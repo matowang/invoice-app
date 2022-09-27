@@ -63,6 +63,7 @@ const ClientForm = ({
 				</p>
 			)}
 			<form onSubmit={handleFormHookSubmit(handleSubmit)} className='flex flex-col gap-5'>
+				<p className='m-0 font-bold text-primary opacity-70'>Client Contact Info:</p>
 				<TextField
 					{...register("email")}
 					label='Email'
@@ -100,6 +101,7 @@ const ClientForm = ({
 					disabled={disabled}
 					inputProps={{ "data-test": "client-company-name" }}
 				/>
+				<p className='m-0 font-bold text-primary opacity-70'>Client Company Details:</p>
 				<TextField
 					{...register("companyDetails.vatNumber")}
 					label='Company VAT Number'

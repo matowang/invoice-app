@@ -1,7 +1,7 @@
+import PageLoader from "../components/PageLoader";
+
 import { ReactNode, useEffect } from "react";
-
 import { useAuth } from "../user/AuthContext";
-
 import { useRouter } from "next/router";
 
 interface NotAuthGuardProps {
@@ -14,12 +14,7 @@ const NotAuthGuard = ({ children }: NotAuthGuardProps) => {
 	useEffect(() => {
 		if (!loading && user) router.push("/");
 	}, [loading, router, user]);
-	if (loading || user)
-		return (
-			<div>
-				<h1>loading...</h1>
-			</div>
-		);
+	if (loading || user) return <PageLoader />;
 	return <>{children}</>;
 };
 
