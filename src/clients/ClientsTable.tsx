@@ -70,6 +70,7 @@ const ClientsTable = ({
 							label: "Edit Client",
 							onClick: () => router.push(`clients/${client.id}`),
 							icon: <EditOutlinedIcon />,
+							"data-test": "edit-client",
 						},
 					]}
 				/>

@@ -9,7 +9,6 @@ import AuthGuard from "../src/user/AuthGuard";
 
 import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
 import ClientsTableContainer from "../src/clients/ClientsTableContainer";
-import PageContainer from "../src/components/PageContainer";
 
 const Dashboard: NextPage = () => {
 	return (

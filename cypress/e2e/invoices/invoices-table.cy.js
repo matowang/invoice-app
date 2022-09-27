@@ -396,6 +396,22 @@ describe("/invoices", () => {
 			});
 		});
 
+		it("can use actions", () => {
+			cy.login({ email: EXISTING_USER_EMAIL, password: EXISTING_USER_PASSWORD });
+
+			cy.get(`[data-test*="invoice-row"]:first`).click();
+			cy.get(`[data-test="submit-invoice"]`).should("be.visible");
+
+			cy.visit("/invoices");
+			cy.get(`[data-test="invoice-actions"]:first`).click();
+			cy.get(`[data-test="edit-invoice"]`).click();
+			cy.get(`[data-test="submit-invoice"]`).should("be.visible");
+
+			cy.get(`[data-test="invoice-actions"]:first`).click();
+			cy.get(`[data-test="print-invoice"]`).click();
+			cy.location("pathname").should("eq", "/invoices/*/view");
+		});
+
 		// {
 		// 	id: string;
 		// 	user_id: string;

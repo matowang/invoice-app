@@ -4,17 +4,18 @@ import { useMemo } from "react";
 import { INVOICES_PAGE_LIMIT } from "../api/base";
 import { getInvoices, GetInvoicesQuery } from "../api/invoices";
 
-export const useInvoices = ({
-	page = 1,
-	sortBy,
-	sortOrder,
-	clientId,
-	startDueDate,
-	endDueDate,
-	startDate,
-	endDate,
-	projectCode,
-}: GetInvoicesQuery = {}) => {
+export const useInvoices = (query?: GetInvoicesQuery) => {
+	const {
+		page = 1,
+		sortBy,
+		sortOrder,
+		clientId,
+		startDueDate,
+		endDueDate,
+		startDate,
+		endDate,
+		projectCode,
+	} = query || {};
 	const result = useQuery(
 		["invoices", page, sortBy, sortOrder, clientId],
 		() =>
@@ -29,7 +30,7 @@ export const useInvoices = ({
 				endDate,
 				projectCode,
 			}),
-		{ keepPreviousData: true }
+		{ keepPreviousData: true, enabled: !!query }
 	);
 	const totalPages = useMemo(
 		() => (result.data ? Math.ceil(result.data.total / INVOICES_PAGE_LIMIT) : undefined),
