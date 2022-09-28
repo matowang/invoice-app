@@ -12,7 +12,7 @@ import axios from "axios";
 
 interface CreateInvoiceFormProps {
 	onSubmitSuccess?: () => void;
-	clientId: string;
+	clientId?: string;
 }
 
 const CreateInvoiceForm = ({ onSubmitSuccess, clientId }: CreateInvoiceFormProps) => {

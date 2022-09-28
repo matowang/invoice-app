@@ -11,7 +11,9 @@ const NewInvoicePage = () => {
 			<div className='my-40 mx-20 flex flex-col items-center relative'>
 				<div className='max-w-4xl w-full'>
 					<h1 className='my-3 text-lg'>Create New Invoice</h1>
-					<CreateInvoiceForm clientId={router.query.clientId} />
+					<CreateInvoiceForm
+						clientId={typeof router.query.clientId === "string" ? router.query.clientId : undefined}
+					/>
 				</div>
 			</div>
 		</AuthGuard>
