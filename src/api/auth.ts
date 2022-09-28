@@ -37,11 +37,11 @@ export const authInstance = axios.create({
 let delayInterceptor = authInstance.interceptors.response.use(
 	async (response) => {
 		authInstance.interceptors.response.eject(delayInterceptor);
-		await devDelay(500);
+		await devDelay(100);
 		return response;
 	},
 	async (error) => {
-		await devDelay(500);
+		await devDelay(100);
 		return Promise.reject(error);
 	}
 );

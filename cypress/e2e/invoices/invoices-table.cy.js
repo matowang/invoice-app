@@ -9,6 +9,7 @@ describe("/invoices", () => {
 		cy.login({ email: "fake_user5@officehourtesting.com", password: "123456" });
 		cy.visit("/invoices");
 
+		cy.get('[data-test="loading-overlay"]').should("be.visible");
 		cy.get('[data-test="invoices-table"]').should("be.visible");
 		//cells
 		cy.get('[data-test="invoice-number"]').should("be.visible");
@@ -270,7 +271,7 @@ describe("/invoices", () => {
 								.should("be.visible");
 						cy.wrap(e)
 							.find(`[data-test="invoice-price"]`)
-							.contains(`${invoices[i].invoice.value}`)
+							.contains(`$${invoices[i].invoice.value.toLocaleString()}`)
 							.should("be.visible");
 					});
 
@@ -307,7 +308,7 @@ describe("/invoices", () => {
 						// 		.should("be.visible");
 						// cy.wrap(e)
 						// 	.find(`[data-test="invoice-price"]`)
-						// 	.contains(`${invoices[i].invoice.value}`)
+						// 	.contains(`$${invoices[i].invoice.value.toLocaleString()}`)
 						// 	.should("be.visible");
 					});
 
@@ -348,7 +349,7 @@ describe("/invoices", () => {
 							// 		.should("be.visible");
 							// cy.wrap(e)
 							// 	.find(`[data-test="invoice-price"]`)
-							// 	.contains(`${invoices[i].invoice.value}`)
+							// 	.contains(`$${invoices[i].invoice.value.toLocaleString()}`)
 							// 	.should("be.visible");
 						});
 				});
@@ -389,7 +390,7 @@ describe("/invoices", () => {
 							// 		.should("be.visible");
 							// cy.wrap(e)
 							// 	.find(`[data-test="invoice-price"]`)
-							// 	.contains(`${invoices[i].invoice.value}`)
+							// 	.contains(`$${invoices[i].invoice.value.toLocaleString()}`)
 							// 	.should("be.visible");
 						});
 				});
