@@ -66,6 +66,7 @@ npm run jest
 
 - add invoice
 - invoices table
+- clients table
 - login _( forked from [Vlad](https://git.toptal.com/vishal-shah/invoiceapi-testcases) )_
 - onboarding _( forked from [Vlad](https://git.toptal.com/vishal-shah/invoiceapi-testcases) )_
 - signup _( forked from [Vlad](https://git.toptal.com/vishal-shah/invoiceapi-testcases) )_
