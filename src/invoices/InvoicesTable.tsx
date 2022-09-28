@@ -18,6 +18,7 @@ interface InvoicesTableProps {
 	errorMessage?: ReactNode;
 	disableRouting?: boolean;
 	totalPages?: number;
+	renderHeader?: () => ReactNode;
 }
 
 const fields = [
@@ -99,11 +100,13 @@ const InvoicesTable = ({
 	errorMessage,
 	disableRouting: disableRouting,
 	totalPages,
+	renderHeader,
 }: InvoicesTableProps) => {
 	const router = useRouter();
 
 	return (
 		<DataTable
+			renderHeader={renderHeader}
 			fields={fields}
 			totalPages={totalPages}
 			isError={!!errorMessage}

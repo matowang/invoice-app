@@ -19,19 +19,28 @@ const Clients = ({ query }: { query: any | null }) => {
 	return (
 		<AuthGuard>
 			<div className='py-32 mx-10 md:mx-20'>
-				<header className='flex justify-between items-end'>
-					<h2 className='m-0'>Clients</h2>
-					<div>
-						<Link href='/clients/new'>
-							<a className='no-underline'>
-								<Button variant='outlined' startIcon={<AddIcon />}>
-									Add Client
-								</Button>
-							</a>
-						</Link>
-					</div>
-				</header>
-				<ClientsTableContainer query={query} />
+				<ClientsTableContainer
+					query={query}
+					renderHeader={() => (
+						<header className='flex justify-between items-end p-4'>
+							<h2 className='m-0 text-lg'>Clients</h2>
+							<div className='flex gap-2'>
+								<Link href='/clients/new'>
+									<a className='no-underline'>
+										<Button
+											variant='contained'
+											data-test='add-client'
+											startIcon={<AddIcon />}
+											sx={{ borderRadius: 8 }}
+										>
+											Add Client
+										</Button>
+									</a>
+								</Link>
+							</div>
+						</header>
+					)}
+				/>
 			</div>
 		</AuthGuard>
 	);

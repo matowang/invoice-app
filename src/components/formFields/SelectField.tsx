@@ -10,9 +10,10 @@ interface SelectFieldProps {
 
 const SelectField = ({ value, options, onChange, label }: SelectFieldProps) => {
 	return (
-		<FormControl fullWidth>
+		<FormControl fullWidth size='small'>
 			<InputLabel>{label}</InputLabel>
 			<Select
+				sx={{ height: "100%" }}
 				labelId='demo-simple-select-label'
 				id='demo-simple-select'
 				value={value}

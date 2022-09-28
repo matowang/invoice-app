@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, FormControl } from "@mui/material";
 import Link from "next/link";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -19,22 +19,32 @@ const InvoicesPage = ({ query }: { query: any | null }) => {
 	return (
 		<AuthGuard>
 			<div className='py-32 mx-10 md:mx-20'>
-				<header className='flex justify-between items-end'>
-					<h2 className='m-0'>Invoices</h2>
-					<div className='flex gap-2'>
-						<div className='relative w-52'>
-							<ClientSelectField />
-						</div>
-						<Link href='/invoices/new'>
-							<a className='no-underline'>
-								<Button variant='outlined' className='h-full' startIcon={<AddIcon />}>
-									Add Invoice
-								</Button>
-							</a>
-						</Link>
-					</div>
-				</header>
-				<InvoicesTableContainer query={query} />
+				<InvoicesTableContainer
+					query={query}
+					renderHeader={() => (
+						<header className='flex justify-between items-end p-4'>
+							<h1 className='m-0 text-lg'>Invoices</h1>
+							<div className='flex gap-2'>
+								<div className='relative w-52 h-10'>
+									<ClientSelectField />
+								</div>
+								<Link href='/invoices/new'>
+									<a className='no-underline'>
+										<Button
+											variant='contained'
+											className='h-full'
+											sx={{ borderRadius: 8 }}
+											startIcon={<AddIcon />}
+											data-test='add-invoice'
+										>
+											Add Invoice
+										</Button>
+									</a>
+								</Link>
+							</div>
+						</header>
+					)}
+				/>
 			</div>
 		</AuthGuard>
 	);

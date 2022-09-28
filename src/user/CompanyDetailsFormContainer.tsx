@@ -1,8 +1,10 @@
 import CompanyDetailsForm from "./CompanyDetailsForm";
-import AuthAPI from "../api/auth";
+import LinearLoader from "../components/LinearLoader";
+
+import { setCompanyDetails } from "../api/base";
+
 import { useState } from "react";
 import { useAlert } from "../contexts/AlertContext";
-import LinearLoader from "../components/LinearLoader";
 import { useAuth } from "../user/AuthContext";
 
 interface CompanyDetailsFormContainerProps {
@@ -26,7 +28,7 @@ const CompanyDetailsFormContainer = ({ onSubmitSuccess }: CompanyDetailsFormCont
 				onSubmit={async (data) => {
 					setDisabled(true);
 					try {
-						const newUser = await AuthAPI.setCompanyDetails(data);
+						const newUser = await setCompanyDetails(data);
 						updateUser(newUser);
 						await onSubmitSuccess();
 						showAlert(<span data-test='success-message'>Onboarding successful.</span>, "success");

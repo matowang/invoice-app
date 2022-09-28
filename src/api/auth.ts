@@ -70,18 +70,10 @@ export const validateToken = async (token: string): Promise<UserDTO | null> => {
 	}
 };
 
-export const setCompanyDetails = async (newCompanyDetails: CompanyDetails): Promise<UserDTO> => {
-	const {
-		data: { user },
-	} = await authInstance.put<{ success: boolean; user: UserDTO }>("/me/company", newCompanyDetails);
-	return user;
-};
-
 const AuthAPI = {
 	login,
 	register,
 	validateToken,
-	setCompanyDetails,
 };
 
 export default AuthAPI;

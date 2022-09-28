@@ -16,6 +16,7 @@ interface ClientsTableProps {
 	errorMessage?: ReactNode;
 	disableRouting?: boolean;
 	totalPages?: number;
+	renderHeader?: () => ReactNode;
 }
 
 const fields = [
@@ -44,10 +45,12 @@ const ClientsTable = ({
 	errorMessage,
 	disableRouting,
 	totalPages,
+	renderHeader,
 }: ClientsTableProps) => {
 	const router = useRouter();
 	return (
 		<DataTable
+			renderHeader={renderHeader}
 			fields={fields}
 			totalPages={totalPages}
 			isError={!!errorMessage}

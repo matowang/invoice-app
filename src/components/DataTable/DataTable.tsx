@@ -57,6 +57,7 @@ interface DataTableProps<TData> {
 	rowProps: (data: TData) => RowProps;
 	rowDataTransform: (data: TData) => Cell[];
 	renderRowActions?: (data: TData) => ReactNode;
+	renderHeader?: () => ReactNode;
 }
 
 const DataTable = <TData extends unknown>({
@@ -73,10 +74,12 @@ const DataTable = <TData extends unknown>({
 	rowProps,
 	rowDataTransform,
 	renderRowActions,
+	renderHeader,
 }: DataTableProps<TData>) => {
 	const cols = renderRowActions ? fields.length + 1 : fields.length;
 	return (
 		<TableContainer component={Paper}>
+			{renderHeader && renderHeader()}
 			<Table {...tableProps}>
 				<TableHead>
 					<TableRow>

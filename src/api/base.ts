@@ -1,4 +1,6 @@
 import axios from "axios";
+import { CompanyDetails } from "../user/CompanyDetailsForm";
+import { UserDTO } from "./auth";
 
 export const devDelay = async (ms: number) => {
 	if (process.env.NODE_ENV === "development") {
@@ -61,6 +63,13 @@ export const setHeaderToken = (token: string, onTokenInvalid?: () => unknown) =>
 			return Promise.reject(error);
 		}
 	);
+};
+
+export const setCompanyDetails = async (newCompanyDetails: CompanyDetails): Promise<UserDTO> => {
+	const {
+		data: { user },
+	} = await dbInstance.put<{ success: boolean; user: UserDTO }>("/me/company", newCompanyDetails);
+	return user;
 };
 
 export type SortOrder = "asc" | "desc" | undefined;
