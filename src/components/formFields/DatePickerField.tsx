@@ -4,7 +4,7 @@ import { TextField, TextFieldProps } from "@mui/material";
 import dayjs from "dayjs";
 
 import { ReactNode } from "react";
-import { Control, FieldValues, Path, useController } from "react-hook-form";
+import { Control, FieldValues, Path, PathValue, useController } from "react-hook-form";
 
 interface DatePickerProps<TFieldValues extends FieldValues> {
 	disabled?: boolean;

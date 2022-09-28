@@ -1,4 +1,4 @@
-import { Button, TextField, InputLabel, FormLabel } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import DatePickerField from "../components/formFields/DatePickerField";
 import AutocompleteField from "../components/formFields/AutoCompleteField";
@@ -75,7 +75,7 @@ interface InvoiceFormProps {
 	onSubmit?: (data: InvoiceFormValues) => void;
 	formError?: string | null;
 	disabled?: boolean;
-	defaultValues?: InvoiceFormValues;
+	defaultValues?: Partial<InvoiceFormValues>;
 	clientsCompanyNames: ClientCompanyNameDTO[];
 	isLoadingClientsCompanyNames?: boolean;
 	resetOnSuccesfulSubmit?: boolean;
@@ -94,7 +94,7 @@ const InvoiceForm = ({
 }: InvoiceFormProps) => {
 	const {
 		handleSubmit: handleFormHookSubmit,
-		formState: { errors, isSubmitSuccessful, isSubmitted },
+		formState: { errors, isSubmitSuccessful, isSubmitted, dirtyFields },
 		control,
 		register,
 		reset,
@@ -103,11 +103,14 @@ const InvoiceForm = ({
 		resolver: zodResolver(InvoiceValuesSchema),
 		defaultValues: {
 			meta: {
-				items: [{}],
+				items: defaultValues?.meta?.items.length ? defaultValues?.meta?.items : [{}],
+				...defaultValues?.meta,
 			},
 			...defaultValues,
 		},
 	});
+
+	console.log(dirtyFields);
 
 	const {
 		fields: itemsFields,
@@ -127,18 +130,15 @@ const InvoiceForm = ({
 	//clear values on submit
 	useEffect(() => {
 		if (resetOnSuccessfulSubmit && isSubmitSuccessful)
-			reset(undefined, { keepDefaultValues: true });
+			reset(undefined, { keepDefaultValues: true, keepSubmitCount: true });
 	}, [isSubmitSuccessful, reset, resetOnSuccessfulSubmit]);
 
 	//set value sum
 	const items = useWatch({ name: "meta.items", control: control });
 	useEffect(() => {
-		if (!isSubmitted) return;
 		const total = items.reduce((a, { value }) => a + value, 0);
-		setValue("value", total, { shouldValidate: true });
+		setValue("value", total, { shouldValidate: isSubmitted });
 	}, [items, setValue, isSubmitted]);
-
-	console.log(errors);
 
 	return (
 		<>
@@ -288,6 +288,7 @@ const InvoiceForm = ({
 				<Controller
 					name={`value`}
 					control={control}
+					defaultValue={0}
 					render={({ field: { value } }) => (
 						<TextField
 							error={!!errors.value}

@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
+import { Skeleton } from "@mui/material";
 import LinearLoader from "../components/LinearLoader";
 import InvoiceForm, { InvoiceFormValues } from "./InvoiceForm";
 
@@ -11,9 +12,10 @@ import axios from "axios";
 
 interface CreateInvoiceFormProps {
 	onSubmitSuccess?: () => void;
+	clientId: string;
 }
 
-const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
+const CreateInvoiceForm = ({ onSubmitSuccess, clientId }: CreateInvoiceFormProps) => {
 	const {
 		data: clientCompanyNameData,
 		isError: isErrorGetClient,
@@ -23,6 +25,21 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 	const [formError, setFormError] = useState<null | string>(null);
 
 	const { showAlert } = useAlert();
+
+	const defaultClientCompany = useMemo(
+		() => clientCompanyNameData?.find((clientCompany) => clientCompany.id === clientId),
+		[clientCompanyNameData, clientId]
+	);
+
+	const defaultValues = useMemo<Partial<InvoiceFormValues>>(
+		() =>
+			JSON.parse(
+				JSON.stringify({
+					clientCompany: defaultClientCompany,
+				})
+			),
+		[defaultClientCompany]
+	);
 
 	const submitForm = useCallback(
 		(invoiceFormValues: InvoiceFormValues) => {
@@ -48,6 +65,18 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 		[mutate, onSubmitSuccess, showAlert]
 	);
 
+	if (isLoadingClientsCompanyNames)
+		return (
+			<>
+				<LinearLoader loading />
+				<div className='flex flex-col gap-5'>
+					{Array.from(Array(8)).map((e, i) => (
+						<Skeleton key={`loading-create-invoice-form-skel-${i}`} height='4rem' />
+					))}
+				</div>
+			</>
+		);
+
 	return (
 		<>
 			<LinearLoader loading={mutateIsLoading} />
@@ -59,6 +88,7 @@ const CreateInvoiceForm = ({ onSubmitSuccess }: CreateInvoiceFormProps) => {
 				isLoadingClientsCompanyNames={isLoadingClientsCompanyNames}
 				resetOnSuccesfulSubmit
 				submitText='Create Invoice'
+				defaultValues={defaultValues}
 			/>
 		</>
 	);

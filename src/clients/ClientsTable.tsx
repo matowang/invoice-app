@@ -1,5 +1,6 @@
 import DataTable, { Cell } from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
@@ -71,6 +72,12 @@ const ClientsTable = ({
 							onClick: () => router.push(`clients/${client.id}`),
 							icon: <EditOutlinedIcon />,
 							"data-test": "edit-client",
+						},
+						{
+							label: "Add Invoice",
+							onClick: () => router.push(`invoices/new?clientId=${client.id}`),
+							icon: <DescriptionOutlinedIcon />,
+							"data-test": "add-invoice",
 						},
 					]}
 				/>
