@@ -9,7 +9,7 @@ exports[`invoice form renders disabled properly 1`] = `
     Something wrong
   </p>
   <form
-    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20"
+    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20 "
   >
     <div
       class="grid gap-5 py-4"
@@ -32,7 +32,7 @@ exports[`invoice form renders disabled properly 1`] = `
             aria-describedby=":ri:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-date"
+            data-test="invoice-date"
             disabled=""
             id=":ri:"
             placeholder="mm/dd/yyyy"
@@ -100,7 +100,7 @@ exports[`invoice form renders disabled properly 1`] = `
             aria-describedby=":rj:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-due-date"
+            data-test="invoice-due-date"
             disabled=""
             id=":rj:"
             placeholder="mm/dd/yyyy"
@@ -167,7 +167,7 @@ exports[`invoice form renders disabled properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-number"
+            data-test="invoice-number"
             disabled=""
             id=":rk:"
             name="invoice_number"
@@ -206,7 +206,7 @@ exports[`invoice form renders disabled properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-project-code"
+            data-test="invoice-project-code"
             disabled=""
             id=":rl:"
             name="projectCode"
@@ -252,7 +252,7 @@ exports[`invoice form renders disabled properly 1`] = `
               autocapitalize="none"
               autocomplete="off"
               class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-client"
+              data-test="invoice-company-id"
               disabled=""
               id=":rm:"
               role="combobox"
@@ -301,10 +301,11 @@ exports[`invoice form renders disabled properly 1`] = `
       </div>
     </div>
     <div
-      class="grid gap-5 h-full md:overflow-y-scroll py-4"
+      class="grid gap-5 py-4 h-full md:overflow-y-scroll"
     >
       <div
         class="grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative"
+        data-test="invoice-item-0"
       >
         <div
           class="absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2"
@@ -328,7 +329,7 @@ exports[`invoice form renders disabled properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-description-0"
+              data-test="invoice-item-description"
               disabled=""
               id=":ro:"
               name="meta.items.0.description"
@@ -366,7 +367,7 @@ exports[`invoice form renders disabled properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-value-0"
+              data-test="invoice-item-value"
               disabled=""
               id=":rp:"
               type="text"
@@ -389,7 +390,7 @@ exports[`invoice form renders disabled properly 1`] = `
       </div>
       <button
         class="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium py-12 css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
-        data-test="add-invoice-item"
+        data-test="invoice-add-item"
         disabled=""
         tabindex="-1"
         type="button"
@@ -414,6 +415,7 @@ exports[`invoice form renders disabled properly 1`] = `
         <input
           aria-invalid="false"
           class="MuiInputBase-input MuiOutlinedInput-input Mui-disabled css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+          data-test="invoice-value"
           disabled=""
           id=":rq:"
           type="text"
@@ -435,7 +437,7 @@ exports[`invoice form renders disabled properly 1`] = `
     </div>
     <button
       class="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium col-span-1 md:col-span-2 css-sghohy-MuiButtonBase-root-MuiButton-root"
-      data-test="submit-client"
+      data-test="submit-invoice"
       disabled=""
       tabindex="-1"
       type="submit"
@@ -449,7 +451,7 @@ exports[`invoice form renders disabled properly 1`] = `
 exports[`invoice form renders empty properly 1`] = `
 <div>
   <form
-    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20"
+    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20 "
   >
     <div
       class="grid gap-5 py-4"
@@ -472,7 +474,7 @@ exports[`invoice form renders empty properly 1`] = `
             aria-describedby=":r0:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-date"
+            data-test="invoice-date"
             id=":r0:"
             placeholder="mm/dd/yyyy"
             type="tel"
@@ -541,7 +543,7 @@ exports[`invoice form renders empty properly 1`] = `
             aria-describedby=":r1:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-due-date"
+            data-test="invoice-due-date"
             id=":r1:"
             placeholder="mm/dd/yyyy"
             type="tel"
@@ -609,7 +611,7 @@ exports[`invoice form renders empty properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-number"
+            data-test="invoice-number"
             id=":r2:"
             name="invoice_number"
             placeholder="1234"
@@ -647,7 +649,7 @@ exports[`invoice form renders empty properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-project-code"
+            data-test="invoice-project-code"
             id=":r3:"
             name="projectCode"
             placeholder="A1234567"
@@ -692,7 +694,7 @@ exports[`invoice form renders empty properly 1`] = `
               autocapitalize="none"
               autocomplete="off"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-client"
+              data-test="invoice-company-id"
               id=":r4:"
               role="combobox"
               spellcheck="false"
@@ -742,10 +744,11 @@ exports[`invoice form renders empty properly 1`] = `
       </div>
     </div>
     <div
-      class="grid gap-5 h-full md:overflow-y-scroll py-4"
+      class="grid gap-5 py-4 h-full md:overflow-y-scroll"
     >
       <div
         class="grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative"
+        data-test="invoice-item-0"
       >
         <div
           class="absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2"
@@ -769,7 +772,7 @@ exports[`invoice form renders empty properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-description-0"
+              data-test="invoice-item-description"
               id=":r6:"
               name="meta.items.0.description"
               type="text"
@@ -806,7 +809,7 @@ exports[`invoice form renders empty properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-value-0"
+              data-test="invoice-item-value"
               id=":r7:"
               type="text"
               value=""
@@ -828,7 +831,7 @@ exports[`invoice form renders empty properly 1`] = `
       </div>
       <button
         class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium py-12 css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
-        data-test="add-invoice-item"
+        data-test="invoice-add-item"
         tabindex="0"
         type="button"
       >
@@ -855,6 +858,7 @@ exports[`invoice form renders empty properly 1`] = `
         <input
           aria-invalid="false"
           class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+          data-test="invoice-value"
           id=":r8:"
           type="text"
           value="0"
@@ -875,7 +879,7 @@ exports[`invoice form renders empty properly 1`] = `
     </div>
     <button
       class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium col-span-1 md:col-span-2 css-sghohy-MuiButtonBase-root-MuiButton-root"
-      data-test="submit-client"
+      data-test="submit-invoice"
       tabindex="0"
       type="submit"
     >
@@ -891,7 +895,7 @@ exports[`invoice form renders empty properly 1`] = `
 exports[`invoice form renders happy properly 1`] = `
 <div>
   <form
-    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20"
+    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20 "
   >
     <div
       class="grid gap-5 py-4"
@@ -914,7 +918,7 @@ exports[`invoice form renders happy properly 1`] = `
             aria-describedby=":r9:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-date"
+            data-test="invoice-date"
             id=":r9:"
             placeholder="mm/dd/yyyy"
             type="tel"
@@ -983,7 +987,7 @@ exports[`invoice form renders happy properly 1`] = `
             aria-describedby=":ra:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-due-date"
+            data-test="invoice-due-date"
             id=":ra:"
             placeholder="mm/dd/yyyy"
             type="tel"
@@ -1051,7 +1055,7 @@ exports[`invoice form renders happy properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-number"
+            data-test="invoice-number"
             id=":rb:"
             name="invoice_number"
             placeholder="1234"
@@ -1089,7 +1093,7 @@ exports[`invoice form renders happy properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-project-code"
+            data-test="invoice-project-code"
             id=":rc:"
             name="projectCode"
             placeholder="A1234567"
@@ -1134,7 +1138,7 @@ exports[`invoice form renders happy properly 1`] = `
               autocapitalize="none"
               autocomplete="off"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-client"
+              data-test="invoice-company-id"
               id=":rd:"
               role="combobox"
               spellcheck="false"
@@ -1206,10 +1210,11 @@ exports[`invoice form renders happy properly 1`] = `
       </div>
     </div>
     <div
-      class="grid gap-5 h-full md:overflow-y-scroll py-4"
+      class="grid gap-5 py-4 h-full md:overflow-y-scroll"
     >
       <div
         class="grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative"
+        data-test="invoice-item-0"
       >
         <div
           class="absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2"
@@ -1233,7 +1238,7 @@ exports[`invoice form renders happy properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-description-0"
+              data-test="invoice-item-description"
               id=":rf:"
               name="meta.items.0.description"
               type="text"
@@ -1270,7 +1275,7 @@ exports[`invoice form renders happy properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-value-0"
+              data-test="invoice-item-value"
               id=":rg:"
               type="text"
               value="800"
@@ -1292,7 +1297,7 @@ exports[`invoice form renders happy properly 1`] = `
       </div>
       <button
         class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium py-12 css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
-        data-test="add-invoice-item"
+        data-test="invoice-add-item"
         tabindex="0"
         type="button"
       >
@@ -1319,6 +1324,7 @@ exports[`invoice form renders happy properly 1`] = `
         <input
           aria-invalid="false"
           class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+          data-test="invoice-value"
           id=":rh:"
           type="text"
           value="800"
@@ -1339,7 +1345,7 @@ exports[`invoice form renders happy properly 1`] = `
     </div>
     <button
       class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium col-span-1 md:col-span-2 css-sghohy-MuiButtonBase-root-MuiButton-root"
-      data-test="submit-client"
+      data-test="submit-invoice"
       tabindex="0"
       type="submit"
     >
@@ -1361,7 +1367,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
     Something wrong
   </p>
   <form
-    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20"
+    class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20 "
   >
     <div
       class="grid gap-5 py-4"
@@ -1384,7 +1390,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
             aria-describedby=":rr:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-date"
+            data-test="invoice-date"
             id=":rr:"
             placeholder="mm/dd/yyyy"
             type="tel"
@@ -1453,7 +1459,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
             aria-describedby=":rs:-helper-text"
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-due-date"
+            data-test="invoice-due-date"
             id=":rs:"
             placeholder="mm/dd/yyyy"
             type="tel"
@@ -1521,7 +1527,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-number"
+            data-test="invoice-number"
             id=":rt:"
             name="invoice_number"
             placeholder="1234"
@@ -1559,7 +1565,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            data-test="client-invoice-project-code"
+            data-test="invoice-project-code"
             id=":ru:"
             name="projectCode"
             placeholder="A1234567"
@@ -1604,7 +1610,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
               autocapitalize="none"
               autocomplete="off"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-client"
+              data-test="invoice-company-id"
               id=":rv:"
               role="combobox"
               spellcheck="false"
@@ -1654,10 +1660,11 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
       </div>
     </div>
     <div
-      class="grid gap-5 h-full md:overflow-y-scroll py-4"
+      class="grid gap-5 py-4 h-full md:overflow-y-scroll"
     >
       <div
         class="grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative"
+        data-test="invoice-item-0"
       >
         <div
           class="absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2"
@@ -1681,7 +1688,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-description-0"
+              data-test="invoice-item-description"
               id=":r11:"
               name="meta.items.0.description"
               type="text"
@@ -1718,7 +1725,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              data-test="client-invoice-item-value-0"
+              data-test="invoice-item-value"
               id=":r12:"
               type="text"
               value=""
@@ -1740,7 +1747,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
       </div>
       <button
         class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium py-12 css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
-        data-test="add-invoice-item"
+        data-test="invoice-add-item"
         tabindex="0"
         type="button"
       >
@@ -1767,6 +1774,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
         <input
           aria-invalid="false"
           class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+          data-test="invoice-value"
           id=":r13:"
           type="text"
           value="0"
@@ -1787,7 +1795,7 @@ exports[`invoice form renders isLoadingClientsCompanyNames properly 1`] = `
     </div>
     <button
       class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium col-span-1 md:col-span-2 css-sghohy-MuiButtonBase-root-MuiButton-root"
-      data-test="submit-client"
+      data-test="submit-invoice"
       tabindex="0"
       type="submit"
     >

@@ -1,6 +1,6 @@
 import { Table, TableHead, TableRow } from "@mui/material";
 import { render } from "@testing-library/react";
-import DataTableHeader from "../src/components/DataTable/DataTableHeader";
+import DataTableHeader from "../src/components/DataTable/DataTableHeaderField";
 
 describe("table row message", () => {
 	it("renders sortable properly", () => {
@@ -8,10 +8,7 @@ describe("table row message", () => {
 			<Table>
 				<TableHead>
 					<TableRow>
-						<DataTableHeader
-							field={{ isSortable: true, label: "Test", name: "test", "data-test": "test" }}
-							sortOrder='asc'
-						/>
+						<DataTableHeader data-test='test'>Matthew</DataTableHeader>
 					</TableRow>
 				</TableHead>
 			</Table>
@@ -23,9 +20,9 @@ describe("table row message", () => {
 			<Table>
 				<TableHead>
 					<TableRow>
-						<DataTableHeader
-							field={{ isSortable: false, label: "Test", name: "test", "data-test": "test" }}
-						/>
+						<DataTableHeader sortOrder='asc' data-test='test'>
+							Matthew
+						</DataTableHeader>
 					</TableRow>
 				</TableHead>
 			</Table>
