@@ -57,7 +57,19 @@ const InvoicesPage = ({ query }: { query: any | null }) => {
 							<h1 className='m-0 text-lg'>Invoices</h1>
 							<div className='flex gap-2'>
 								<div className='relative w-52 h-10'>
-									<ClientSelectField />
+									<ClientSelectField
+										onChange={(value) =>
+											router.replace(
+												JSON.parse(
+													JSON.stringify({
+														pathname: router.pathname,
+														query: { ...router.query, clientId: value || undefined },
+													})
+												)
+											)
+										}
+										value={parsedQuery.data.clientId || ""}
+									/>
 								</div>
 								<Link href='/invoices/new'>
 									<a className='no-underline'>

@@ -1,15 +1,18 @@
 import SelectField from "../components/formFields/SelectField";
 
-import { useRouter } from "next/router";
 import { useClientCompanyNames } from "../clients/useClientsCompanyNames";
 
-const ClientSelectField = () => {
-	const router = useRouter();
+interface ClientSelectFieldProps {
+	onChange: (value: string | number | undefined) => void;
+	value: string;
+}
+
+const ClientSelectField = ({ onChange, value }: ClientSelectFieldProps) => {
 	const { data } = useClientCompanyNames();
 	return (
 		<SelectField
 			label='Company'
-			value={typeof router.query?.clientId === "string" ? router.query.clientId : ""}
+			value={value}
 			options={
 				data
 					? [
@@ -18,16 +21,7 @@ const ClientSelectField = () => {
 					  ]
 					: []
 			}
-			onChange={(value) =>
-				router.replace(
-					JSON.parse(
-						JSON.stringify({
-							pathname: router.pathname,
-							query: { ...router.query, clientId: value || undefined },
-						})
-					)
-				)
-			}
+			onChange={onChange}
 		/>
 	);
 };
