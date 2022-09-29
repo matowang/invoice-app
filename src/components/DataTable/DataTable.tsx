@@ -12,7 +12,7 @@ import {
 	TableCell,
 } from "@mui/material";
 
-import DataTableHeader from "./DataTableHeader";
+import DataTableHeader from "./DataTableHeaderField";
 
 import FillTable from "../FillTable";
 import TableRowStatusMessage from "../TableRowStatusMessage";

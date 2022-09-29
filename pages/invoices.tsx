@@ -1,4 +1,4 @@
-import { Button, FormControl } from "@mui/material";
+import { Button } from "@mui/material";
 import Link from "next/link";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import AuthGuard from "../src/user/AuthGuard";
 import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
 import ClientSelectField from "../src/invoices/ClientSelectField";
+import DataTableHeaderContainer from "../src/components/DataTable/DataTableHeaderContainer";
 
 import { usePaginationGaurd } from "../src/hooks/usePaginationGaurd";
 import { useTableFieldClick } from "../src/hooks/useTableFieldClick";
@@ -53,39 +54,36 @@ const InvoicesPage = ({ query }: { query: any | null }) => {
 					onClickField={handleFieldClick}
 					query={parsedQuery.data}
 					renderHeader={() => (
-						<header className='flex justify-between items-end p-4'>
-							<h1 className='m-0 text-lg'>Invoices</h1>
-							<div className='flex gap-2'>
-								<div className='relative w-52 h-10'>
-									<ClientSelectField
-										onChange={(value) =>
-											router.replace(
-												JSON.parse(
-													JSON.stringify({
-														pathname: router.pathname,
-														query: { ...router.query, clientId: value || undefined },
-													})
-												)
+						<DataTableHeaderContainer title='Invoices'>
+							<div className='relative w-52 h-10'>
+								<ClientSelectField
+									onChange={(value) =>
+										router.replace(
+											JSON.parse(
+												JSON.stringify({
+													pathname: router.pathname,
+													query: { ...router.query, clientId: value || undefined },
+												})
 											)
-										}
-										value={parsedQuery.data.clientId || ""}
-									/>
-								</div>
-								<Link href='/invoices/new'>
-									<a className='no-underline'>
-										<Button
-											variant='contained'
-											className='h-full'
-											sx={{ borderRadius: 8 }}
-											startIcon={<AddIcon />}
-											data-test='add-invoice'
-										>
-											Add Invoice
-										</Button>
-									</a>
-								</Link>
+										)
+									}
+									value={parsedQuery.data.clientId || ""}
+								/>
 							</div>
-						</header>
+							<Link href='/invoices/new'>
+								<a className='no-underline'>
+									<Button
+										variant='contained'
+										className='h-full'
+										sx={{ borderRadius: 8 }}
+										startIcon={<AddIcon />}
+										data-test='add-invoice'
+									>
+										Add Invoice
+									</Button>
+								</a>
+							</Link>
+						</DataTableHeaderContainer>
 					)}
 				/>
 			</div>

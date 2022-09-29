@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import AuthGuard from "../src/user/AuthGuard";
 
 import ClientsTableContainer from "../src/clients/ClientsTableContainer";
+import DataTableHeaderContainer from "../src/components/DataTable/DataTableHeaderContainer";
 import ErrorPage from "../src/components/ErrorPage";
 
 import { usePaginationGaurd } from "../src/hooks/usePaginationGaurd";
@@ -53,23 +54,20 @@ const Clients = ({ query }: { query: Record<string, string | string[]> }) => {
 					onClickField={handleFieldClick}
 					query={parsedQuery.data}
 					renderHeader={() => (
-						<header className='flex justify-between items-end p-4'>
-							<h2 className='m-0 text-lg'>Clients</h2>
-							<div className='flex gap-2'>
-								<Link href='/clients/new'>
-									<a className='no-underline'>
-										<Button
-											variant='contained'
-											data-test='add-client'
-											startIcon={<AddIcon />}
-											sx={{ borderRadius: 8 }}
-										>
-											Add Client
-										</Button>
-									</a>
-								</Link>
-							</div>
-						</header>
+						<DataTableHeaderContainer title='Clients'>
+							<Link href='/clients/new'>
+								<a className='no-underline'>
+									<Button
+										variant='contained'
+										data-test='add-client'
+										startIcon={<AddIcon />}
+										sx={{ borderRadius: 8 }}
+									>
+										Add Client
+									</Button>
+								</a>
+							</Link>
+						</DataTableHeaderContainer>
 					)}
 				/>
 			</div>
