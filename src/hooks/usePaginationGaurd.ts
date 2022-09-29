@@ -3,10 +3,9 @@ import { useEffect } from "react";
 
 interface UsePaginationGaurdProps {
 	totalPages?: number;
-	disabled?: boolean;
 }
 
-export const usePaginationGaurd = ({ totalPages, disabled }: UsePaginationGaurdProps) => {
+export const usePaginationGaurd = ({ totalPages }: UsePaginationGaurdProps) => {
 	const router = useRouter();
 	useEffect(() => {
 		if (!router.isReady) return;

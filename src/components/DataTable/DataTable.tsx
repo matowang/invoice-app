@@ -12,7 +12,6 @@ import {
 	TableCell,
 } from "@mui/material";
 
-import PaginationController from "./PaginationController";
 import DataTableHeader from "./DataTableHeader";
 
 import FillTable from "../FillTable";
