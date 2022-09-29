@@ -3,6 +3,7 @@ import { InvoiceFormValues } from "../invoices/InvoiceForm";
 import { transformInvoiceValue } from "../util/transformInvoiceData";
 import { INVOICES_PAGE_LIMIT, SortOrder } from "./base";
 import { ClientDTO } from "./clients";
+import { z } from "zod";
 
 export type InvoiceDTO = {
 	id: string;
@@ -23,18 +24,35 @@ export type InvoiceWithClientsDTO = {
 	client: Pick<ClientDTO, "user_id" | "email" | "name" | "companyDetails" | "id">;
 };
 
-export type GetInvoicesQuery = {
-	page?: number;
-	sortBy?: "total" | "dueDate" | "creationDate" | "companyName";
-	sortOrder?: SortOrder;
-	clientId?: string;
+export const invoicesQuerySchema = z.object({
+	page: z
+		.string()
+		.optional()
+		.transform((val) => (val ? parseInt(val) : undefined)),
+	sortBy: z.enum(["total", "dueDate", "creationDate", "companyName"]).optional(),
+	sortOrder: z.enum(["asc", "desc"]).optional(),
+	clientId: z.string().optional(),
 	//Below are not required params for incremental project
-	startDueDate?: number;
-	endDueDate?: number;
-	startDate?: number;
-	endDate?: number;
-	projectCode?: string;
-};
+	startDueDate: z
+		.string()
+		.optional()
+		.transform((val) => (val ? parseInt(val) : undefined)),
+	endDueDate: z
+		.string()
+		.optional()
+		.transform((val) => (val ? parseInt(val) : undefined)),
+	startDate: z
+		.string()
+		.optional()
+		.transform((val) => (val ? parseInt(val) : undefined)),
+	endDate: z
+		.string()
+		.optional()
+		.transform((val) => (val ? parseInt(val) : undefined)),
+	projectCode: z.string().optional(),
+});
+
+export type GetInvoicesQuery = z.infer<typeof invoicesQuerySchema>;
 
 const InvoicesSortByMap = {
 	total: "price",

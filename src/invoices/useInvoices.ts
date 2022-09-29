@@ -36,6 +36,8 @@ export const useInvoices = (query?: GetInvoicesQuery) => {
 		() => (result.data ? Math.ceil(result.data.total / INVOICES_PAGE_LIMIT) : undefined),
 		[result.data]
 	);
+	console.log("useInvoices total page", totalPages);
+
 	return {
 		...result,
 		totalPages,

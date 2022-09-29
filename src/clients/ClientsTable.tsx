@@ -24,6 +24,8 @@ export interface ClientsTableProps {
 	onClickRow?: (client: ClientDTO) => void;
 	sortBy?: string;
 	sortOrder?: SortOrder;
+	page: number;
+	onChangePage?: (page: number) => void;
 }
 
 const fields: DataTableField[] = [
@@ -58,10 +60,14 @@ const ClientsTable = ({
 	onClickRow,
 	sortBy,
 	sortOrder,
+	page,
+	onChangePage,
 }: ClientsTableProps) => {
 	return (
 		<DataTable
 			onClickField={onClickField}
+			onChangePage={onChangePage}
+			page={page}
 			sortBy={sortBy}
 			sortOrder={sortOrder}
 			renderHeader={renderHeader}

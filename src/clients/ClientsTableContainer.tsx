@@ -10,6 +10,7 @@ interface ClientsTableContainerProps {
 	actionsOnClick: ClientsTableProps["actionsOnClick"];
 	onClickRow: ClientsTableProps["onClickRow"];
 	onClickField?: ClientsTableProps["onClickField"];
+	onChangePage?: ClientsTableProps["onChangePage"];
 }
 
 const ClientsTableContainer = ({
@@ -19,12 +20,14 @@ const ClientsTableContainer = ({
 	actionsOnClick,
 	onClickRow,
 	onClickField,
+	onChangePage,
 }: ClientsTableContainerProps) => {
 	const { data, error, isLoading, totalPages, isFetching } = useClients(query);
 	return (
 		<ClientsTable
 			sortBy={query?.sortBy}
 			sortOrder={query?.sortOrder}
+			page={query?.page || 1}
 			totalPages={totalPages}
 			disableRouting={disableRouting}
 			isLoading={isLoading}
@@ -35,6 +38,7 @@ const ClientsTableContainer = ({
 			actionsOnClick={actionsOnClick}
 			onClickRow={onClickRow}
 			onClickField={onClickField}
+			onChangePage={onChangePage}
 		/>
 	);
 };

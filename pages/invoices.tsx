@@ -11,39 +11,47 @@ import { usePaginationGaurd } from "../src/hooks/usePaginationGaurd";
 import { useTableFieldClick } from "../src/hooks/useTableFieldClick";
 import { useInvoices } from "../src/invoices/useInvoices";
 import { useRouter } from "next/router";
+import { useMemo } from "react";
+
+import { invoicesQuerySchema } from "../src/api/invoices";
 
 import { GetServerSideProps } from "next";
-
-// {
-// 	label: "Edit Invoice",
-// 	onClick: () => router.push(`/invoices/${invoice.id}/edit`),
-// 	icon: <EditOutlinedIcon />,
-// },
-// {
-// 	label: "Print Invoice",
-// 	onClick: () => router.push(`/invoices/${invoice.id}/view?print=true`),
-// 	icon: <PrintOutlinedIcon />,
-// },
+import ErrorPage from "../src/components/ErrorPage";
 
 const InvoicesPage = ({ query }: { query: any | null }) => {
-	const { totalPages } = useInvoices();
+	const parsedQuery = useMemo(() => invoicesQuerySchema.safeParse(query), [query]);
+
+	const { totalPages } = useInvoices(parsedQuery.success ? parsedQuery.data : undefined);
+
 	usePaginationGaurd({ totalPages });
 
 	const router = useRouter();
 
 	const { handleFieldClick } = useTableFieldClick();
+	const handlePageChange = (page: number) => {
+		router.push({
+			pathname: router.pathname,
+			query: { ...router.query, page: page },
+		});
+	};
+
+	if (!parsedQuery.success) {
+		console.error(parsedQuery.error.errors);
+		return <ErrorPage>Invalid Query</ErrorPage>;
+	}
 
 	return (
 		<AuthGuard>
 			<div className='py-32 mx-10 md:mx-20'>
 				<InvoicesTableContainer
+					onChangePage={handlePageChange}
 					onClickRow={(invoice) => router.push(`/invoices/${invoice.id}/view`)}
 					actionsOnClick={{
 						editInvoice: (invoice) => router.push(`/invoices/${invoice.id}/edit`),
 						printInvoice: (invoice) => router.push(`/invoices/${invoice.id}/view?print=true`),
 					}}
 					onClickField={handleFieldClick}
-					query={query}
+					query={parsedQuery.data}
 					renderHeader={() => (
 						<header className='flex justify-between items-end p-4'>
 							<h1 className='m-0 text-lg'>Invoices</h1>

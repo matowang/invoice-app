@@ -61,6 +61,8 @@ interface DataTableProps<TData> {
 	renderRowActions?: (data: TData) => ReactNode;
 	renderHeader?: () => ReactNode;
 	onClickField?: (field: DataTableField) => void;
+	onChangePage?: (page: number) => void;
+	page: number;
 }
 
 const DataTable = <TData extends unknown>({
@@ -81,6 +83,8 @@ const DataTable = <TData extends unknown>({
 	renderRowActions,
 	renderHeader,
 	onClickField,
+	onChangePage,
+	page,
 }: DataTableProps<TData>) => {
 	const cols = renderRowActions ? fields.length + 1 : fields.length;
 	return (
@@ -150,19 +154,13 @@ const DataTable = <TData extends unknown>({
 							<Skeleton variant='circular' height={30} width={30} />
 							<Skeleton variant='circular' height={30} width={30} />
 						</div>
-					) : totalPages && totalPages > 1 ? (
-						<PaginationController totalPages={totalPages}>
-							{({ handlePageChange, page, totalPages }) => (
-								<Pagination
-									renderItem={(item) => (
-										<PaginationItem {...item} date-test={`page-${item.page}`} />
-									)}
-									count={totalPages}
-									page={page}
-									onChange={(e, page) => handlePageChange(page)}
-								/>
-							)}
-						</PaginationController>
+					) : totalPages && totalPages > 1 && onChangePage ? (
+						<Pagination
+							renderItem={(item) => <PaginationItem {...item} data-test={`page-${item.page}`} />}
+							count={totalPages}
+							page={page}
+							onChange={(e, page) => onChangePage(page)}
+						/>
 					) : undefined}
 				</div>
 			)}

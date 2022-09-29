@@ -12,6 +12,7 @@ interface InvoicesTableContainerProps {
 	actionsOnClick: InvoicesTableProps["actionsOnClick"];
 	onClickRow: InvoicesTableProps["onClickRow"];
 	onClickField?: InvoicesTableProps["onClickField"];
+	onChangePage?: InvoicesTableProps["onChangePage"];
 }
 
 const InvoicesTableContainer = ({
@@ -21,13 +22,16 @@ const InvoicesTableContainer = ({
 	actionsOnClick,
 	onClickRow,
 	onClickField,
+	onChangePage,
 }: InvoicesTableContainerProps) => {
-	const { data, error, isLoading, totalPages, isFetching } = useInvoices(query);
+	const { data, error, isLoading, isFetching, totalPages } = useInvoices(query);
 	return (
 		<InvoicesTable
+			onChangePage={onChangePage}
 			onClickField={onClickField}
 			sortBy={query.sortBy}
 			sortOrder={query.sortOrder}
+			page={query.page || 1}
 			actionsOnClick={actionsOnClick}
 			onClickRow={onClickRow}
 			errorMessage={error ? "Something went wrong" : undefined}

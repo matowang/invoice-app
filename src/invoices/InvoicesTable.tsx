@@ -26,6 +26,8 @@ export interface InvoicesTableProps {
 	sortBy?: string;
 	sortOrder?: SortOrder;
 	onClickField?: (field: DataTableField) => void;
+	onChangePage?: (page: number) => void;
+	page: number;
 }
 
 const fields = [
@@ -113,12 +115,16 @@ const InvoicesTable = ({
 	onClickField,
 	sortBy,
 	sortOrder,
+	onChangePage,
+	page,
 }: InvoicesTableProps) => {
 	return (
 		<DataTable
+			onChangePage={onChangePage}
 			onClickField={onClickField}
 			sortBy={sortBy}
 			sortOrder={sortOrder}
+			page={page}
 			renderHeader={renderHeader}
 			fields={fields}
 			totalPages={totalPages}
