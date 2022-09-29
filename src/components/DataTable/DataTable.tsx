@@ -12,7 +12,6 @@ import {
 	TableCell,
 } from "@mui/material";
 
-import DataTableHeadController from "./DataTableHeadController";
 import PaginationController from "./PaginationController";
 import DataTableHeader from "./DataTableHeader";
 
@@ -20,13 +19,14 @@ import FillTable from "../FillTable";
 import TableRowStatusMessage from "../TableRowStatusMessage";
 
 import { ReactNode } from "react";
+import { SortOrder } from "../../api/base";
 
-export type DataTableField = {
+export interface DataTableField {
 	name: string;
 	label: string;
 	isSortable: boolean;
 	"data-test"?: string;
-};
+}
 
 export type Row = {
 	label: ReactNode;
@@ -51,6 +51,8 @@ interface DataTableProps<TData> {
 	errorMsg: ReactNode;
 	tableProps?: TableProps<React.ElementType>;
 	fields: DataTableField[];
+	sortBy?: string;
+	sortOrder?: SortOrder;
 	disableRouting?: boolean;
 	totalPages?: number;
 	pageLimit?: number;
@@ -58,6 +60,7 @@ interface DataTableProps<TData> {
 	rowDataTransform: (data: TData) => Cell[];
 	renderRowActions?: (data: TData) => ReactNode;
 	renderHeader?: () => ReactNode;
+	onClickField?: (field: DataTableField) => void;
 }
 
 const DataTable = <TData extends unknown>({
@@ -68,6 +71,8 @@ const DataTable = <TData extends unknown>({
 	isError,
 	errorMsg,
 	fields,
+	sortBy,
+	sortOrder,
 	disableRouting,
 	totalPages,
 	pageLimit = 10,
@@ -75,6 +80,7 @@ const DataTable = <TData extends unknown>({
 	rowDataTransform,
 	renderRowActions,
 	renderHeader,
+	onClickField,
 }: DataTableProps<TData>) => {
 	const cols = renderRowActions ? fields.length + 1 : fields.length;
 	return (
@@ -83,18 +89,16 @@ const DataTable = <TData extends unknown>({
 			<Table {...tableProps}>
 				<TableHead>
 					<TableRow>
-						<DataTableHeadController
-							headFields={fields}
-							disableRouting={disableRouting}
-							renderCell={({ field, onClick, sortOrder }) => (
-								<DataTableHeader
-									field={field}
-									onClick={onClick}
-									sortOrder={sortOrder}
-									key={field.name}
-								/>
-							)}
-						/>
+						{fields.map((field) => (
+							<DataTableHeader
+								onClick={() => field.isSortable && onClickField?.(field)}
+								sortOrder={field.isSortable && field.name === sortBy ? sortOrder : undefined}
+								key={field.name}
+								data-test={field["data-test"]}
+							>
+								{field.label}
+							</DataTableHeader>
+						))}
 						{renderRowActions && <TableCell />}
 					</TableRow>
 				</TableHead>

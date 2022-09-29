@@ -1,4 +1,4 @@
-import DataTable, { Cell } from "../components/DataTable/DataTable";
+import DataTable, { Cell, DataTableField } from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -6,12 +6,11 @@ import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
 
 import dayjs from "dayjs";
 
-import { useRouter } from "next/router";
-
-import { InvoiceWithClientsDTO } from "../api/invoices";
+import { InvoiceDTO, InvoiceWithClientsDTO } from "../api/invoices";
 import { ReactNode } from "react";
+import { SortOrder } from "../api/base";
 
-interface InvoicesTableProps {
+export interface InvoicesTableProps {
 	invoices?: InvoiceWithClientsDTO[];
 	isLoading?: boolean;
 	isFetching?: boolean;
@@ -19,6 +18,14 @@ interface InvoicesTableProps {
 	disableRouting?: boolean;
 	totalPages?: number;
 	renderHeader?: () => ReactNode;
+	actionsOnClick?: {
+		editInvoice?: (invoice: InvoiceDTO) => void;
+		printInvoice?: (invoice: InvoiceDTO) => void;
+	};
+	onClickRow: (invoice: InvoiceDTO) => void;
+	sortBy?: string;
+	sortOrder?: SortOrder;
+	onClickField?: (field: DataTableField) => void;
 }
 
 const fields = [
@@ -101,11 +108,17 @@ const InvoicesTable = ({
 	disableRouting: disableRouting,
 	totalPages,
 	renderHeader,
+	actionsOnClick,
+	onClickRow,
+	onClickField,
+	sortBy,
+	sortOrder,
 }: InvoicesTableProps) => {
-	const router = useRouter();
-
 	return (
 		<DataTable
+			onClickField={onClickField}
+			sortBy={sortBy}
+			sortOrder={sortOrder}
 			renderHeader={renderHeader}
 			fields={fields}
 			totalPages={totalPages}
@@ -118,7 +131,7 @@ const InvoicesTable = ({
 			tableProps={{ "data-test": "invoices-table" }}
 			rowProps={({ invoice }) => ({
 				"data-test": `invoice-row-${invoice.id}`,
-				onClick: () => router.push(`/invoices/${invoice.id}/view`),
+				onClick: () => onClickRow(invoice),
 			})}
 			rowDataTransform={rowDataTransform}
 			renderRowActions={({ invoice }) => (
@@ -127,12 +140,12 @@ const InvoicesTable = ({
 					actions={[
 						{
 							label: "Edit Invoice",
-							onClick: () => router.push(`/invoices/${invoice.id}/edit`),
+							onClick: () => actionsOnClick?.editInvoice?.(invoice),
 							icon: <EditOutlinedIcon />,
 						},
 						{
 							label: "Print Invoice",
-							onClick: () => router.push(`/invoices/${invoice.id}/view?print=true`),
+							onClick: () => actionsOnClick?.printInvoice?.(invoice),
 							icon: <PrintOutlinedIcon />,
 						},
 					]}

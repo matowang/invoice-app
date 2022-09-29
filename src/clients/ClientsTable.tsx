@@ -1,15 +1,14 @@
-import DataTable, { Cell } from "../components/DataTable/DataTable";
+import DataTable, { Cell, DataTableField } from "../components/DataTable/DataTable";
 import MenuActions from "../components/ActionsMenu";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
-import { useRouter } from "next/router";
-
 import { ReactNode } from "react";
 import { ClientDTO } from "../api/clients";
+import { SortOrder } from "../api/base";
 
-interface ClientsTableProps {
+export interface ClientsTableProps {
 	clients?: ClientDTO[];
 	isLoading: boolean;
 	isFetching: boolean;
@@ -17,9 +16,17 @@ interface ClientsTableProps {
 	disableRouting?: boolean;
 	totalPages?: number;
 	renderHeader?: () => ReactNode;
+	actionsOnClick?: {
+		editClient?: (client: ClientDTO) => void;
+		addInvoice?: (client: ClientDTO) => void;
+	};
+	onClickField?: (field: DataTableField) => void;
+	onClickRow?: (client: ClientDTO) => void;
+	sortBy?: string;
+	sortOrder?: SortOrder;
 }
 
-const fields = [
+const fields: DataTableField[] = [
 	{ name: "clientName", label: "Client Name", isSortable: true },
 	{ name: "companyName", label: "Company", isSortable: true },
 	{ name: "invoicesCount", label: "Invoices Count", isSortable: true },
@@ -46,10 +53,17 @@ const ClientsTable = ({
 	disableRouting,
 	totalPages,
 	renderHeader,
+	actionsOnClick,
+	onClickField,
+	onClickRow,
+	sortBy,
+	sortOrder,
 }: ClientsTableProps) => {
-	const router = useRouter();
 	return (
 		<DataTable
+			onClickField={onClickField}
+			sortBy={sortBy}
+			sortOrder={sortOrder}
 			renderHeader={renderHeader}
 			fields={fields}
 			totalPages={totalPages}
@@ -62,7 +76,7 @@ const ClientsTable = ({
 			tableProps={{ "data-test": "clients-table" }}
 			rowProps={(client) => ({
 				"data-test": `client-row-${client.id}`,
-				onClick: () => router.push(`/clients/${client.id}`),
+				onClick: () => onClickRow?.(client),
 			})}
 			rowDataTransform={rowDataTransform}
 			renderRowActions={(client) => (
@@ -72,13 +86,13 @@ const ClientsTable = ({
 					actions={[
 						{
 							label: "Edit Client",
-							onClick: () => router.push(`clients/${client.id}`),
+							onClick: () => actionsOnClick?.editClient?.(client),
 							icon: <EditOutlinedIcon />,
 							"data-test": "edit-client",
 						},
 						{
 							label: "Add Invoice",
-							onClick: () => router.push(`invoices/new?clientId=${client.id}`),
+							onClick: () => actionsOnClick?.addInvoice?.(client),
 							icon: <DescriptionOutlinedIcon />,
 							"data-test": "add-invoice",
 						},

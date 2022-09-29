@@ -10,7 +10,7 @@ export const usePaginationGaurd = ({ totalPages }: UsePaginationGaurdProps) => {
 	useEffect(() => {
 		if (!router.isReady) return;
 		if (!router.query.page) return;
-		if (typeof router.query.page !== "string") {
+		if (Array.isArray(router.query.page)) {
 			router.replace({
 				pathname: router.pathname,
 				query: { ...router.query, page: 1 },

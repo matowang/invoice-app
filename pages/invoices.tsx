@@ -8,18 +8,41 @@ import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
 import ClientSelectField from "../src/invoices/ClientSelectField";
 
 import { usePaginationGaurd } from "../src/hooks/usePaginationGaurd";
+import { useTableFieldClick } from "../src/hooks/useTableFieldClick";
 import { useInvoices } from "../src/invoices/useInvoices";
+import { useRouter } from "next/router";
 
 import { GetServerSideProps } from "next";
+
+// {
+// 	label: "Edit Invoice",
+// 	onClick: () => router.push(`/invoices/${invoice.id}/edit`),
+// 	icon: <EditOutlinedIcon />,
+// },
+// {
+// 	label: "Print Invoice",
+// 	onClick: () => router.push(`/invoices/${invoice.id}/view?print=true`),
+// 	icon: <PrintOutlinedIcon />,
+// },
 
 const InvoicesPage = ({ query }: { query: any | null }) => {
 	const { totalPages } = useInvoices();
 	usePaginationGaurd({ totalPages });
 
+	const router = useRouter();
+
+	const { handleFieldClick } = useTableFieldClick();
+
 	return (
 		<AuthGuard>
 			<div className='py-32 mx-10 md:mx-20'>
 				<InvoicesTableContainer
+					onClickRow={(invoice) => router.push(`/invoices/${invoice.id}/view`)}
+					actionsOnClick={{
+						editInvoice: (invoice) => router.push(`/invoices/${invoice.id}/edit`),
+						printInvoice: (invoice) => router.push(`/invoices/${invoice.id}/view?print=true`),
+					}}
+					onClickField={handleFieldClick}
 					query={query}
 					renderHeader={() => (
 						<header className='flex justify-between items-end p-4'>

@@ -3,6 +3,8 @@ import { dbInstance } from "./base";
 import { CompanyDetails } from "../user/CompanyDetailsForm";
 import { CLIENTS_PAGE_LIMIT, SortOrder } from "./base";
 
+import { z } from "zod";
+
 export type ClientDTO = {
 	user_id: string;
 	email: string;
@@ -18,11 +20,16 @@ export type ClientCompanyNameDTO = {
 	companyName: string;
 };
 
-export type GetClientsQuery = {
-	page?: number;
-	sortBy?: string;
-	sortOrder?: SortOrder;
-};
+export const clientsQuerySchema = z.object({
+	page: z
+		.string()
+		.optional()
+		.transform((val) => (val ? parseInt(val) : undefined)),
+	sortBy: z.string().optional(),
+	sortOrder: z.enum(["asc", "desc"]).optional(),
+});
+
+export type GetClientsQuery = z.infer<typeof clientsQuerySchema>;
 
 export const getClients = async ({ page = 1, sortBy, sortOrder }: GetClientsQuery) => {
 	const variables: any = {

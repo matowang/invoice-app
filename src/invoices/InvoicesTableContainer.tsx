@@ -1,31 +1,36 @@
-import InvoicesTable from "./InvoicesTable";
-import AddIcon from "@mui/icons-material/Add";
+import InvoicesTable, { InvoicesTableProps } from "./InvoicesTable";
 
 import { useInvoices } from "./useInvoices";
 
 import { GetInvoicesQuery } from "../api/invoices";
-import { Button } from "@mui/material";
-import Link from "next/link";
-import ClientSelectField from "./ClientSelectField";
 import { ReactNode } from "react";
 
 interface InvoicesTableContainerProps {
 	disableRouting?: boolean;
 	query: GetInvoicesQuery;
 	renderHeader?: () => ReactNode;
+	actionsOnClick: InvoicesTableProps["actionsOnClick"];
+	onClickRow: InvoicesTableProps["onClickRow"];
+	onClickField?: InvoicesTableProps["onClickField"];
 }
 
 const InvoicesTableContainer = ({
 	query,
 	disableRouting,
 	renderHeader,
+	actionsOnClick,
+	onClickRow,
+	onClickField,
 }: InvoicesTableContainerProps) => {
 	const { data, error, isLoading, totalPages, isFetching } = useInvoices(query);
 	return (
 		<InvoicesTable
-			errorMessage={
-				error ? <span date-test='invoices-fetch-error'>Something went wrong.</span> : undefined
-			}
+			onClickField={onClickField}
+			sortBy={query.sortBy}
+			sortOrder={query.sortOrder}
+			actionsOnClick={actionsOnClick}
+			onClickRow={onClickRow}
+			errorMessage={error ? "Something went wrong" : undefined}
 			invoices={data?.invoices}
 			totalPages={totalPages}
 			disableRouting={disableRouting}

@@ -10,16 +10,29 @@ import ClientsTableContainer from "../src/clients/ClientsTableContainer";
 import { usePaginationGaurd } from "../src/hooks/usePaginationGaurd";
 import { useClients } from "../src/clients/useClients";
 
+import { useRouter } from "next/router";
+import { useTableFieldClick } from "../src/hooks/useTableFieldClick";
+
 import { GetServerSideProps } from "next";
 
 const Clients = ({ query }: { query: any | null }) => {
+	const router = useRouter();
+
 	const { totalPages } = useClients();
 	usePaginationGaurd({ totalPages });
+
+	const { handleFieldClick } = useTableFieldClick();
 
 	return (
 		<AuthGuard>
 			<div className='py-32 mx-10 md:mx-20'>
 				<ClientsTableContainer
+					onClickRow={(client) => router.push(`/clients/${client.id}`)}
+					actionsOnClick={{
+						editClient: (client) => router.push(`clients/${client.id}`),
+						addInvoice: (client) => router.push(`invoices/new?clientId=${client.id}`),
+					}}
+					onClickField={handleFieldClick}
 					query={query}
 					renderHeader={() => (
 						<header className='flex justify-between items-end p-4'>

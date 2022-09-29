@@ -10,12 +10,20 @@ import AuthGuard from "../src/user/AuthGuard";
 import InvoicesTableContainer from "../src/invoices/InvoicesTableContainer";
 import ClientsTableContainer from "../src/clients/ClientsTableContainer";
 
+import { useRouter } from "next/router";
+
 const Dashboard: NextPage = () => {
+	const router = useRouter();
 	return (
 		<AuthGuard>
 			<div className='grid grid-cols-1 gap-10 xl:grid-cols-[3fr_5fr] py-32 mx-10 md:mx-20'>
 				<section>
 					<ClientsTableContainer
+						onClickRow={(client) => router.push(`/clients/${client.id}`)}
+						actionsOnClick={{
+							editClient: (client) => router.push(`clients/${client.id}`),
+							addInvoice: (client) => router.push(`invoices/new?clientId=${client.id}`),
+						}}
 						query={{ page: 1 }}
 						disableRouting
 						renderHeader={() => (
@@ -53,6 +61,11 @@ const Dashboard: NextPage = () => {
 				</section>
 				<section>
 					<InvoicesTableContainer
+						onClickRow={(invoice) => router.push(`/invoices/${invoice.id}/view`)}
+						actionsOnClick={{
+							editInvoice: (invoice) => router.push(`/invoices/${invoice.id}/edit`),
+							printInvoice: (invoice) => router.push(`/invoices/${invoice.id}/view?print=true`),
+						}}
 						query={{ page: 1 }}
 						disableRouting
 						renderHeader={() => (
