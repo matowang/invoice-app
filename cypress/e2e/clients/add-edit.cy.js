@@ -118,6 +118,28 @@ describe("/clients/*", () => {
 		cy.get(`[data-test="client-company-swift"]`).should("be.visible").should("be.empty");
 
 		cy.location("pathname").should("eq", "/clients/new");
+
+		//check table updated
+		cy.visit("/");
+
+		cy.get('[data-test="clients-table"]').should("be.visible");
+		cy.get(`[data-test*="client-row"]`).should("have.length", 4);
+		cy.contains(`[data-test*="client-row"]`, `${NEW_CLIENT_DETAILS.name}`)
+			.find('[data-test="client-name"]')
+			.contains(`${NEW_CLIENT_DETAILS.name}`)
+			.should("be.visible");
+		cy.contains(`[data-test*="client-row"]`, `${NEW_CLIENT_DETAILS.name}`)
+			.find('[data-test="client-companyName"]')
+			.contains(`${NEW_CLIENT_DETAILS.companyName}`)
+			.should("be.visible");
+		cy.contains(`[data-test*="client-row"]`, `${NEW_CLIENT_DETAILS.name}`)
+			.find('[data-test="client-totalBilled"]')
+			.contains(`${0}`)
+			.should("be.visible");
+		cy.contains(`[data-test*="client-row"]`, `${NEW_CLIENT_DETAILS.name}`)
+			.find('[data-test="client-invoicesCount"]')
+			.contains(`${0}`)
+			.should("be.visible");
 	});
 
 	it("can see the newly created client in the dashboard list", () => {

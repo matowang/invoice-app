@@ -1,11 +1,27 @@
 import clients from "../../fixtures/user-clients.json";
 
+const dayjs = require("dayjs");
+
 describe("/invoices/new", () => {
-	const invoice = {
+	const NEW_CLIENT_DETAILS = {
+		email: "vlad@toptal.com",
+		name: "Vlad",
+		companyDetails: {
+			name: "Toptal",
+			address: "Stark Tower, New York City, USA",
+			vat: "241421",
+			reg: "321451",
+			iban: "12314151534312321",
+			swift: "ST12321",
+		},
+	};
+
+	const NEW_INVOICE_DETAILS = {
 		invoice_number: "4836",
-		date: "12032023",
-		dueDate: "12042023",
+		date: "12/03/2023",
+		dueDate: "12/04/2023",
 		projectCode: "sUxY6",
+		companyName: NEW_CLIENT_DETAILS.companyDetails.name,
 		meta: {
 			items: [
 				{
@@ -34,7 +50,7 @@ describe("/invoices/new", () => {
 		createdAt: "1653839527552",
 	};
 
-	invoice.value = invoice.meta.items.reduce((a, c) => a + c.value);
+	NEW_INVOICE_DETAILS.value = NEW_INVOICE_DETAILS.meta.items.reduce((a, c) => a + c.value);
 
 	it("reset", () => {
 		cy.request(`http://localhost:3139/reset`);
@@ -100,23 +116,24 @@ describe("/invoices/new", () => {
 		cy.login({ email: "fake_user1@officehourtesting.com", password: "123456" });
 		cy.visit("/invoices/new");
 
-		cy.get(`[data-test="invoice-number"]`).type(`${invoice.invoice_number}`);
-		cy.get(`[data-test="invoice-project-code"]`).type(`${invoice.projectCode}`);
+		cy.get(`[data-test="invoice-number"]`).type(`${NEW_INVOICE_DETAILS.invoice_number}`);
+		cy.get(`[data-test="invoice-project-code"]`).type(`${NEW_INVOICE_DETAILS.projectCode}`);
 		cy.get(`[data-test="invoice-company-id"]`).type(`{downArrow}{downArrow}{enter}`);
 		cy.get(`[data-test="submit-invoice"]`).click();
 
 		//invoice items
-		cy.wrap(invoice.meta.items).each((item, i) => {
+		cy.wrap(NEW_INVOICE_DETAILS.meta.items).each((item, i) => {
 			cy.get(`[data-test="invoice-item-${i}"]`)
 				.find(`[data-test="invoice-item-value"]`)
 				.type(`${item.value}`);
 			cy.get(`[data-test="invoice-item-${i}"]`)
 				.find(`[data-test="invoice-item-description"]`)
 				.type(`${item.description}`);
-			if (i !== invoice.meta.items.length - 1) cy.get(`[data-test="invoice-add-item"]`).click();
+			if (i !== NEW_INVOICE_DETAILS.meta.items.length - 1)
+				cy.get(`[data-test="invoice-add-item"]`).click();
 		});
 
-		cy.wrap(invoice.meta.items).each((item, i) => {
+		cy.wrap(NEW_INVOICE_DETAILS.meta.items).each((item, i) => {
 			cy.get(`[data-test="invoice-item-${i}"]`)
 				.find(`[data-test="invoice-item-value"]`)
 				.should("have.value", `${item.value}`);
@@ -130,16 +147,16 @@ describe("/invoices/new", () => {
 
 		cy.get(`[data-test="invoice-item-${2}"]`)
 			.find(`[data-test="invoice-item-value"]`)
-			.should("have.value", `${invoice.meta.items[3].value}`);
+			.should("have.value", `${NEW_INVOICE_DETAILS.meta.items[3].value}`);
 		cy.get(`[data-test="invoice-item-${2}"]`)
 			.find(`[data-test="invoice-item-description"]`)
-			.should("have.value", `${invoice.meta.items[3].description}`);
+			.should("have.value", `${NEW_INVOICE_DETAILS.meta.items[3].description}`);
 		cy.get(`[data-test="invoice-item-${3}"]`)
 			.find(`[data-test="invoice-item-value"]`)
-			.should("have.value", `${invoice.meta.items[4].value}`);
+			.should("have.value", `${NEW_INVOICE_DETAILS.meta.items[4].value}`);
 		cy.get(`[data-test="invoice-item-${3}"]`)
 			.find(`[data-test="invoice-item-description"]`)
-			.should("have.value", `${invoice.meta.items[4].description}`);
+			.should("have.value", `${NEW_INVOICE_DETAILS.meta.items[4].description}`);
 
 		//Check if due date can be greater
 		cy.get(`[data-test="invoice-date"]`).type("12/04/2023");
@@ -153,9 +170,9 @@ describe("/invoices/new", () => {
 		cy.get(`[data-test="invoice-due-date-error"]`).should("not.exist");
 
 		cy.get(`[data-test="invoice-date"]`).clear();
-		cy.get(`[data-test="invoice-date"]`).type(`${invoice.date}`);
+		cy.get(`[data-test="invoice-date"]`).type(`${NEW_INVOICE_DETAILS.date}`);
 		cy.get(`[data-test="invoice-due-date"]`).clear();
-		cy.get(`[data-test="invoice-due-date"]`).type(`${invoice.dueDate}`);
+		cy.get(`[data-test="invoice-due-date"]`).type(`${NEW_INVOICE_DETAILS.dueDate}`);
 
 		//Check No Errors
 		cy.get(`[data-test="invoice-date-error"]`).should("not.exist");
@@ -188,5 +205,91 @@ describe("/invoices/new", () => {
 		cy.get(`[data-test="invoice-item-description"]`).should("have.value", "");
 		cy.get(`[data-test="invoice-company-id"]`).should("have.value", "");
 		cy.get(`[data-test="invoice-value"]`).should("have.value", "0");
+	});
+
+	it("updates table and table fields are correct after adding", () => {
+		cy.request(`http://localhost:3139/reset`);
+		cy.login({ email: "fake_user1@officehourtesting.com", password: "123456" });
+
+		let token;
+
+		cy.getCookie("token")
+			.should("exist")
+			.then((c) => {
+				// save cookie until we need it
+				token = c.value;
+				cy.request({
+					method: "POST",
+					url: "http://localhost:3139/clients",
+					body: NEW_CLIENT_DETAILS,
+					headers: { "x-access-token": token },
+				});
+			});
+
+		cy.visit("/invoices/new");
+
+		cy.get(`[data-test="invoice-number"]`).type(`${NEW_INVOICE_DETAILS.invoice_number}`);
+		cy.get(`[data-test="invoice-project-code"]`).type(`${NEW_INVOICE_DETAILS.projectCode}`);
+		cy.get(`[data-test="invoice-company-id"]`).type(
+			`${NEW_INVOICE_DETAILS.companyName}{downArrow}{enter}`
+		);
+
+		//invoice items
+		cy.wrap(NEW_INVOICE_DETAILS.meta.items).each((item, i) => {
+			cy.get(`[data-test="invoice-item-${i}"]`)
+				.find(`[data-test="invoice-item-value"]`)
+				.type(`${item.value}`);
+			cy.get(`[data-test="invoice-item-${i}"]`)
+				.find(`[data-test="invoice-item-description"]`)
+				.type(`${item.description}`);
+			if (i !== NEW_INVOICE_DETAILS.meta.items.length - 1)
+				cy.get(`[data-test="invoice-add-item"]`).click();
+		});
+
+		cy.wrap(NEW_INVOICE_DETAILS.meta.items).each((item, i) => {
+			cy.get(`[data-test="invoice-item-${i}"]`)
+				.find(`[data-test="invoice-item-value"]`)
+				.should("have.value", `${item.value}`);
+			cy.get(`[data-test="invoice-item-${i}"]`)
+				.find(`[data-test="invoice-item-description"]`)
+				.should("have.value", `${item.description}`);
+		});
+
+		cy.get(`[data-test="invoice-date"]`).type(`${NEW_INVOICE_DETAILS.date}`);
+		cy.get(`[data-test="invoice-due-date"]`).type(`${NEW_INVOICE_DETAILS.dueDate}`);
+
+		cy.get(`[data-test="submit-invoice"]`).click();
+		cy.get(`[data-test="form-success"]`).should("be.visible");
+
+		cy.visit("/");
+
+		const invoiceTotal = NEW_INVOICE_DETAILS.meta.items.reduce((a, item) => a + item.value, 0);
+		console.log("Invoice Total", invoiceTotal);
+		cy.get('[data-test="invoices-table"]').should("be.visible");
+		cy.get(`[data-test*="invoice-row"]`).should("have.length", 2);
+		cy.contains(`[data-test*="invoice-row"]`, `${NEW_INVOICE_DETAILS.invoice_number}`)
+			.find('[data-test="invoice-number"]')
+			.contains(`${NEW_INVOICE_DETAILS.invoice_number}`)
+			.should("be.visible");
+		cy.contains(`[data-test*="invoice-row"]`, `${NEW_INVOICE_DETAILS.invoice_number}`)
+			.find('[data-test="invoice-company"]')
+			.contains(`${NEW_INVOICE_DETAILS.companyName}`)
+			.should("be.visible");
+		cy.contains(`[data-test*="invoice-row"]`, `${NEW_INVOICE_DETAILS.invoice_number}`)
+			.find('[data-test="invoice-date"]')
+			.then((e) => dayjs(e.text()).format("DD/MM/YYYY"))
+			.should("eq", `${dayjs(NEW_INVOICE_DETAILS.date).format("DD/MM/YYYY")}`);
+		cy.contains(`[data-test*="invoice-row"]`, `${NEW_INVOICE_DETAILS.invoice_number}`)
+			.find('[data-test="invoice-due-date"]')
+			.then((e) => dayjs(e.text()).format("DD/MM/YYYY"))
+			.should("eq", `${dayjs(NEW_INVOICE_DETAILS.dueDate).format("DD/MM/YYYY")}`);
+		cy.contains(`[data-test*="invoice-row"]`, `${NEW_INVOICE_DETAILS.invoice_number}`)
+			.find('[data-test="invoice-price"]')
+			.then(($e) => $e.text().replace(/\D/g, ""))
+			.should("eq", `${invoiceTotal}`);
+		cy.contains(`[data-test*="invoice-row"]`, `${NEW_INVOICE_DETAILS.invoice_number}`)
+			.find('[data-test="invoice-project"]')
+			.contains(`${NEW_INVOICE_DETAILS.projectCode}`)
+			.should("be.visible");
 	});
 });
