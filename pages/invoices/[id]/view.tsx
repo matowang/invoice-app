@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
 import Link from "next/link";
 
+import AuthGuard from "../../../src/user/AuthGuard";
+
 import PageLoader from "../../../src/components/PageLoader";
 import Error404 from "../../../src/components/Error404";
 
@@ -26,16 +28,22 @@ const InvoiceView = () => {
 		);
 
 	return (
-		<div className='my-40 mx-20 flex flex-col  relative'>
-			<InvoiceViewContainer invoiceId={router.query.id} />
-			<Link href={`/invoices/${router.query.id}/view?print=true`}>
-				<a>
-					<Button variant='contained' className='self-start mt-6' startIcon={<PrintOutlinedIcon />}>
-						Print
-					</Button>
-				</a>
-			</Link>
-		</div>
+		<AuthGuard>
+			<div className='my-40 mx-20 flex flex-col  relative'>
+				<InvoiceViewContainer invoiceId={router.query.id} />
+				<Link href={`/invoices/${router.query.id}/view?print=true`}>
+					<a>
+						<Button
+							variant='contained'
+							className='self-start mt-6'
+							startIcon={<PrintOutlinedIcon />}
+						>
+							Print
+						</Button>
+					</a>
+				</Link>
+			</div>
+		</AuthGuard>
 	);
 };
 
