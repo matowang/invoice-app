@@ -9,6 +9,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import Link from "next/link";
 
 import MenuActions from "../components/ActionsMenu";
+import UserMenu from "./UserMenu";
 
 import { useAuth } from "../user/AuthContext";
 import { useRouter } from "next/router";
@@ -31,15 +32,30 @@ const navItems = [
 const Header = () => {
 	const { loading, logout, token } = useAuth();
 	const router = useRouter();
+
+	const menuItems = [
+		{
+			label: "Logout",
+			onClick: logout,
+			icon: <LogoutOutlinedIcon />,
+			"data-test": "logout-button",
+		},
+		{
+			label: "My Company Details",
+			onClick: () => router.push("/company-details"),
+			icon: <BusinessIcon />,
+		},
+	];
+
 	return (
-		<div className='fixed flex w-full top-0 items-center px-10 md:px-20 py-5 z-10 '>
+		<div className='fixed flex w-full top-0 items-center px-10 md:px-20 py-5 z-10'>
 			<Link href='/'>
 				<a
 					className='no-underline flex items-center text-gray-800'
 					data-active={router.pathname === "/"}
 				>
 					<PixOutlinedIcon sx={{ mr: 1 }} />
-					<h1 className='text-lg mr-0 md:mr-8'>Outvoice</h1>
+					<h1 className='text-lg m-0 mr-0 md:mr-8'>Outvoice</h1>
 				</a>
 			</Link>
 			{loading ? (
@@ -65,23 +81,8 @@ const Header = () => {
 							</React.Fragment>
 						))}
 					</ul>
-					<div className='ml-auto'>
-						<MenuActions
-							actions={[
-								{
-									label: "Logout",
-									onClick: logout,
-									icon: <LogoutOutlinedIcon />,
-									"data-test": "logout-button",
-								},
-								{
-									label: "My Company Details",
-									onClick: () => router.push("/company-details"),
-									icon: <BusinessIcon />,
-								},
-							]}
-							icon={<Avatar />}
-						/>
+					<div className='ml-auto flex flex-end'>
+						<UserMenu menuItems={menuItems}></UserMenu>
 					</div>
 				</>
 			) : null}
