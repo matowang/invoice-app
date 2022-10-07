@@ -10,7 +10,7 @@ export const useClients = (query?: GetClientsQuery) => {
 		() => getClients({ page, sortBy, sortOrder }),
 		{
 			keepPreviousData: true,
-			enabled: !!query?.page && !isNaN(query.page),
+			enabled: !!query,
 		}
 	);
 
