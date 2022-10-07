@@ -19,11 +19,11 @@ export const dbInstance = axios.create({
 let delayInterceptor = dbInstance.interceptors.response.use(
 	async (response) => {
 		dbInstance.interceptors.response.eject(delayInterceptor);
-		await devDelay(100);
+		await devDelay(700);
 		return response;
 	},
 	async (error) => {
-		await devDelay(100);
+		await devDelay(700);
 		return Promise.reject(error);
 	}
 );

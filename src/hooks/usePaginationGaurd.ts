@@ -2,10 +2,10 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 interface UsePaginationGaurdProps {
-	totalPages?: number;
+	maxPage?: number;
 }
 
-export const usePaginationGaurd = ({ totalPages }: UsePaginationGaurdProps) => {
+export const usePaginationGaurd = ({ maxPage }: UsePaginationGaurdProps) => {
 	const router = useRouter();
 	useEffect(() => {
 		if (!router.isReady) return;
@@ -25,12 +25,12 @@ export const usePaginationGaurd = ({ totalPages }: UsePaginationGaurdProps) => {
 			});
 			return;
 		}
-		if (totalPages && page > totalPages) {
+		if (maxPage && page > maxPage) {
 			router.replace({
 				pathname: router.pathname,
-				query: { ...router.query, page: totalPages },
+				query: { ...router.query, page: maxPage },
 			});
 			return;
 		}
-	}, [router, router.isReady, totalPages]);
+	}, [router, router.isReady, maxPage]);
 };

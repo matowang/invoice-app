@@ -16,19 +16,26 @@ import { useMemo } from "react";
 
 import { invoicesQuerySchema } from "../src/api/invoices";
 
-import { GetServerSideProps } from "next";
 import ErrorPage from "../src/components/ErrorPage";
 
-const InvoicesPage = ({ query }: { query: any | null }) => {
-	const parsedQuery = useMemo(() => invoicesQuerySchema.safeParse(query), [query]);
+const InvoicesPage = () => {
+	return (
+		<AuthGuard>
+			<InvoicesPageContainer />
+		</AuthGuard>
+	);
+};
 
-	const { totalPages } = useInvoices(parsedQuery.success ? parsedQuery.data : undefined);
-
-	usePaginationGaurd({ totalPages });
-
+const InvoicesPageContainer = () => {
 	const router = useRouter();
+	const parsedQuery = useMemo(() => invoicesQuerySchema.safeParse(router.query), [router.query]);
+
+	const { totalPages } = useInvoices(router.query);
+
+	usePaginationGaurd({ maxPage: totalPages });
 
 	const { handleFieldClick } = useTableFieldClick();
+
 	const handlePageChange = (page: number) => {
 		router.push({
 			pathname: router.pathname,
@@ -37,64 +44,54 @@ const InvoicesPage = ({ query }: { query: any | null }) => {
 	};
 
 	if (!parsedQuery.success) {
-		console.error(parsedQuery.error.errors);
 		return <ErrorPage>Invalid Query</ErrorPage>;
 	}
-
 	return (
-		<AuthGuard>
-			<div className='py-32 mx-10 md:mx-20'>
-				<InvoicesTableContainer
-					onChangePage={handlePageChange}
-					onClickRow={(invoice) => router.push(`/invoices/${invoice.id}/view`)}
-					actionsOnClick={{
-						editInvoice: (invoice) => router.push(`/invoices/${invoice.id}/edit`),
-						printInvoice: (invoice) => router.push(`/invoices/${invoice.id}/view?print=true`),
-					}}
-					onClickField={handleFieldClick}
-					query={parsedQuery.data}
-					renderHeader={() => (
-						<DataTableHeaderContainer title='Invoices'>
-							<div className='relative w-52 h-10'>
-								<ClientSelectField
-									onChange={(value) =>
-										router.replace(
-											JSON.parse(
-												JSON.stringify({
-													pathname: router.pathname,
-													query: { ...router.query, clientId: value || undefined },
-												})
-											)
+		<div className='py-32 mx-10 md:mx-20'>
+			<InvoicesTableContainer
+				onChangePage={handlePageChange}
+				onClickRow={(invoice) => router.push(`/invoices/${invoice.id}/view`)}
+				actionsOnClick={{
+					editInvoice: (invoice) => router.push(`/invoices/${invoice.id}/edit`),
+					printInvoice: (invoice) => router.push(`/invoices/${invoice.id}/view?print=true`),
+				}}
+				onClickField={handleFieldClick}
+				query={parsedQuery.data}
+				renderHeader={() => (
+					<DataTableHeaderContainer title='Invoices'>
+						<div className='relative w-52 h-10'>
+							<ClientSelectField
+								onChange={(value) =>
+									router.replace(
+										JSON.parse(
+											JSON.stringify({
+												pathname: router.pathname,
+												query: { ...parsedQuery.data, clientId: value || undefined },
+											})
 										)
-									}
-									value={parsedQuery.data.clientId || ""}
-								/>
-							</div>
-							<Link href='/invoices/new'>
-								<a className='no-underline'>
-									<Button
-										variant='contained'
-										className='h-full'
-										sx={{ borderRadius: 8 }}
-										startIcon={<AddIcon />}
-										data-test='add-invoice'
-									>
-										Add Invoice
-									</Button>
-								</a>
-							</Link>
-						</DataTableHeaderContainer>
-					)}
-				/>
-			</div>
-		</AuthGuard>
+									)
+								}
+								value={parsedQuery.data.clientId || ""}
+							/>
+						</div>
+						<Link href='/invoices/new'>
+							<a className='no-underline'>
+								<Button
+									variant='contained'
+									className='h-full'
+									sx={{ borderRadius: 8 }}
+									startIcon={<AddIcon />}
+									data-test='add-invoice'
+								>
+									Add Invoice
+								</Button>
+							</a>
+						</Link>
+					</DataTableHeaderContainer>
+				)}
+			/>
+		</div>
 	);
 };
 
 export default InvoicesPage;
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-	return {
-		props: { query: query || null },
-	};
-};

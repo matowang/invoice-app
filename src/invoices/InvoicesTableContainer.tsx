@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 
 interface InvoicesTableContainerProps {
 	disableRouting?: boolean;
-	query: GetInvoicesQuery;
+	query?: GetInvoicesQuery;
 	renderHeader?: () => ReactNode;
 	actionsOnClick: InvoicesTableProps["actionsOnClick"];
 	onClickRow: InvoicesTableProps["onClickRow"];
@@ -25,13 +25,14 @@ const InvoicesTableContainer = ({
 	onChangePage,
 }: InvoicesTableContainerProps) => {
 	const { data, error, isLoading, isFetching, totalPages } = useInvoices(query);
+
 	return (
 		<InvoicesTable
 			onChangePage={onChangePage}
 			onClickField={onClickField}
-			sortBy={query.sortBy}
-			sortOrder={query.sortOrder}
-			page={query.page || 1}
+			sortBy={query?.sortBy}
+			sortOrder={query?.sortOrder}
+			page={query?.page || 1}
 			actionsOnClick={actionsOnClick}
 			onClickRow={onClickRow}
 			errorMessage={error ? "Something went wrong" : undefined}
