@@ -1,5 +1,6 @@
-import { Button } from "@mui/material";
 import Link from "next/link";
+
+import OutlinedButton from "../src/components/OutlinedButton";
 
 import PageContainer from "../src/components/PageContainer";
 import RegisterFormContainer from "../src/user/RegisterFormContainer";
@@ -28,12 +29,15 @@ const SignUp = () => {
 						router.push("/login");
 					}}
 				/>
-				<p className='text-center text-gray-500'>Already have an account? Login.</p>
+				<p className='text-center text-gray-500 pt-12 pb-5'>
+					Already have an account?
+					<Link href='/login'>
+						<a className='font-bold w-full'> Login.</a>
+					</Link>
+				</p>
 				<Link href='/login'>
-					<a className='no-underline w-full'>
-						<Button variant='outlined' className='w-full h-full' sx={{ borderRadius: 8 }}>
-							Login in
-						</Button>
+					<a className='no-underline'>
+						<OutlinedButton>LOGIN</OutlinedButton>
 					</a>
 				</Link>
 			</PageContainer>

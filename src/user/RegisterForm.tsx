@@ -1,4 +1,6 @@
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
+import ContainedButton from "../components/ContainedButton";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -94,15 +96,9 @@ const RegisterForm = ({ onSubmit, formError, disabled }: RegisterFormProps) => {
 					disabled={disabled}
 					inputProps={{ "data-test": "confirm-password" }}
 				/>
-				<Button
-					type='submit'
-					variant='contained'
-					disabled={disabled}
-					data-test='submit-sign-up'
-					sx={{ borderRadius: 8 }}
-				>
-					Sign-Up
-				</Button>
+				<ContainedButton type='submit' disabled={disabled} data-test='submit-sign-up'>
+					SIGN-UP
+				</ContainedButton>
 			</form>
 		</>
 	);

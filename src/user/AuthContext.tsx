@@ -7,6 +7,8 @@ import { setHeaderToken } from "../api/base";
 import create from "zustand";
 import { useEffect } from "react";
 
+export type AuthStatus = "loading" | "error" | "authorized" | "unauthorized";
+
 interface AuthState {
 	loading: boolean;
 	token: string | null;
@@ -15,9 +17,13 @@ interface AuthState {
 	logout: () => void;
 	updateUser: (user: UserDTO) => void;
 	initAuth: () => Promise<void>;
+	status: AuthStatus;
 }
 
+//TODO enable error state
+
 export const useAuthStore = create<AuthState>((set, get) => ({
+	status: "loading",
 	loading: true,
 	token: null,
 	user: null,
@@ -30,7 +36,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		if (user) {
 			set((state) => {
 				setHeaderToken(token, state.logout);
-				return { token, user };
+				return { token, user, status: "authorized" };
 			});
 		} else {
 			destroyCookie(null, "token");
@@ -39,18 +45,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 	logout: () => {
 		console.log("LOGOUT");
 		destroyCookie(null, "token");
-		set({ token: null, user: null });
+		set({ token: null, user: null, status: "unauthorized" });
 	},
 	updateUser: (user) => set({ user }),
 	initAuth: async () => {
-		set({ loading: true });
+		set({ loading: true, status: "loading" });
 		const { token } = parseCookies();
-		if (!token) return set({ loading: false });
+		if (!token) return set({ loading: false, status: "unauthorized" });
 		const user = await validateToken(token);
 		if (user) {
 			setHeaderToken(token, get().logout);
-			set({ token, user });
+			set({ token, user, status: "authorized" });
 		} else {
+			set({ status: "unauthorized" });
 			destroyCookie(null, "token");
 		}
 		set({ loading: false });

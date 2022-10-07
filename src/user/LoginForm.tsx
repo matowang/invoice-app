@@ -1,4 +1,7 @@
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
+import ContainedButton from "../components/ContainedButton";
+import OutlinedButton from "../components/OutlinedButton";
+
 import Link from "next/link";
 
 import { useForm } from "react-hook-form";
@@ -65,20 +68,12 @@ const LoginForm = ({ onSubmit, formError, disabled }: LoginFormProps) => {
 					disabled={disabled}
 				/>
 				<div className='grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch justify-items-stretch w-full h-14'>
-					<Button
-						type='submit'
-						variant='contained'
-						disabled={disabled}
-						data-test='submit-login'
-						sx={{ borderRadius: 8 }}
-					>
-						Login
-					</Button>
+					<ContainedButton type='submit' disabled={disabled} data-test='submit-login'>
+						LOGIN
+					</ContainedButton>
 					<Link href='/signup'>
-						<a className='no-underline w-full'>
-							<Button variant='outlined' className='w-full h-full' sx={{ borderRadius: 8 }}>
-								Sign Up
-							</Button>
+						<a className='no-underline w-full flex items-stretch'>
+							<OutlinedButton>SIGN UP</OutlinedButton>
 						</a>
 					</Link>
 				</div>

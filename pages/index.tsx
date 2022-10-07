@@ -1,6 +1,8 @@
-import { Button } from "@mui/material";
 import Link from "next/link";
 import type { NextPage } from "next";
+
+import OutlinedButton from "../src/components/OutlinedButton";
+import ContainedButton from "../src/components/ContainedButton";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
@@ -31,26 +33,21 @@ const Dashboard: NextPage = () => {
 							<DataTableHeaderContainer title='Clients'>
 								<Link href='/clients'>
 									<a className='no-underline'>
-										<Button
-											variant='outlined'
+										<OutlinedButton
 											data-test='view-all-clients'
 											startIcon={<RemoveRedEyeOutlinedIcon />}
-											sx={{ borderRadius: 8 }}
+											size='small'
 										>
-											See all
-										</Button>
+											SEE ALL
+										</OutlinedButton>
 									</a>
 								</Link>
 								<Link href='/clients/new'>
 									<a className='no-underline'>
-										<Button
-											variant='contained'
-											data-test='add-client'
-											startIcon={<AddIcon />}
-											sx={{ borderRadius: 8 }}
-										>
-											Add Client
-										</Button>
+										<ContainedButton data-test='add-client' size='small'>
+											<AddIcon />
+											ADD CLIENT
+										</ContainedButton>
 									</a>
 								</Link>
 							</DataTableHeaderContainer>
@@ -70,26 +67,21 @@ const Dashboard: NextPage = () => {
 							<DataTableHeaderContainer title='Invoices'>
 								<Link href='/invoices'>
 									<a className='no-underline'>
-										<Button
-											variant='outlined'
+										<OutlinedButton
 											data-test='view-all-invoices'
 											startIcon={<RemoveRedEyeOutlinedIcon />}
-											sx={{ borderRadius: 8 }}
+											size='small'
 										>
-											See all
-										</Button>
+											SEE ALL
+										</OutlinedButton>
 									</a>
 								</Link>
 								<Link href='/invoices/new'>
 									<a className='no-underline'>
-										<Button
-											variant='contained'
-											data-test='add-invoice'
-											startIcon={<AddIcon />}
-											sx={{ borderRadius: 8 }}
-										>
-											Add Invoice
-										</Button>
+										<ContainedButton size='small'>
+											<AddIcon />
+											ADD INVOICE
+										</ContainedButton>
 									</a>
 								</Link>
 							</DataTableHeaderContainer>
