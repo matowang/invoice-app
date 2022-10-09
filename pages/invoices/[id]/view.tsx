@@ -1,10 +1,10 @@
-import { Button } from "@mui/material";
 import Link from "next/link";
 
 import AuthGuard from "../../../src/user/AuthGuard";
 
 import PageLoader from "../../../src/components/PageLoader";
 import Error404 from "../../../src/components/Error404";
+import ContainedButton from "../../../src/components/ContainedButton";
 
 import InvoicePrintContainer from "../../../src/invoices/InvoicePrintContainer";
 import InvoiceViewContainer from "../../../src/invoices/InvoiceViewContainer";
@@ -29,17 +29,13 @@ const InvoiceView = () => {
 
 	return (
 		<AuthGuard>
-			<div className='my-40 mx-20 flex flex-col  relative'>
+			<div className='my-40 mx-20 flex flex-col relative'>
 				<InvoiceViewContainer invoiceId={router.query.id} />
 				<Link href={`/invoices/${router.query.id}/view?print=true`}>
-					<a>
-						<Button
-							variant='contained'
-							className='self-start mt-6'
-							startIcon={<PrintOutlinedIcon />}
-						>
-							Print
-						</Button>
+					<a className='mt-4 self-start'>
+						<ContainedButton data-test='add-client' startIcon={<PrintOutlinedIcon />} size='small'>
+							PRINT
+						</ContainedButton>
 					</a>
 				</Link>
 			</div>

@@ -87,7 +87,7 @@ const CreateInvoiceForm = ({ onSubmitSuccess, clientId }: CreateInvoiceFormProps
 				clientsCompanyNames={clientCompanyNameData || []}
 				isLoadingClientsCompanyNames={isLoadingClientsCompanyNames}
 				resetOnSuccesfulSubmit
-				submitText='Create Invoice'
+				submitText='CREATE INVOICE'
 				defaultValues={defaultValues}
 			/>
 		</>

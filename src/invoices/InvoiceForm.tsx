@@ -1,7 +1,9 @@
 import { Button, TextField } from "@mui/material";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
+
 import DatePickerField from "../components/formFields/DatePickerField";
 import AutocompleteField from "../components/formFields/AutoCompleteField";
+import ContainedButton from "../components/ContainedButton";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -303,15 +305,11 @@ const InvoiceForm = ({
 						/>
 					)}
 				/>
-				<Button
-					type='submit'
-					variant='contained'
-					disabled={disabled}
-					data-test='submit-invoice'
-					className='col-span-1 md:col-span-2'
-				>
-					{submitText || "Submit"}
-				</Button>
+				<div className='col-span-1 md:col-span-2'>
+					<ContainedButton type='submit' disabled={disabled} data-test='submit-invoice'>
+						{submitText || "Submit"}
+					</ContainedButton>
+				</div>
 			</form>
 		</>
 	);

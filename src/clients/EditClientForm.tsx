@@ -80,6 +80,7 @@ const EditClientForm = ({ onSubmitSuccess, clientId, onGetClientError }: EditCli
 				disabled={editClientIsLoading}
 				defaultValues={data}
 				onSubmit={onSubmit}
+				submitText='EDIT CLIENT'
 			/>
 		</Fragment>
 	);
