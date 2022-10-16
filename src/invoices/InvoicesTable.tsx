@@ -74,7 +74,7 @@ const fields = [
 
 const rowDataTransform: (data: InvoiceWithClientsDTO) => Cell[] = ({ invoice, client }) => [
 	{
-		label: invoice.invoice_number,
+		label: invoice.invoiceNumber,
 		"data-test": "invoice-number",
 	},
 	{

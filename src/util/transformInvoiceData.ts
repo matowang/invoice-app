@@ -6,19 +6,15 @@ export const transformInvoiceDTO = (
 	invoiceDTO: InvoiceDTO,
 	clientCompanyNameData: ClientCompanyNameDTO[]
 ): InvoiceFormValues => {
-	const clientCompany = clientCompanyNameData.find(
-		(company) => company.id === invoiceDTO.client_id
-	);
+	const clientCompany = clientCompanyNameData.find((company) => company.id === invoiceDTO.clientId);
 	const valueSum =
-		invoiceDTO.meta?.items?.reduce((a: number, item: { value: number }) => a + item.value, 0) || 0;
+		invoiceDTO.items?.reduce((a: number, item: { price: number }) => a + item.price, 0) || 0;
 	return {
 		...invoiceDTO,
 		meta: {
 			...invoiceDTO?.meta,
-			items: invoiceDTO?.meta?.items?.length
-				? invoiceDTO?.meta.items
-				: [{ description: null, value: null }],
 		},
+		items: invoiceDTO?.items?.length ? invoiceDTO?.items : [{ description: "", price: 0 }],
 		value: valueSum,
 		clientCompany: clientCompany || { id: "", companyName: "" },
 	};
@@ -27,7 +23,7 @@ export const transformInvoiceDTO = (
 export const transformInvoiceValue = (invoiceFormValues: InvoiceFormValues): InvoiceAPIValues => {
 	const reformattedValues: InvoiceAPIValues = {
 		...invoiceFormValues,
-		client_id: invoiceFormValues.clientCompany.id,
+		clientId: invoiceFormValues.clientCompany.id,
 		projectCode: invoiceFormValues.projectCode || undefined,
 	};
 	return reformattedValues;

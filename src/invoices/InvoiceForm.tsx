@@ -12,7 +12,7 @@ import NumberField from "../components/formFields/NumberField";
 
 // "invoice": {
 //     "user_id": "111",
-//     "invoice_number": "1234",
+//     "invoiceNumber": "1234",
 //     "client_id": "1644482450322",
 //     "date": 1644492351880,
 //     "dueDate": 1647084351880,
@@ -32,20 +32,17 @@ const InvoiceValuesSchema = z
 			})
 			.int()
 			.min(1, "Must be a valid date."),
-		invoice_number: z.string().min(3, "Invoice Number must be 3 or more characters."),
+		invoiceNumber: z.string().min(3, "Invoice Number must be 3 or more characters."),
 		projectCode: z.string().min(3, "Project Code must be 3 or more characters.").optional(),
-		meta: z
-			.object({
-				items: z
-					.array(
-						z.object({
-							description: z.string().min(3, "Item Description must be 3 or more characters."),
-							value: z.number().positive(),
-						})
-					)
-					.min(1, "Must include atleast 1 invoice item"),
-			})
-			.optional(),
+		meta: z.object({}).optional(),
+		items: z
+			.array(
+				z.object({
+					description: z.string().min(3, "Item Description must be 3 or more characters."),
+					price: z.number().positive(),
+				})
+			)
+			.min(1, "Must include atleast 1 invoice item"),
 		clientCompany: z.object(
 			{
 				id: z.string().min(1),
@@ -82,6 +79,8 @@ interface InvoiceFormProps {
 	submitText?: ReactNode;
 }
 
+// TODO fix date to integrate with prisma
+
 const InvoiceForm = ({
 	onSubmit,
 	formError,
@@ -103,14 +102,12 @@ const InvoiceForm = ({
 		resolver: zodResolver(InvoiceValuesSchema),
 		defaultValues: {
 			meta: {
-				items: defaultValues?.meta?.items.length ? defaultValues?.meta?.items : [{}],
 				...defaultValues?.meta,
 			},
+			items: defaultValues?.items?.length ? defaultValues?.items : [{}],
 			...defaultValues,
 		},
 	});
-
-	console.log(dirtyFields);
 
 	const {
 		fields: itemsFields,
@@ -118,11 +115,11 @@ const InvoiceForm = ({
 		remove: removeItem,
 	} = useFieldArray({
 		control,
-		name: "meta.items",
+		name: "items",
 	});
 
 	const handleSubmit = async (data: InvoiceFormValues) => {
-		console.log(data);
+		console.log(JSON.stringify(data));
 		if (disabled) return;
 		await onSubmit?.(data);
 	};
@@ -134,9 +131,9 @@ const InvoiceForm = ({
 	}, [isSubmitSuccessful, reset, resetOnSuccessfulSubmit]);
 
 	//set value sum
-	const items = useWatch({ name: "meta.items", control: control });
+	const items = useWatch({ name: "items", control: control });
 	useEffect(() => {
-		const total = items.reduce((a, { value }) => a + value, 0);
+		const total = items.reduce((a, { price }) => a + price, 0);
 		setValue("value", total, { shouldValidate: isSubmitted });
 	}, [items, setValue, isSubmitted]);
 
@@ -147,15 +144,14 @@ const InvoiceForm = ({
 					{formError}
 				</p>
 			)}
-			{errors.meta?.items && (
+			{errors.items && (
 				<p className='text-red-400' data-test='form-error'>
-					{errors.meta?.items.message}
+					{errors.items.message}
 				</p>
 			)}
 			<form
 				onSubmit={handleFormHookSubmit(handleSubmit)}
-				className='grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20 '
-			>
+				className='grid grid-cols-1 md:grid-cols-2 gap-5 items-start relative md:h-20 '>
 				<div className='grid gap-5 py-4'>
 					<DatePickerField
 						name='date'
@@ -180,13 +176,13 @@ const InvoiceForm = ({
 						disabled={disabled}
 					/>
 					<TextField
-						{...register("invoice_number")}
+						{...register("invoiceNumber")}
 						label='Invoice Number'
 						placeholder='1234'
-						error={!!errors.invoice_number}
+						error={!!errors.invoiceNumber}
 						helperText={
-							errors.invoice_number && (
-								<span data-test='invoice-number-error'>{errors.invoice_number?.message}</span>
+							errors.invoiceNumber && (
+								<span data-test='invoice-number-error'>{errors.invoiceNumber?.message}</span>
 							)
 						}
 						disabled={disabled}
@@ -227,16 +223,15 @@ const InvoiceForm = ({
 						<div
 							className='grid gap-2 px-4 py-6 border-2 border-slate-200 border-solid rounded-lg relative'
 							key={`invoice-item-${field.id}`}
-							data-test={`invoice-item-${i}`}
-						>
+							data-test={`invoice-item-${i}`}>
 							<div className='absolute transform -translate-y-1/2 bg-white top-0 left-2 text-xs text-slate-500 p-2'>{`Invoice Item ${i}`}</div>
 							<TextField
-								{...register(`meta.items.${i}.description`)}
-								error={!!errors.meta?.items?.[i]?.description}
+								{...register(`items.${i}.description`)}
+								error={!!errors.items?.[i]?.description}
 								helperText={
-									errors.meta?.items?.[i]?.description && (
+									errors.items?.[i]?.description && (
 										<span data-test='invoice-item-description-error'>
-											{errors.meta?.items[i]?.description?.message}
+											{errors.items[i]?.description?.message}
 										</span>
 									)
 								}
@@ -245,26 +240,25 @@ const InvoiceForm = ({
 								label='Description'
 							/>
 							<NumberField
-								name={`meta.items.${i}.value`}
+								name={`items.${i}.price`}
 								control={control}
-								label='Value'
+								label='Price'
 								disabled={disabled}
 								errorMsg={
-									errors.meta?.items?.[i]?.value && (
-										<span data-test='invoice-item-value-error'>
-											{errors.meta?.items[i]?.value?.message}
+									errors.items?.[i]?.price && (
+										<span data-test='invoice-item-price-error'>
+											{errors.items[i]?.price?.message}
 										</span>
 									)
 								}
-								inputProps={{ "data-test": `invoice-item-value` }}
+								inputProps={{ "data-test": `invoice-item-price` }}
 							/>
 							{i !== 0 && (
 								<Button
 									variant='outlined'
 									disabled={disabled}
 									data-test='invoice-remove-item'
-									onClick={() => removeItem(i)}
-								>
+									onClick={() => removeItem(i)}>
 									Remove Invoice Item
 								</Button>
 							)}
@@ -278,10 +272,9 @@ const InvoiceForm = ({
 						onClick={() =>
 							append({
 								description: "",
-								value: 0,
+								price: 0,
 							})
-						}
-					>
+						}>
 						Add Invoice Item +
 					</Button>
 				</div>
@@ -308,8 +301,7 @@ const InvoiceForm = ({
 					variant='contained'
 					disabled={disabled}
 					data-test='submit-invoice'
-					className='col-span-1 md:col-span-2'
-				>
+					className='col-span-1 md:col-span-2'>
 					{submitText || "Submit"}
 				</Button>
 			</form>

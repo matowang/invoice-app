@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "CompanyDetails" ALTER COLUMN "iban" DROP NOT NULL,
+ALTER COLUMN "swift" DROP NOT NULL;

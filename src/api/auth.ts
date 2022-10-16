@@ -30,7 +30,7 @@ if (!process.env.NEXT_PUBLIC_API_URL)
 	throw new Error("No NEXT_PUBLIC_API_URL environment variable");
 
 export const authInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_URL,
+	baseURL: "http://localhost:3139" || process.env.NEXT_PUBLIC_API_URL,
 });
 
 // add artificial delay for dev env

@@ -11,15 +11,59 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Invoice[]
+  id             String          @id @default(uuid())
+  email          String          @unique
+  name           String
+  invoices       Invoice[]
+  clients        Client[]
+  companyDetails CompanyDetails?
 }
 
 model Invoice {
-  id        Int     @id @default(autoincrement())
-  value   Int
-  user    User    @relation(fields: [userId], references: [id])
-  userId  Int
+  id            String        @id @default(uuid())
+  user          User          @relation(fields: [userId], references: [id])
+  userId        String
+  client        Client        @relation(fields: [clientId], references: [id])
+  clientId      String
+  invoiceNumber String        @unique
+  projectCode   String?
+  createdAt     DateTime      @default(now())
+  date          DateTime
+  dueDate       DateTime
+  meta          Json?
+  items         InvoiceItem[]
+  value         Float         @default(0)
+}
+
+model InvoiceItem {
+  id          Int      @id @default(autoincrement())
+  invoice     Invoice? @relation(fields: [invoiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  invoiceId   String?
+  description String
+  price       Float    @default(0)
+}
+
+model CompanyDetails {
+  id        String  @id @default(uuid())
+  user      User?   @relation(fields: [userId], references: [id])
+  userId    String? @unique
+  client    Client?
+  name      String
+  address   String
+  vatNumber String
+  regNumber String
+  iban      String?
+  swift     String?
+}
+
+model Client {
+  id               String         @id @default(uuid())
+  companyDetails   CompanyDetails @relation(fields: [companyDetailsId], references: [id])
+  companyDetailsId String         @unique
+  user             User           @relation(fields: [userId], references: [id])
+  userId           String
+  invoices         Invoice[]
+  email            String
+  name             String
+  createdAt        DateTime       @default(now())
 }

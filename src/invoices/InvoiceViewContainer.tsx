@@ -8,6 +8,8 @@ const InvoiceViewContainer = ({ invoiceId }: { invoiceId: string }) => {
 
 	if (isLoading) return <PageLoader />;
 
+	console.log(data);
+
 	if (!data) return <Error404 />;
 
 	return <InvoiceView invoiceData={data} />;

@@ -4,24 +4,26 @@ import { transformInvoiceValue } from "../util/transformInvoiceData";
 import { INVOICES_PAGE_LIMIT, SortOrder } from "./base";
 import { ClientDTO } from "./clients";
 import { z } from "zod";
+import { Client, CompanyDetails, Invoice } from "@prisma/client";
 
 export type InvoiceDTO = {
 	id: string;
-	user_id: string;
+	userId: string;
 	date: number;
 	dueDate: number;
-	invoice_number: string;
-	client_id: string;
+	invoiceNumber: string;
+	clientId: string;
 	projectCode?: string;
 	meta?: Record<string, any>;
+	items: { description: string; price: number }[];
 	value: number;
 };
 
-export type InvoiceAPIValues = Omit<InvoiceDTO, "id" | "user_id">;
+export type InvoiceAPIValues = Omit<InvoiceDTO, "id" | "userId">;
 
 export type InvoiceWithClientsDTO = {
 	invoice: InvoiceDTO;
-	client: Pick<ClientDTO, "user_id" | "email" | "name" | "companyDetails" | "id">;
+	client: Pick<ClientDTO, "userId" | "email" | "name" | "companyDetails" | "id">;
 };
 
 export const invoicesQuerySchema = z.object({
@@ -85,10 +87,31 @@ export const getInvoices = async ({
 		projectCode,
 	};
 	const { data } = await dbInstance.get<{
-		invoices: InvoiceWithClientsDTO[];
+		invoices: (Invoice & {
+			client: Client & {
+				companyDetails: CompanyDetails;
+			};
+		})[];
 		total: number;
 	}>("/invoices", { params });
-	return data;
+	return {
+		invoices: data.invoices.map(
+			({ id, createdAt, date, dueDate, invoiceNumber, projectCode, value, meta, client }) => ({
+				invoice: {
+					id,
+					createdAt,
+					date,
+					dueDate,
+					invoiceNumber,
+					projectCode,
+					value,
+					meta,
+				},
+				client,
+			})
+		),
+		total: data.total,
+	};
 };
 
 export const getInvoice = async (id: string) => {
@@ -99,15 +122,14 @@ export const getInvoice = async (id: string) => {
 };
 
 export const editInvoice = async (invoiceId: string, invoiceValues: InvoiceFormValues) => {
-	const { data } = await dbInstance.put<any>("/invoices", {
+	const { data } = await dbInstance.put<any>(`/invoices/${invoiceId}`, {
 		...transformInvoiceValue(invoiceValues),
-		id: invoiceId,
 	});
 	return data;
 };
 
 export const deleteInvoice = async (invoiceId: string) => {
-	const { data } = await dbInstance.delete(`/invoices?${invoiceId}`);
+	const { data } = await dbInstance.delete(`/invoices/${invoiceId}`);
 	return data;
 };
 
