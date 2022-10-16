@@ -1,5 +1,7 @@
+import ContainedButton from "../components/ContainedButton";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 import { z } from "zod";
@@ -118,14 +120,9 @@ const CompanyDetailsForm = ({
 					disabled={disabled}
 					inputProps={{ "data-test": "company-swift" }}
 				/>
-				<Button
-					type='submit'
-					variant='contained'
-					disabled={disabled}
-					data-test='submit-company-details'
-				>
-					Submit
-				</Button>
+				<ContainedButton type='submit' disabled={disabled} data-test='submit-company-details'>
+					SUBMIT
+				</ContainedButton>
 			</form>
 		</>
 	);

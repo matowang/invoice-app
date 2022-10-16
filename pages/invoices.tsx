@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import Link from "next/link";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -17,6 +16,7 @@ import { useMemo } from "react";
 import { invoicesQuerySchema } from "../src/api/invoices";
 
 import ErrorPage from "../src/components/ErrorPage";
+import ContainedButton from "../src/components/ContainedButton";
 
 const InvoicesPage = () => {
 	return (
@@ -76,15 +76,9 @@ const InvoicesPageContainer = () => {
 						</div>
 						<Link href='/invoices/new'>
 							<a className='no-underline'>
-								<Button
-									variant='contained'
-									className='h-full'
-									sx={{ borderRadius: 8 }}
-									startIcon={<AddIcon />}
-									data-test='add-invoice'
-								>
-									Add Invoice
-								</Button>
+								<ContainedButton data-test='add-invoice' startIcon={<AddIcon />} size='small'>
+									ADD INVOICE
+								</ContainedButton>
 							</a>
 						</Link>
 					</DataTableHeaderContainer>

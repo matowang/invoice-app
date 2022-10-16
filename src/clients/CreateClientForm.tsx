@@ -48,6 +48,7 @@ const CreateClientForm = ({ onSubmitSuccess }: CreateClientForm) => {
 				disabled={isLoading}
 				onSubmit={handleSubmit}
 				resetOnSuccessfulSubmit
+				submitText='CREATE CLIENT'
 			/>
 		</>
 	);

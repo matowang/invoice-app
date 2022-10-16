@@ -91,7 +91,7 @@ const EditInvoiceForm = ({ onSubmitSuccess, invoiceId }: EditInvoiceFormProps) =
 				clientsCompanyNames={clientCompanyNameData || []}
 				isLoadingClientsCompanyNames={isLoadingClientsCompanyNames}
 				defaultValues={invoiceData}
-				submitText='Submit Edit'
+				submitText='EDIT INVOICE'
 			/>
 		</>
 	);

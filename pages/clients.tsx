@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import Link from "next/link";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -8,6 +7,8 @@ import AuthGuard from "../src/user/AuthGuard";
 import ClientsTableContainer from "../src/clients/ClientsTableContainer";
 import DataTableHeaderContainer from "../src/components/DataTable/DataTableHeaderContainer";
 import ErrorPage from "../src/components/ErrorPage";
+
+import ContainedButton from "../src/components/ContainedButton";
 
 import { usePaginationGaurd } from "../src/hooks/usePaginationGaurd";
 import { useClients } from "../src/clients/useClients";
@@ -33,7 +34,7 @@ const ClientsPageContainer = () => {
 	const parsedQuery = useMemo(() => clientsQuerySchema.safeParse(router.query), [router.query]);
 
 	const { totalPages } = useClients(parsedQuery.success ? parsedQuery.data : undefined);
-	
+
 	usePaginationGaurd({ maxPage: totalPages });
 
 	const { handleFieldClick } = useTableFieldClick();
@@ -64,14 +65,9 @@ const ClientsPageContainer = () => {
 					<DataTableHeaderContainer title='Clients'>
 						<Link href='/clients/new'>
 							<a className='no-underline'>
-								<Button
-									variant='contained'
-									data-test='add-client'
-									startIcon={<AddIcon />}
-									sx={{ borderRadius: 8 }}
-								>
-									Add Client
-								</Button>
+								<ContainedButton data-test='add-client' startIcon={<AddIcon />} size='small'>
+									ADD CLIENT
+								</ContainedButton>
 							</a>
 						</Link>
 					</DataTableHeaderContainer>

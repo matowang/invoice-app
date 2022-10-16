@@ -1,9 +1,11 @@
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
+
+import ContainedButton from "../components/ContainedButton";
 
 const ClientValuesSchema = z.object({
 	email: z.string().email(),
@@ -26,6 +28,7 @@ interface ClientFormProps {
 	disabled?: boolean;
 	defaultValues?: ClientValues;
 	resetOnSuccessfulSubmit?: boolean;
+	submitText?: ReactNode;
 }
 
 const ClientForm = ({
@@ -34,6 +37,7 @@ const ClientForm = ({
 	disabled,
 	defaultValues,
 	resetOnSuccessfulSubmit,
+	submitText,
 }: ClientFormProps) => {
 	const {
 		register,
@@ -178,9 +182,9 @@ const ClientForm = ({
 					disabled={disabled}
 					inputProps={{ "data-test": "client-company-swift" }}
 				/>
-				<Button type='submit' variant='contained' disabled={disabled} data-test='submit-client'>
-					Submit
-				</Button>
+				<ContainedButton type='submit' disabled={disabled} data-test='submit-client'>
+					{submitText || "SUBMIT"}
+				</ContainedButton>
 			</form>
 		</>
 	);
