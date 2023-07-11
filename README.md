@@ -73,8 +73,6 @@ npm run jest
 - add & edit client _( forked from [Vlad](https://git.toptal.com/vishal-shah/invoiceapi-testcases) )_
 - dashboard _( forked from [Vlad](https://git.toptal.com/vishal-shah/invoiceapi-testcases) )_
 
-### ❌ Angular
-
 ---
 
 ## 🎆 Thank You! 🎆
